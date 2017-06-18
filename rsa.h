@@ -120,7 +120,8 @@ namespace Crypto
 				if (pos < plain_text.size())
 				{
 					plain_text = vector<byte>(&plain_text[pos], &plain_text[0] + plain_text.size());
-				}				
+				}
+				else { plain_text = vector<byte>(); }
 				break;
 			default: 
 				break;
