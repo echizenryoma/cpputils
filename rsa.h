@@ -112,7 +112,7 @@ namespace Crypto
 			size_t pos = 0;
 			switch (padding)
 			{
-			case RSA_NoPadding: 				
+			case RSA_NoPadding:
 				while (pos < plain_text.size() && plain_text[pos] == 0)
 				{
 					pos++;
@@ -121,9 +121,12 @@ namespace Crypto
 				{
 					plain_text = vector<byte>(&plain_text[pos], &plain_text[0] + plain_text.size());
 				}
-				else { plain_text = vector<byte>(); }
+				else
+				{
+					plain_text = vector<byte>();
+				}
 				break;
-			default: 
+			default:
 				break;
 			}
 
