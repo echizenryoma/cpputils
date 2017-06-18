@@ -21,7 +21,7 @@ namespace Hex
 		if (bignum_val == nullptr)
 		{
 			ERR_print_errors_fp(stderr);
-			throw exception("BIGNUM");
+			throw exception(ERR_error_string(ERR_get_error(), nullptr));
 		}
 		char* hex_buffer = BN_bn2hex(bignum_val);
 		string str_hex(hex_buffer);
