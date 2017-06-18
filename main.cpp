@@ -56,14 +56,14 @@ string RSAEncrypt_PublicKey(RSA* public_key, string data)
 
 int main(int argc, char** argv)
 {
-//	string str = "面面面面面面様様様様様様";
-//	wstring wstr = string2wstring(str, Convert::String::CharacterSetType::GB2312);
-//
-//
-//	string data = "0123456789ABCDEF";
-//	string hex_string = Hex::encode(reinterpret_cast<const byte*>(data.c_str()), data.length());
-//	cout << hex_string << endl;
-//	vector<byte> byte_array = Hex::decode(hex_string);
+	//	string str = "面面面面面面様様様様様様";
+	//	wstring wstr = string2wstring(str, Convert::String::CharacterSetType::GB2312);
+	//
+	//
+	//	string data = "0123456789ABCDEF";
+	//	string hex_string = Hex::encode(reinterpret_cast<const byte*>(data.c_str()), data.length());
+	//	cout << hex_string << endl;
+	//	vector<byte> byte_array = Hex::decode(hex_string);
 
 
 	ostringstream sout;
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 	cout << RSAEncrypt_PublicKey(public_key, "0123456789ABCDEF") << endl;
 	RSA_free(public_key);
 
-	vector<byte> results = Crypto::Rsa::decode(Base64::decode("EpyiEXOK1s0qATP/dDwlTn2PK4ICJ85u19iNiWnaRAlUi35a2vnrZQualyNAzGIMAtIG5cERSTnGEanVlg5VG6/QWnLgsck+KlhR9Vdn1d5jj3M4lqLT0r8vGkTt1yGp29wRDBWxEsn2qj9WYiOcJHh5ZY8aSihGjArXeZKE3DI="), private_key, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY, Crypto::Rsa::RSA_PADDING::RSA_PKCS1Padding);
+	vector<byte> results = Crypto::Rsa::decode(Base64::decode("EpyiEXOK1s0qATP/dDwlTn2PK4ICJ85u19iNiWnaRAlUi35a2vnrZQualyNAzGIMAtIG5cERSTnGEanVlg5VG6/QWnLgsck+KlhR9Vdn1d5jj3M4lqLT0r8vGkTt1yGp29wRDBWxEsn2qj9WYiOcJHh5ZY8aSihGjArXeZKE3DI="), private_key, Crypto::Rsa::RSA_PADDING::RSA_PKCS1Padding);
 
 	RSA_free(private_key);
 
