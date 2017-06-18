@@ -58,7 +58,7 @@ namespace Crypto
 
 		static vector<byte> encode(const vector<byte>& data, RSA* key, const KEY_TYPE& key_type = PUBLIC_KEY, const RSA_PADDING& padding = RSA_NoPadding)
 		{
-			unsigned int rsa_key_size = RSA_size(key);
+			size_t rsa_key_size = RSA_size(key);
 			string plain_text_str(rsa_key_size - data.size(), 0);
 			plain_text_str += string(data.begin(), data.end());
 			byte* encrypt_data = new byte[rsa_key_size];
