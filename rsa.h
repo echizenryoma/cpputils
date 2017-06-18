@@ -56,7 +56,7 @@ namespace Crypto
 			return rsa_key;
 		}
 
-		static vector<byte> encode(const vector<byte>& data, RSA* key, const KEY_TYPE& key_type = PUBLIC_KEY, const RSA_PADDING& padding = RSA_NoPadding)
+		static vector<byte> encode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = RSA_NoPadding, const KEY_TYPE& key_type = PUBLIC_KEY)
 		{
 			size_t rsa_key_size = RSA_size(key);
 			string plain_text_str(data.begin(), data.end());
@@ -65,7 +65,7 @@ namespace Crypto
 			case RSA_NoPadding:
 				plain_text_str = string(rsa_key_size - data.size(), 0) + plain_text_str;
 				break;
-			default: 
+			default:
 				break;
 			}
 			plain_text_str += string(data.begin(), data.end());
@@ -82,7 +82,7 @@ namespace Crypto
 			default:
 				throw exception("Error key type.");
 			}
-			if (encrypt_data_length == -1)
+			if (encrypt_data_length < 0)
 			{
 				delete[]encrypt_data;
 				ERR_print_errors_fp(stderr);
@@ -93,7 +93,7 @@ namespace Crypto
 			return encrypt_text;
 		}
 
-		static vector<byte> decode(const vector<byte>& data, RSA* key, const KEY_TYPE& key_type = PRIVATE_KEY, const RSA_PADDING& padding = RSA_NoPadding)
+		static vector<byte> decode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = RSA_NoPadding, const KEY_TYPE& key_type = PRIVATE_KEY)
 		{
 			size_t rsa_key_size = RSA_size(key);
 			byte* plain_data = new unsigned char[rsa_key_size];
