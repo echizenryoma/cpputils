@@ -48,7 +48,6 @@ namespace Base64
 		string str_base64 = string((*buf_mem).data, (*buf_mem).length);
 
 		BUF_MEM_free(buf_mem);
-		BIO_free_all(bio_base64);
 		BIO_free_all(bio_mem);
 		return str_base64;
 	}
@@ -65,13 +64,12 @@ namespace Base64
 		bio_mem = BIO_push(bio_base64, bio_mem);
 		BIO_set_flags(bio_mem, BIO_FLAGS_BASE64_NO_NL); //No New Line
 
-		byte* buffer = new byte[str_base64.length() * 3 / 4]{0};
+		byte* buffer = new byte[str_base64.length() * 3 / 4];
 		size_t length = BIO_read(bio_mem, buffer, str_base64.length());
 
 		vector<byte> val(buffer, buffer + length);
 
 		delete[]buffer;
-		BIO_free_all(bio_base64);
 		BIO_free_all(bio_mem);
 		return val;
 	}
