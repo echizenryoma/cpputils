@@ -7,6 +7,7 @@
 #include <vector>
 #include <openssl/hmac.h>
 #include <openssl/md5.h>
+#include <openssl/sha.h>
 #include "type.h"
 using namespace std;
 
