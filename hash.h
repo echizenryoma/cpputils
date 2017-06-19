@@ -1,16 +1,24 @@
 #pragma once
 
-#ifndef __SHA_H__
-#define __SHA_H__
+#ifndef __HASH_H__
+#define __HASH_H__
 
 #include <string>
 #include <openssl/sha.h>
+#include <openssl/md5.h>
 #include "hex.h"
 #include "type.h"
 using namespace std;
 
 namespace Hash
 {
+	inline string md5(const vector<byte>& data)
+	{
+		byte hash[MD5_DIGEST_LENGTH];
+		MD5(&data[0], data.size(), hash);
+		return Hex::encode(vector<byte>(hash, hash + MD5_DIGEST_LENGTH));
+	}
+
 	inline string sha1(const vector<byte>& data)
 	{
 		byte hash[SHA_DIGEST_LENGTH];
@@ -42,4 +50,4 @@ namespace Hash
 	}
 }
 
-#endif __SHA_H__
+#endif __HASH_H__

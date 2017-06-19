@@ -56,6 +56,7 @@ int main(int argc, char** argv)
 	cout << Hex::encode(results) << endl;
 	RSA_free(private_key);
 
+	cout << Hash::md5(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha1(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha256(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha512(vector<byte>(str.begin(), str.end())) << endl;
