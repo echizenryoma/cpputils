@@ -1,71 +1,13 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <openssl/err.h>
-#include <openssl/rsa.h>
-#include <openssl/pem.h>
 #include "base64.h"
 #include "hex.h"
-#include "convert.h"
 #include "rsa.h"
 using namespace std;
 
-RSA* RSALoadPublicKey(const string& public_key_string)
-{
-	BIO* public_key_content = BIO_new_mem_buf(public_key_string.c_str(), public_key_string.length());
-	if (public_key_content == nullptr)
-	{
-		return nullptr;
-	}
-	RSA* rsa_public_key = PEM_read_bio_RSA_PUBKEY(public_key_content, nullptr, nullptr, nullptr);
-	ERR_print_errors_fp(stderr);
-	if (rsa_public_key == nullptr)
-	{
-		throw exception("PEM_read_bio_RSA_PUBKEY");
-	}
-	BIO_free(public_key_content);
-	return rsa_public_key;
-}
-
-string RSAEncrypt_PublicKey(RSA* public_key, string data)
-{
-	unsigned int rsa_key_size = RSA_size(public_key);
-	unsigned char* plain_text = new unsigned char[rsa_key_size] {0};
-	for (unsigned int i = 0; i < data.length(); ++i)
-	{
-		plain_text[rsa_key_size - data.length() + i] = static_cast<unsigned char>(data[i]);
-	}
-	//RSA_set_default_method(RSA_null_method());
-	unsigned char* encrypt_data = new unsigned char[rsa_key_size]{0};
-	int encrypt_data_length = RSA_public_encrypt(rsa_key_size, reinterpret_cast<const unsigned char*>(plain_text), encrypt_data, public_key, RSA_NO_PADDING);
-	ERR_print_errors_fp(stderr);
-	if (encrypt_data_length == -1)
-	{
-		throw exception("RSA_public_encrypt");
-	}
-	string base64 = Base64::encode(encrypt_data, encrypt_data_length);
-
-	delete []plain_text;
-	plain_text = nullptr;
-	delete []encrypt_data;
-	encrypt_data = nullptr;
-
-	return base64;
-}
-
-
 int main(int argc, char** argv)
 {
-	//	string str = "面面面面面面様様様様様様";
-	//	wstring wstr = string2wstring(str, Convert::String::CharacterSetType::GB2312);
-	//
-	//
-	//	string data = "0123456789ABCDEF";
-	//	string hex_string = Hex::encode(reinterpret_cast<const byte*>(data.c_str()), data.length());
-	//	cout << hex_string << endl;
-	//	vector<byte> byte_array = Hex::decode(hex_string);
-
-
 	ostringstream sout;
 	sout << "-----BEGIN PUBLIC KEY-----\n" <<
 		"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgkB5vTONXv15SukpyFKKbkO3m\n" <<
@@ -105,11 +47,12 @@ int main(int argc, char** argv)
 	cout << priave_key_string << endl;
 	RSA* public_key = Crypto::Rsa::key(public_key_string, Crypto::Rsa::KEY_TYPE::PUBLIC_KEY);
 	RSA* private_key = Crypto::Rsa::key(priave_key_string, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
-	cout << RSAEncrypt_PublicKey(public_key, "0123456789ABCDEF") << endl;
+	string str = "0123456789ABCDEF";
+	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()),public_key)) << endl;
 	RSA_free(public_key);
 
-	vector<byte> results = Crypto::Rsa::decode(Base64::decode("EpyiEXOK1s0qATP/dDwlTn2PK4ICJ85u19iNiWnaRAlUi35a2vnrZQualyNAzGIMAtIG5cERSTnGEanVlg5VG6/QWnLgsck+KlhR9Vdn1d5jj3M4lqLT0r8vGkTt1yGp29wRDBWxEsn2qj9WYiOcJHh5ZY8aSihGjArXeZKE3DI="), private_key, Crypto::Rsa::RSA_PADDING::RSA_PKCS1Padding);
-
+	vector<byte> results = Crypto::Rsa::decode(Base64::decode("TE9b/6RqzQPmtUkc7CWWvKyRgLVpBoVJMoKpECksgE17oMlNxWMmtFjQfchNZ81uQ4P9Xpr2WU207/HKnB00Pm69/umS0c/RXMCCcBTXJ/ao5pALoffNmrneuM6Mp9e+zJKUhjbnRCMDSpmRYhahBl1jk/P4rG6e3g0Jw2bd0YA="), private_key);
+	cout << Hex::encode(results) << endl;
 	RSA_free(private_key);
 
 	CRYPTO_cleanup_all_ex_data();

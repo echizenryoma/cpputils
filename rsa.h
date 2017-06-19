@@ -3,9 +3,12 @@
 #ifndef __RSA_H__
 #define __RSA_H__
 
-#include <openssl/pem.h>
-#include <openssl/err.h>
 #include <algorithm>
+#include <vector>
+#include <openssl/err.h>
+#include <openssl/pem.h>
+#include <openssl/rsa.h>
+#include "type.h"
 using namespace std;
 
 namespace Crypto
