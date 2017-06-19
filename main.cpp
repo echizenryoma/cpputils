@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include "base64.h"
+#include "hash.h"
 #include "hex.h"
 #include "rsa.h"
 using namespace std;
@@ -45,15 +46,19 @@ int main(int argc, char** argv)
 	string priave_key_string = sout.str();
 
 	cout << priave_key_string << endl;
-	RSA* public_key = Crypto::Rsa::key(public_key_string, Crypto::Rsa::KEY_TYPE::PUBLIC_KEY);
-	RSA* private_key = Crypto::Rsa::key(priave_key_string, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
+	RSA* public_key = key(public_key_string, Crypto::Rsa::KEY_TYPE::PUBLIC_KEY);
+	RSA* private_key = key(priave_key_string, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
 	string str = "0123456789ABCDEF";
-	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()),public_key)) << endl;
+	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()), public_key)) << endl;
 	RSA_free(public_key);
 
 	vector<byte> results = Crypto::Rsa::decode(Base64::decode("TE9b/6RqzQPmtUkc7CWWvKyRgLVpBoVJMoKpECksgE17oMlNxWMmtFjQfchNZ81uQ4P9Xpr2WU207/HKnB00Pm69/umS0c/RXMCCcBTXJ/ao5pALoffNmrneuM6Mp9e+zJKUhjbnRCMDSpmRYhahBl1jk/P4rG6e3g0Jw2bd0YA="), private_key);
 	cout << Hex::encode(results) << endl;
 	RSA_free(private_key);
+
+	cout << Hash::sha1(vector<byte>(str.begin(), str.end())) << endl;
+	cout << Hash::sha256(vector<byte>(str.begin(), str.end())) << endl;
+	cout << Hash::sha512(vector<byte>(str.begin(), str.end())) << endl;
 
 	CRYPTO_cleanup_all_ex_data();
 	return 0;
