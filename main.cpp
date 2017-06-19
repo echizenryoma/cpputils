@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "hex.h"
 #include "rsa.h"
+#include "hmac.h"
 using namespace std;
 
 int main(int argc, char** argv)
@@ -60,6 +61,12 @@ int main(int argc, char** argv)
 	cout << Hash::sha1(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha256(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha512(vector<byte>(str.begin(), str.end())) << endl;
+
+	string key = "key";
+	cout << Hmac::hamc_md5(vector<byte>(key.begin(), key.end()), vector<byte>(str.begin(), str.end())) << endl;
+	cout << Hmac::hamc_sha1(vector<byte>(key.begin(), key.end()), vector<byte>(str.begin(), str.end())) << endl;
+	cout << Hmac::hamc_sha256(vector<byte>(key.begin(), key.end()), vector<byte>(str.begin(), str.end())) << endl;
+	cout << Hmac::hamc_sha512(vector<byte>(key.begin(), key.end()), vector<byte>(str.begin(), str.end())) << endl;
 
 	CRYPTO_cleanup_all_ex_data();
 	return 0;
