@@ -10,9 +10,8 @@ using namespace std;
 
 namespace Crypto
 {
-	class Rsa
+	namespace Rsa
 	{
-	public:
 		enum KEY_TYPE
 		{
 			PUBLIC_KEY = 0,
@@ -26,7 +25,7 @@ namespace Crypto
 			RSA_OAEPPadding = RSA_PKCS1_OAEP_PADDING,
 		};
 
-		static RSA* key(const string& key_str, const KEY_TYPE& key_type = PUBLIC_KEY)
+		inline RSA* key(const string& key_str, const KEY_TYPE& key_type = PUBLIC_KEY)
 		{
 			BIO* key_content = BIO_new_mem_buf(key_str.c_str(), key_str.length());
 			if (key_content == nullptr)
@@ -56,7 +55,7 @@ namespace Crypto
 			return rsa_key;
 		}
 
-		static vector<byte> encode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = RSA_NoPadding, const KEY_TYPE& key_type = PUBLIC_KEY)
+		inline vector<byte> encode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = RSA_NoPadding, const KEY_TYPE& key_type = PUBLIC_KEY)
 		{
 			size_t rsa_key_size = RSA_size(key);
 			string plain_text_str(data.begin(), data.end());
@@ -93,7 +92,7 @@ namespace Crypto
 			return encrypt_text;
 		}
 
-		static vector<byte> decode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = RSA_NoPadding, const KEY_TYPE& key_type = PRIVATE_KEY)
+		inline vector<byte> decode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = RSA_NoPadding, const KEY_TYPE& key_type = PRIVATE_KEY)
 		{
 			size_t rsa_key_size = RSA_size(key);
 			byte* plain_data = new unsigned char[rsa_key_size];
@@ -141,7 +140,7 @@ namespace Crypto
 			delete[]plain_data;
 			return plain_text;
 		}
-	};
+	}
 }
 
 #endif __RSA_H__
