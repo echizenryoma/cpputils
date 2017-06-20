@@ -11,18 +11,12 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	ostringstream sout;
-	sout << "-----BEGIN PUBLIC KEY-----\n" <<
-		"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgkB5vTONXv15SukpyFKKbkO3m\n" <<
-		"MbZ8z4u8HwtV14qEoOJaOhh6pu75o6bojX3RFnWm3wHxFjmdJu1+JurChFiY2fxD\n" <<
-		"Q+SZWXKzNvfK/fvi3JNMfgVfp0HcuCzKDWE+vPeactLeTNnjFRYlnaUygiwm0KNE\n" <<
-		"hDDHw2/41xjcPLmPpQIDAQAB\n" <<
-		"-----END PUBLIC KEY-----\n";
-	//	sout << "-----BEGIN PUBLIC KEY-----\n"
-	//		"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCupklvg4M62TpvbbISD8MrEb1h\n" <<
-	//		"a2jW0bo4JshAUguKfWvc5w3B+59QmB4u6DANEemkmPBCVqgNACoM63L8q4Tl3WJo\n" <<
-	//		"E1EQ735qaV2eRjweDroLtgLfVRGSzlZnajLFwhRqKO6/fId3J0kBLCVdZINfQbns\n" <<
-	//		"DsqD6Wjyqf0z7DiWkQIDAQAB\n" <<
-	//		"-----END PUBLIC KEY-----";
+	sout << "-----BEGIN PUBLIC KEY-----\n"
+		"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCupklvg4M62TpvbbISD8MrEb1h\n" <<
+		"a2jW0bo4JshAUguKfWvc5w3B+59QmB4u6DANEemkmPBCVqgNACoM63L8q4Tl3WJo\n" <<
+		"E1EQ735qaV2eRjweDroLtgLfVRGSzlZnajLFwhRqKO6/fId3J0kBLCVdZINfQbns\n" <<
+		"DsqD6Wjyqf0z7DiWkQIDAQAB\n" <<
+		"-----END PUBLIC KEY-----";
 	string public_key_string = sout.str();
 	cout << public_key_string << endl;
 
@@ -53,8 +47,8 @@ int main(int argc, char** argv)
 	vector<byte> param(str.length());
 	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()), public_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding)) << endl;
 	RSA_free(public_key);
-	
-	vector<byte> results = Crypto::Rsa::decode(Base64::decode("13biRNkPgNB1AWV1tMhGYJfBY7dz6jYf3HCnQDbTwc+VuEnwj8e3ba84co3e8r8Axts1sLPUnqZcPn5CqWZ4d9uCNslIElVqCraMT1khm9/NOp2EDdOBtF6buvU2gZoIUSL2sKtctz7WnsQKmSuMrJ7SqUnAcNoHqaN6V8PKSMY="), private_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding);
+
+	vector<byte> results = Crypto::Rsa::decode(Base64::decode("V/Et5H/pJ1ePQF3nFPKEzooyn95NZaVFf9SFTK8pjJ5KCnYv4OmlIJs5ioSYHKWvLQGsEyxZIp7RGnHXumIf9mDYCxZBKqNyzvw8Omy1DstFBcp7Q1N/Ih2hCJ7+lyDI659RDuP176Jb02XW8SLRAunDdjsI3RLY5ACaENdBFcE="), private_key);
 	cout << Hex::encode(results) << endl;
 	RSA_free(private_key);
 
