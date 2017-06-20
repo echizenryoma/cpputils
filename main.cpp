@@ -50,13 +50,15 @@ int main(int argc, char** argv)
 	RSA* public_key = key(public_key_string, Crypto::Rsa::KEY_TYPE::PUBLIC_KEY);
 	RSA* private_key = key(priave_key_string, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
 	string str = "0123456789ABCDEF";
-	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()), public_key)) << endl;
+	vector<byte> param(str.length());
+	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()), public_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding)) << endl;
 	RSA_free(public_key);
-
-	vector<byte> results = Crypto::Rsa::decode(Base64::decode("TE9b/6RqzQPmtUkc7CWWvKyRgLVpBoVJMoKpECksgE17oMlNxWMmtFjQfchNZ81uQ4P9Xpr2WU207/HKnB00Pm69/umS0c/RXMCCcBTXJ/ao5pALoffNmrneuM6Mp9e+zJKUhjbnRCMDSpmRYhahBl1jk/P4rG6e3g0Jw2bd0YA="), private_key);
+	
+	vector<byte> results = Crypto::Rsa::decode(Base64::decode("13biRNkPgNB1AWV1tMhGYJfBY7dz6jYf3HCnQDbTwc+VuEnwj8e3ba84co3e8r8Axts1sLPUnqZcPn5CqWZ4d9uCNslIElVqCraMT1khm9/NOp2EDdOBtF6buvU2gZoIUSL2sKtctz7WnsQKmSuMrJ7SqUnAcNoHqaN6V8PKSMY="), private_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding);
 	cout << Hex::encode(results) << endl;
 	RSA_free(private_key);
 
+	cout << Hash::md4(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::md5(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha1(vector<byte>(str.begin(), str.end())) << endl;
 	cout << Hash::sha256(vector<byte>(str.begin(), str.end())) << endl;

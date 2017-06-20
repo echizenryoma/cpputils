@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(SOURCE_FILES base64.h hash.h hmac.h hex.h rsa.h main.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-find_package(OpenSSL)
+find_package(OpenSSL REQUIRED)
 
 message("OPENSSL_VERSION: ${OPENSSL_VERSION}")
 message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")

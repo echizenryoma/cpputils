@@ -3,7 +3,6 @@
 #ifndef __HMAC_H__
 #define __HMAC_H__
 
-#include <string>
 #include <vector>
 #include <openssl/hmac.h>
 #include <openssl/md5.h>
