@@ -45,10 +45,10 @@ int main(int argc, char** argv)
 	RSA* private_key = key(priave_key_string, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
 	string str = "0123456789ABCDEF";
 	vector<byte> param(str.length());
-	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()), public_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding)) << endl;
+	cout << Base64::encode(Crypto::Rsa::encode(vector<byte>(str.begin(), str.end()), public_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA1andMGF1Padding)) << endl;
 	RSA_free(public_key);
 
-	vector<byte> results = Crypto::Rsa::decode(Base64::decode("V/Et5H/pJ1ePQF3nFPKEzooyn95NZaVFf9SFTK8pjJ5KCnYv4OmlIJs5ioSYHKWvLQGsEyxZIp7RGnHXumIf9mDYCxZBKqNyzvw8Omy1DstFBcp7Q1N/Ih2hCJ7+lyDI659RDuP176Jb02XW8SLRAunDdjsI3RLY5ACaENdBFcE="), private_key);
+	vector<byte> results = Crypto::Rsa::decode(Base64::decode("DBGbeizQFRqglslsBtNpZ9g+eItukKdUqMmzQhLxGIgafpWE6o+C2iP/l3NenIFS0iouf2gfPnwR+lSEfZvuuObZgedFY/4st9T/fDX+2+drY2Km8bELLkDeri1VAaBTTwkt1Xy97s3SZwvcu94ZrOHtG+CnPgk0BAgD7rswwNI="), private_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA1andMGF1Padding);
 	cout << Hex::encode(results) << endl;
 	RSA_free(private_key);
 

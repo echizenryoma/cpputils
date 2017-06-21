@@ -26,6 +26,11 @@ namespace Crypto
 			RSA_NoPadding = RSA_NO_PADDING,
 			RSA_PKCS1Padding = RSA_PKCS1_PADDING,
 			RSA_OAEPPadding = RSA_PKCS1_OAEP_PADDING,
+			RSA_OAEPwithSHA1andMGF1Padding = 1001,
+			RSA_OAEPwithSHA224andMGF1Padding = 1224,
+			RSA_OAEPwithSHA256andMGF1Padding = 1256,
+			RSA_OAEPwithSHA384andMGF1Padding = 1384,
+			RSA_OAEPwithSHA512andMGF1Padding = 1512,
 		};
 
 		inline RSA* key(const string& key_str, const KEY_TYPE& key_type = PUBLIC_KEY)
@@ -62,23 +67,52 @@ namespace Crypto
 		{
 			size_t rsa_key_size = RSA_size(key);
 			string plain_text_str(data.begin(), data.end());
+			vector<byte> buffer(rsa_key_size, 0);
+			int PADDING = padding;
 			switch (padding)
 			{
 			case RSA_NoPadding:
 				plain_text_str = string(rsa_key_size - data.size(), 0) + plain_text_str;
 				break;
-			default:
+			case RSA_PKCS1Padding: break;
+			case RSA_OAEPPadding: break;
+			case RSA_OAEPwithSHA1andMGF1Padding:
+				PADDING = RSA_NO_PADDING;
+				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha1(), nullptr);
+				plain_text_str = string(buffer.begin(), buffer.end());
 				break;
+			case RSA_OAEPwithSHA224andMGF1Padding:
+				PADDING = RSA_NO_PADDING;
+				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha224(), nullptr);
+				plain_text_str = string(buffer.begin(), buffer.end());
+				break;
+			case RSA_OAEPwithSHA256andMGF1Padding:
+				PADDING = RSA_NO_PADDING;
+				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha256(), nullptr);
+				plain_text_str = string(buffer.begin(), buffer.end());
+				break;
+			case RSA_OAEPwithSHA384andMGF1Padding:
+				PADDING = RSA_NO_PADDING;
+				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha384(), nullptr);
+				plain_text_str = string(buffer.begin(), buffer.end());
+				break;
+			case RSA_OAEPwithSHA512andMGF1Padding:
+				PADDING = RSA_NO_PADDING;
+				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha512(), nullptr);
+				plain_text_str = string(buffer.begin(), buffer.end());
+				break;
+			default:
+				throw exception("Padding is unsupported.");
 			}
 			byte* encrypt_data = new byte[rsa_key_size];
 			int encrypt_data_length;
 			switch (key_type)
 			{
 			case PUBLIC_KEY:
-				encrypt_data_length = RSA_public_encrypt(plain_text_str.size(), reinterpret_cast<const byte*>(plain_text_str.c_str()), encrypt_data, key, padding);
+				encrypt_data_length = RSA_public_encrypt(plain_text_str.size(), reinterpret_cast<const byte*>(plain_text_str.c_str()), encrypt_data, key, PADDING);
 				break;
 			case PRIVATE_KEY:
-				encrypt_data_length = RSA_private_encrypt(plain_text_str.size(), reinterpret_cast<const byte*>(plain_text_str.c_str()), encrypt_data, key, padding);
+				encrypt_data_length = RSA_private_encrypt(plain_text_str.size(), reinterpret_cast<const byte*>(plain_text_str.c_str()), encrypt_data, key, PADDING);
 				break;
 			default:
 				throw exception("Error key type.");
@@ -100,13 +134,30 @@ namespace Crypto
 			byte* plain_data = new byte[rsa_key_size];
 			int plain_data_length;
 
+			int PADDING = padding;
+			switch (padding)
+			{
+			case RSA_NoPadding: break;
+			case RSA_PKCS1Padding: break;
+			case RSA_OAEPPadding: break;
+			case RSA_OAEPwithSHA1andMGF1Padding:
+			case RSA_OAEPwithSHA224andMGF1Padding:
+			case RSA_OAEPwithSHA256andMGF1Padding:
+			case RSA_OAEPwithSHA384andMGF1Padding:
+			case RSA_OAEPwithSHA512andMGF1Padding:
+				PADDING = RSA_PKCS1_OAEP_PADDING;
+				break;
+			default:
+				throw exception("Padding is unsupported.");
+			}
+
 			switch (key_type)
 			{
 			case PUBLIC_KEY:
-				plain_data_length = RSA_public_decrypt(data.size(), &data[0], plain_data, key, padding);
+				plain_data_length = RSA_public_decrypt(data.size(), &data[0], plain_data, key, PADDING);
 				break;
 			case PRIVATE_KEY:
-				plain_data_length = RSA_private_decrypt(data.size(), &data[0], plain_data, key, padding);
+				plain_data_length = RSA_private_decrypt(data.size(), &data[0], plain_data, key, PADDING);
 				break;
 			default:
 				throw exception("Error key type.");
@@ -135,8 +186,11 @@ namespace Crypto
 					plain_text = vector<byte>();
 				}
 				break;
+			case RSA_PKCS1Padding: break;
+			case RSA_OAEPPadding: break;
+			case RSA_OAEPwithSHA1andMGF1Padding: break;
 			default:
-				break;
+				throw exception("Padding is unsupported.");
 			}
 			delete[]plain_data;
 			return plain_text;
