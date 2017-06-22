@@ -2,9 +2,10 @@
 
 #include <ostream>
 #include <sstream>
-#include "../rsa.h"
 #include <random>
 #include <iostream>
+#include "../rsa.h"
+#include "../base64.h"
 using namespace std;
 
 inline RSA* RSA_ReadPublicKey_Test()
@@ -54,40 +55,35 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 	switch (padding)
 	{
 	case Crypto::Rsa::RSA_NoPadding:
-		max_data_size = rsa_key_size;
+		max_data_size = rsa_key_size - 1;
 		uniform_int = uniform_int_distribution<unsigned>(1, 0xff);
 		break;
 	case Crypto::Rsa::RSA_PKCS1Padding:
 		max_data_size = rsa_key_size - RSA_PKCS1_PADDING_SIZE - 1;
 		break;
 	case Crypto::Rsa::RSA_OAEPPadding:
-		max_data_size = rsa_key_size - 41;
-		break;
-	case Crypto::Rsa::RSA_OAEPwithSHA1andMGF1Padding:
 		max_data_size = rsa_key_size - 2 * SHA_DIGEST_LENGTH - 2;
 		break;
 	case Crypto::Rsa::RSA_OAEPwithSHA224andMGF1Padding:
-		max_data_size = rsa_key_size - 2 * SHA224_DIGEST_LENGTH - 2;
+		max_data_size = rsa_key_size - 2 * SHA256_DIGEST_LENGTH - 2;
 		break;
 	case Crypto::Rsa::RSA_OAEPwithSHA256andMGF1Padding:
 		max_data_size = rsa_key_size - 2 * SHA256_DIGEST_LENGTH - 2;
 		break;
 	case Crypto::Rsa::RSA_OAEPwithSHA384andMGF1Padding:
-		max_data_size = rsa_key_size - 2 * SHA384_DIGEST_LENGTH - 2;
+		max_data_size = rsa_key_size - 2 * SHA512_DIGEST_LENGTH - 2;
 		break;
 	case Crypto::Rsa::RSA_OAEPwithSHA512andMGF1Padding:
 		max_data_size = rsa_key_size - 2 * SHA512_DIGEST_LENGTH - 2;
 		break;
 	default: ;
 	}
-	uniform_int_distribution<size_t> size_rand(0, max_data_size);
 	size_t success = 0;
 	vector<byte> rand_buffer(max_data_size);
 	for (size_t i = 1; i <= max_data_size; ++i)
 	{
-		size_t length = size_rand(random_engine);
-		rand_buffer.resize(length);
-		for (size_t j = 0; j < length; ++j)
+		rand_buffer.resize(i);
+		for (size_t j = 0; j < i; ++j)
 		{
 			rand_buffer[j] = uniform_int(random_engine);
 		}
@@ -102,7 +98,6 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 		}
 		catch (exception e)
 		{
-			
 		}
 	}
 	return success;
@@ -129,8 +124,10 @@ inline int RSA_Test()
 	}
 	cout << "[Success]" << endl;
 
+	size_t success = 0;
+
 	cout << "RSA PKEncode_SKDecode with NoPadding Test: ";
-	size_t success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::RSA_NoPadding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::RSA_NoPadding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with PKCS1Padding Test: ";
@@ -139,6 +136,10 @@ inline int RSA_Test()
 
 	cout << "RSA PKEncode_SKDecode with OAEPPadding Test: ";
 	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding);
+	cout << "[" << success << "]" << endl;
+
+	cout << "RSA PKEncode_SKDecode with OAEPwithSHA1andMGF1Padding Test: ";
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA1andMGF1Padding);
 	cout << "[" << success << "]" << endl;
 
 	RSA_free(rsa_public_key);

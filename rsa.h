@@ -26,7 +26,7 @@ namespace Crypto
 			RSA_NoPadding = RSA_NO_PADDING,
 			RSA_PKCS1Padding = RSA_PKCS1_PADDING,
 			RSA_OAEPPadding = RSA_PKCS1_OAEP_PADDING,
-			RSA_OAEPwithSHA1andMGF1Padding = 1001,
+			RSA_OAEPwithSHA1andMGF1Padding = RSA_PKCS1_OAEP_PADDING,
 			RSA_OAEPwithSHA224andMGF1Padding = 1224,
 			RSA_OAEPwithSHA256andMGF1Padding = 1256,
 			RSA_OAEPwithSHA384andMGF1Padding = 1384,
@@ -76,11 +76,6 @@ namespace Crypto
 				break;
 			case RSA_PKCS1Padding: break;
 			case RSA_OAEPPadding: break;
-			case RSA_OAEPwithSHA1andMGF1Padding:
-				PADDING = RSA_NO_PADDING;
-				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha1(), nullptr);
-				plain_text_str = string(buffer.begin(), buffer.end());
-				break;
 			case RSA_OAEPwithSHA224andMGF1Padding:
 				PADDING = RSA_NO_PADDING;
 				RSA_padding_add_PKCS1_OAEP_mgf1(&buffer[0], buffer.size(), &data[0], data.size(), nullptr, 0, EVP_sha224(), nullptr);
@@ -140,12 +135,11 @@ namespace Crypto
 			case RSA_NoPadding: break;
 			case RSA_PKCS1Padding: break;
 			case RSA_OAEPPadding: break;
-			case RSA_OAEPwithSHA1andMGF1Padding:
 			case RSA_OAEPwithSHA224andMGF1Padding:
 			case RSA_OAEPwithSHA256andMGF1Padding:
 			case RSA_OAEPwithSHA384andMGF1Padding:
 			case RSA_OAEPwithSHA512andMGF1Padding:
-				PADDING = RSA_PKCS1_OAEP_PADDING;
+				PADDING = RSA_NO_PADDING;
 				break;
 			default:
 				throw exception("Padding is unsupported.");
@@ -169,6 +163,7 @@ namespace Crypto
 				throw exception(ERR_error_string(ERR_get_error(), nullptr));
 			}
 			vector<byte> plain_text(plain_data, plain_data + plain_data_length);
+			vector<byte> buffer(rsa_key_size, 0);
 			size_t pos = 0;
 			switch (padding)
 			{
@@ -188,7 +183,6 @@ namespace Crypto
 				break;
 			case RSA_PKCS1Padding: break;
 			case RSA_OAEPPadding: break;
-			case RSA_OAEPwithSHA1andMGF1Padding: break;
 			default:
 				throw exception("Padding is unsupported.");
 			}
