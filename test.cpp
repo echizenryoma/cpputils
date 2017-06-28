@@ -1,6 +1,4 @@
 #include "test/rsa_test.h"
-#include "base64.h"
-using namespace std;
 
 int main(int argc, char** argv)
 {
