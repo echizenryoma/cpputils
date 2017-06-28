@@ -18,7 +18,6 @@ namespace Hmac
 		HMAC_CTX* ctx = HMAC_CTX_new();
 		if (ctx == nullptr)
 		{
-			ERR_print_errors_fp(stderr);
 			throw exception(ERR_error_string(ERR_get_error(), nullptr));
 		}
 		HMAC_Init_ex(ctx, &key[0], key.size(), EVP_md5(), nullptr);
@@ -34,7 +33,6 @@ namespace Hmac
 		HMAC_CTX* ctx = HMAC_CTX_new();
 		if (ctx == nullptr)
 		{
-			ERR_print_errors_fp(stderr);
 			throw exception(ERR_error_string(ERR_get_error(), nullptr));
 		}
 		HMAC_Init_ex(ctx, &key[0], key.size(), EVP_sha1(), nullptr);
@@ -67,7 +65,6 @@ namespace Hmac
 		HMAC_CTX* ctx = HMAC_CTX_new();
 		if (ctx == nullptr)
 		{
-			ERR_print_errors_fp(stderr);
 			throw exception(ERR_error_string(ERR_get_error(), nullptr));
 		}
 		HMAC_Init_ex(ctx, &key[0], key.size(), EVP_sha256(), nullptr);
@@ -83,7 +80,6 @@ namespace Hmac
 		HMAC_CTX* ctx = HMAC_CTX_new();
 		if (ctx == nullptr)
 		{
-			ERR_print_errors_fp(stderr);
 			throw exception(ERR_error_string(ERR_get_error(), nullptr));
 		}
 		HMAC_Init_ex(ctx, &key[0], key.size(), EVP_sha256(), nullptr);
@@ -99,7 +95,6 @@ namespace Hmac
 		HMAC_CTX* ctx = HMAC_CTX_new();
 		if (ctx == nullptr)
 		{
-			ERR_print_errors_fp(stderr);
 			throw exception(ERR_error_string(ERR_get_error(), nullptr));
 		}
 		HMAC_Init_ex(ctx, &key[0], key.size(), EVP_sha512(), nullptr);
