@@ -4,6 +4,7 @@
 #include <sstream>
 #include <random>
 #include <iostream>
+#include <openssl/pem.h>
 #include "../rsa.h"
 using namespace std;
 
@@ -17,7 +18,7 @@ inline RSA* RSA_ReadPublicKey_Test()
 		"DsqD6Wjyqf0z7DiWkQIDAQAB\n" <<
 		"-----END PUBLIC KEY-----";
 	string key_str = sout.str();
-	return key(key_str, Crypto::Rsa::KEY_TYPE::PUBLIC_KEY);
+	return Crypto::Rsa::key(key_str, Crypto::Rsa::KEY_TYPE::PUBLIC_KEY);
 }
 
 inline RSA* RSA_ReadPrivateKey_Test()
@@ -39,7 +40,7 @@ inline RSA* RSA_ReadPrivateKey_Test()
 		"LhnHN6B7gOM/zQNCfZQiMhxHFE7SfB8dF1qAsl9/sA==\n" <<
 		"-----END RSA PRIVATE KEY-----" << endl;
 	string key_str = sout.str();
-	return key(key_str, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
+	return Crypto::Rsa::key(key_str, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
 }
 
 inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RSA_PADDING& padding)
@@ -50,32 +51,7 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 	default_random_engine random_engine(rd());
 	uniform_int_distribution<unsigned> uniform_int(0, 0xff);
 
-	size_t max_data_size = 0;
-	switch (padding)
-	{
-	case Crypto::Rsa::RSA_PADDING::RSA_NoPadding:
-		max_data_size = rsa_key_size - 1;
-		break;
-	case Crypto::Rsa::RSA_PADDING::RSA_PKCS1Padding:
-		max_data_size = rsa_key_size - RSA_PKCS1_PADDING_SIZE - 1;
-		break;
-	case Crypto::Rsa::RSA_PADDING::RSA_OAEPPadding:
-		max_data_size = rsa_key_size - 2 * SHA_DIGEST_LENGTH - 2;
-		break;
-	case Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA224andMGF1Padding:
-		max_data_size = rsa_key_size - 2 * SHA224_DIGEST_LENGTH - 2;
-		break;
-	case Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA256andMGF1Padding:
-		max_data_size = rsa_key_size - 2 * SHA256_DIGEST_LENGTH - 2;
-		break;
-	case Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA384andMGF1Padding:
-		max_data_size = rsa_key_size - 2 * SHA384_DIGEST_LENGTH - 2;
-		break;
-	case Crypto::Rsa::RSA_PADDING::RSA_OAEPwithSHA512andMGF1Padding:
-		max_data_size = rsa_key_size - 2 * SHA512_DIGEST_LENGTH - 2;
-		break;
-	default: ;
-	}
+	size_t max_data_size = Crypto::Rsa::RSA_message_max_length(rsa_key_size, padding);
 	size_t success = 0;
 	vector<byte> rand_buffer(max_data_size);
 	for (size_t i = 1; i <= max_data_size; ++i)
@@ -85,7 +61,8 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 		{
 			rand_buffer[j] = uniform_int(random_engine);
 		}
-		if(padding == Crypto::Rsa::RSA_PADDING::RSA_NoPadding)
+
+		if (padding == Crypto::Rsa::RSA_PADDING::RSA_NoPadding)
 		{
 			while (rand_buffer[0] == 0)
 			{
@@ -95,8 +72,8 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 
 		try
 		{
-			vector<byte> encrypt_buffer = encode(rand_buffer, PK, padding);
-			vector<byte> decrypt_buffer = decode(encrypt_buffer, SK, padding);
+			vector<byte> encrypt_buffer = Crypto::Rsa::encode(rand_buffer, PK, padding);
+			vector<byte> decrypt_buffer = Crypto::Rsa::decode(encrypt_buffer, SK, padding);
 			if (rand_buffer == decrypt_buffer)
 			{
 				success++;
@@ -104,6 +81,7 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 		}
 		catch (exception e)
 		{
+			cerr << e.what() << endl;
 		}
 	}
 	return success;
