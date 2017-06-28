@@ -8,6 +8,7 @@
 #include "type.h"
 #include "rsa.h"
 using std::vector;
+using std::string;
 
 vector<byte> Crypto::Rsa::RSA_encode_PKCS1_OAEP_padding(const vector<byte>& from, const size_t& key_size, const RSA_PADDING& padding)
 {
@@ -149,7 +150,7 @@ size_t Crypto::Rsa::RSA_message_max_length(const size_t& key_size, const RSA_PAD
 	return max_data_size;
 }
 
-RSA * Crypto::Rsa::key(const string & key_str, const KEY_TYPE & key_type)
+RSA* Crypto::Rsa::key(const string& key_str, const KEY_TYPE& key_type)
 {
 	BIO* key_content = BIO_new_mem_buf(key_str.c_str(), key_str.length());
 	if (key_content == nullptr)
