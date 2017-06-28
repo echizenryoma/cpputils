@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 project(cpputils)
 set(CMAKE_CXX_STANDARD 11)
-set(SOURCE_FILES base64.h hash.h hmac.h hex.h rsa.h main.cpp)
+set(SOURCE_FILES base64.h hash.h hmac.h hex.h rsa.h test.cpp "test/rsa_test.h")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-find_package(OpenSSL)
+find_package(OpenSSL REQUIRED)
 
 message("OPENSSL_VERSION: ${OPENSSL_VERSION}")
 message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")
