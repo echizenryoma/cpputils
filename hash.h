@@ -8,7 +8,7 @@
 #include <openssl/md5.h>
 #include "hex.h"
 #include "type.h"
-using namespace std;
+using std::vector;
 
 namespace Hash
 {

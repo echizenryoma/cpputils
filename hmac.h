@@ -9,7 +9,8 @@
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 #include "type.h"
-using namespace std;
+using std::vector;
+using std::exception;
 
 namespace Hmac
 {

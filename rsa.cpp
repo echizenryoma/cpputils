@@ -9,6 +9,7 @@
 #include "rsa.h"
 using std::vector;
 using std::string;
+using std::exception;
 
 vector<byte> Crypto::Rsa::RSA_encode_PKCS1_OAEP_padding(const vector<byte>& from, const size_t& key_size, const RSA_PADDING& padding)
 {
@@ -191,14 +192,13 @@ vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_P
 		throw exception("Message is too long.");
 	}
 
-	string plain_text_str(data.begin(), data.end());
-	// ReSharper disable once CppJoinDeclarationAndAssignment
-	vector<byte> buffer;
+	vector<byte> plain_text_buffer(data.begin(), data.end());
 	int PADDING = padding;
 	switch (padding)
 	{
 	case RSA_NoPadding:
-		plain_text_str = string(key_size - data.size(), 0) + plain_text_str;
+		plain_text_buffer = vector<byte>(key_size);
+		copy(data.begin(), data.end(), plain_text_buffer.begin() + (key_size - data.size()));
 		break;
 	case RSA_PKCS1Padding: break;
 	case RSA_OAEPPadding: break;
@@ -208,9 +208,7 @@ vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_P
 	case RSA_OAEPwithSHA384andMGF1Padding:
 	case RSA_OAEPwithSHA512andMGF1Padding:
 		PADDING = RSA_NO_PADDING;
-		// ReSharper disable once CppJoinDeclarationAndAssignment
-		buffer = RSA_encode_PKCS1_OAEP_padding(data, key_size, padding);
-		plain_text_str = string(buffer.begin(), buffer.end());
+		plain_text_buffer = RSA_encode_PKCS1_OAEP_padding(data, key_size, padding);
 		break;
 	default:
 		throw exception("Padding is unsupported.");
@@ -220,10 +218,10 @@ vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_P
 	switch (key_type)
 	{
 	case PUBLIC_KEY:
-		encrypt_data_length = RSA_public_encrypt(plain_text_str.size(), reinterpret_cast<const byte*>(plain_text_str.c_str()), encrypt_data, key, PADDING);
+		encrypt_data_length = RSA_public_encrypt(plain_text_buffer.size(), &plain_text_buffer[0], encrypt_data, key, PADDING);
 		break;
 	case PRIVATE_KEY:
-		encrypt_data_length = RSA_private_encrypt(plain_text_str.size(), reinterpret_cast<const byte*>(plain_text_str.c_str()), encrypt_data, key, PADDING);
+		encrypt_data_length = RSA_private_encrypt(plain_text_buffer.size(), &plain_text_buffer[0], encrypt_data, key, PADDING);
 		break;
 	default:
 		throw exception("Error key type.");

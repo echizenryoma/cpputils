@@ -7,7 +7,9 @@
 #include <openssl/asn1.h>
 #include <openssl/err.h>
 #include "type.h"
-using namespace std;
+using std::string;
+using std::vector;
+using std::exception;
 
 namespace Hex
 {
@@ -50,7 +52,6 @@ namespace Hex
 			throw exception("BN_bn2bin");
 		}
 		vector<byte> val(buffer, buffer + buffer_length);
-
 		OPENSSL_free(buffer);
 		BN_free(bignum_val);
 		return val;
