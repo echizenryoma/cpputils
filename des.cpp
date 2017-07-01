@@ -60,6 +60,11 @@ vector<byte> Crypto::Des::radom_key()
 
 vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
 {
+	if (!check_key(key))
+	{
+		throw exception("The key is unsupported.");
+	}
+
 	int cipher_text_buffer_length = data.size() % DES_KEY_SZ == 0 ? data.size() : (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
 	DES_PADDING PADDING = padding;
 	vector<byte> message(data);
@@ -116,6 +121,16 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 
 vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
 {
+	if (!check_key(key))
+	{
+		throw exception("The key is unsupported.");
+	}
+
+	if (data.size() % DES_KEY_SZ != 0)
+	{
+		throw exception("The length of cipher-text is error.");
+	}
+
 	DES_PADDING PADDING = padding;
 	switch (padding)
 	{
