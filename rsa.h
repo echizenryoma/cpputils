@@ -39,8 +39,8 @@ namespace Crypto
 		static bool RSA_message_check_length(const vector<byte>& data, const size_t& key_size, const RSA_PADDING& padding);
 		static size_t RSA_message_max_length(const size_t& key_size, const RSA_PADDING& padding);
 		static RSA* key(const string& key_str, const KEY_TYPE& key_type = PUBLIC_KEY);
-		static vector<byte> encode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = NoPadding, const KEY_TYPE& key_type = PUBLIC_KEY);
-		static vector<byte> decode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = NoPadding, const KEY_TYPE& key_type = PRIVATE_KEY);
+		static vector<byte> encrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = NoPadding, const KEY_TYPE& key_type = PUBLIC_KEY);
+		static vector<byte> decrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding = NoPadding, const KEY_TYPE& key_type = PRIVATE_KEY);
 	};
 }
 

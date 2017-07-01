@@ -178,7 +178,7 @@ RSA* Crypto::Rsa::key(const string& key_str, const KEY_TYPE& key_type)
 	return rsa_key;
 }
 
-vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
+vector<byte> Crypto::Rsa::encrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
 {
 	if (RSA_check_key(key) < 0)
 	{
@@ -238,7 +238,7 @@ vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_P
 	return encrypt_text;
 }
 
-vector<byte> Crypto::Rsa::decode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
+vector<byte> Crypto::Rsa::decrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
 {
 	size_t rsa_key_size = RSA_size(key);
 	byte* plain_data = new byte[rsa_key_size];

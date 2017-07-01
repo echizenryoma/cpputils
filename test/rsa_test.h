@@ -72,8 +72,8 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 
 		try
 		{
-			vector<byte> encrypt_buffer = Crypto::Rsa::encode(rand_buffer, PK, padding);
-			vector<byte> decrypt_buffer = Crypto::Rsa::decode(encrypt_buffer, SK, padding);
+			vector<byte> encrypt_buffer = Crypto::Rsa::encrypt(rand_buffer, PK, padding);
+			vector<byte> decrypt_buffer = Crypto::Rsa::decrypt(encrypt_buffer, SK, padding);
 			if (rand_buffer == decrypt_buffer)
 			{
 				success++;
