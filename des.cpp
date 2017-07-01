@@ -2,13 +2,14 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
+#include <openssl/des.h>
 #include "type.h"
 #include "des.h"
 using std::vector;
 using std::string;
 using std::exception;
 
-const EVP_CIPHER* Crypto::Des::GetMode(const DES_MODE& mode)
+const EVP_CIPHER* Crypto::Des::get_mode(const DES_MODE& mode)
 {
 	const EVP_CIPHER* cipher_mode = nullptr;
 	switch (mode)
@@ -31,40 +32,89 @@ const EVP_CIPHER* Crypto::Des::GetMode(const DES_MODE& mode)
 	return cipher_mode;
 }
 
-vector<byte> Crypto::Des::encode(const vector<byte>& data, vector<byte> key, const DES_MODE& mode, const DES_PADDING& padding)
+
+vector<byte> Crypto::Des::key(const string& des_key_str)
 {
+	DES_cblock key_buffer;
+	DES_string_to_key(des_key_str.c_str(), &key_buffer);
+	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
+}
+
+bool Crypto::Des::check_key(const vector<byte>& des_key)
+{
+	if (des_key.size() != DES_KEY_SZ)
+	{
+		return false;
+	}
+	DES_cblock key_buffer;
+	copy(des_key.begin(), des_key.end(), key_buffer);
+	return DES_check_key_parity(&key_buffer);
+}
+
+vector<byte> Crypto::Des::radom_key()
+{
+	DES_cblock key_buffer;
+	DES_random_key(&key_buffer);
+	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
+}
+
+vector<byte> Crypto::Des::encode(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+{
+	int cipher_text_buffer_length = data.size() % 8 == 0 ? data.size() : (data.size() / 8 + 1) * 8;
+	DES_PADDING PADDING = padding;
+	vector<byte> message(data);
+	switch (padding)
+	{
+	case NoPadding: break;
+	case PKCS5Padding: 
+		PADDING = PKCS7Padding;
+		cipher_text_buffer_length = (data.size() / 8 + 1) * 8;
+		if (data.size() % 8 == 0)
+		{
+			message.insert(message.end(), DES_KEY_SZ, DES_KEY_SZ);
+		}
+		break;
+	case PKCS7Padding: break;
+	case ISO10126Padding: break;
+	default: 
+		throw exception("Padding is unsupported.");
+	}
+
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
-	EVP_CIPHER_CTX_set_padding(ctx, padding);
-	const EVP_CIPHER* cipher_type = GetMode(mode);
+	EVP_CIPHER_CTX_set_padding(ctx, PADDING);
+	const EVP_CIPHER* cipher_type = get_mode(mode);
 
 	vector<byte> iv(8);
 	int ret = EVP_EncryptInit_ex(ctx, cipher_type, nullptr, &key[0], &iv[0]);
-	if (ret != 0)
+	if (ret <= 0)
 	{
 		throw exception(ERR_error_string(ERR_get_error(), nullptr));
 	}
 
-	int cipher_text_buffer_length;
-	byte* cipher_text_buffer = nullptr;
-	ret = EVP_EncryptUpdate(ctx, cipher_text_buffer, &cipher_text_buffer_length, &data[0], data.size());
-	if (ret != 0)
+	int cipher_text_buffer_written_length = 0;
+	vector<byte> cipher_text_buffer(cipher_text_buffer_length);
+	ret = EVP_EncryptUpdate(ctx, &cipher_text_buffer[0], &cipher_text_buffer_written_length, &message[0], message.size());
+	if (ret <= 0)
 	{
 		throw exception(ERR_error_string(ERR_get_error(), nullptr));
 	}
 
-	ret = EVP_EncryptFinal_ex(ctx, cipher_text_buffer + cipher_text_buffer_length, &cipher_text_buffer_length);
-	if (ret != 0)
+	if (cipher_text_buffer_written_length <  cipher_text_buffer_length)
 	{
-		throw exception(ERR_error_string(ERR_get_error(), nullptr));
+		ret = EVP_EncryptFinal_ex(ctx, &cipher_text_buffer[0] + cipher_text_buffer_written_length, &cipher_text_buffer_length);
+		if (ret <= 0)
+		{
+			throw exception(ERR_error_string(ERR_get_error(), nullptr));
+		}
 	}
-	vector<byte> cipher_text(cipher_text_buffer, cipher_text_buffer + cipher_text_buffer_length);
+
+	vector<byte> cipher_text(cipher_text_buffer.begin(), cipher_text_buffer.end());
 	EVP_CIPHER_CTX_cleanup(ctx);
-	OPENSSL_free(cipher_text_buffer);
 	return cipher_text;
 }
 
-vector<byte> Crypto::Des::decode(const vector<byte>& data, vector<byte> key, const DES_MODE& mode, const DES_PADDING& padding)
+vector<byte> Crypto::Des::decode(const vector<byte>& data, const vector<byte>&, const DES_MODE& mode, const DES_PADDING& padding)
 {
 	return {};
 }

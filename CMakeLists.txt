@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(cpputils)
 set(CMAKE_CXX_STANDARD 11)
-set(SOURCE_FILES base64.h des.h des.cpp hash.h hmac.h hex.h rsa.h rsa.cpp test.cpp "test/rsa_test.h")
+set(SOURCE_FILES base64.h des.h des.cpp hash.h hmac.h hex.h rsa.h rsa.cpp test.cpp "test/des_test.h" "test/rsa_test.h")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 find_package(OpenSSL REQUIRED)

@@ -16,8 +16,8 @@ namespace Crypto
 	public:
 		enum DES_PADDING
 		{
-			NoPadding = EVP_PADDING_ZERO,
-			PKCS5Padding = EVP_PADDING_PKCS7,
+			NoPadding = EVP_CIPH_NO_PADDING,
+			PKCS5Padding = 105,
 			PKCS7Padding = EVP_PADDING_PKCS7,
 			ISO10126Padding = EVP_PADDING_ISO10126
 		};
@@ -26,17 +26,20 @@ namespace Crypto
 		{
 			CBC,
 			CFB,
-			//CTR, //δʵ��
-			//CTS, //δʵ��
+			//CTR, //未实现
+			//CTS, //未实现
 			ECB,
 			OFB,
 		};
 
 	private:
-		static const const EVP_CIPHER* GetMode(const DES_MODE& mode);
+		static const EVP_CIPHER* get_mode(const DES_MODE& mode);
 	public:
-		static vector<byte> encode(const vector<byte>& data, vector<byte> key, const DES_MODE& mode, const DES_PADDING& padding);
-		static vector<byte> decode(const vector<byte>& data, vector<byte> key, const DES_MODE& mode, const DES_PADDING& padding);
+		static vector<byte> key(const string& des_key_str);
+		static bool check_key(const vector<byte>& des_key);
+		static vector<byte> radom_key();
+		static vector<byte> encode(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding);
+		static vector<byte> decode(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding);
 	};
 }
 
