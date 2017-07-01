@@ -14,5 +14,6 @@ inline int DES_Test()
 	vector<byte> buffer(str.begin(), str.end());
 	vector<byte> encrypt_text = Crypto::Des::encode(buffer, key, Crypto::Des::DES_MODE::ECB, Crypto::Des::DES_PADDING::PKCS5Padding);
 	cout << Base64::encode(encrypt_text) << endl;
+	vector<byte> plain_text = Crypto::Des::decode(encrypt_text, key, Crypto::Des::DES_MODE::ECB, Crypto::Des::DES_PADDING::PKCS5Padding);
 	return 0;
 }
