@@ -58,7 +58,7 @@ vector<byte> Crypto::Des::radom_key()
 	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
 }
 
-vector<byte> Crypto::Des::encode(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
 {
 	int cipher_text_buffer_length = data.size() % DES_KEY_SZ == 0 ? data.size() : (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
 	DES_PADDING PADDING = padding;
@@ -114,7 +114,7 @@ vector<byte> Crypto::Des::encode(const vector<byte>& data, const vector<byte>& k
 	return cipher_text;
 }
 
-vector<byte> Crypto::Des::decode(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
 {
 	DES_PADDING PADDING = padding;
 	switch (padding)
