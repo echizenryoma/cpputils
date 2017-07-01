@@ -22,19 +22,19 @@ vector<byte> Crypto::Rsa::RSA_encode_PKCS1_OAEP_padding(const vector<byte>& from
 	const EVP_MD* hash_function;
 	switch (padding)
 	{
-	case RSA_OAEPwithSHA1andMGF1Padding:
+	case OAEPwithSHA1andMGF1Padding:
 		hash_function = EVP_sha1();
 		break;
-	case RSA_OAEPwithSHA224andMGF1Padding:
+	case OAEPwithSHA224andMGF1Padding:
 		hash_function = EVP_sha224();
 		break;
-	case RSA_OAEPwithSHA256andMGF1Padding:
+	case OAEPwithSHA256andMGF1Padding:
 		hash_function = EVP_sha256();
 		break;
-	case RSA_OAEPwithSHA384andMGF1Padding:
+	case OAEPwithSHA384andMGF1Padding:
 		hash_function = EVP_sha384();
 		break;
-	case RSA_OAEPwithSHA512andMGF1Padding:
+	case OAEPwithSHA512andMGF1Padding:
 		hash_function = EVP_sha512();
 		break;
 
@@ -53,27 +53,27 @@ vector<byte> Crypto::Rsa::RSA_decode_PKCS1_OAEP_padding(const vector<byte>& from
 	const EVP_MD* hash_function;
 	switch (padding)
 	{
-	case RSA_OAEPwithSHA1andMGF1Padding:
+	case OAEPwithSHA1andMGF1Padding:
 		hash = Hex::decode("da39a3ee5e6b4b0d3255bfef95601890afd80709");
 		hash_size = SHA_DIGEST_LENGTH;
 		hash_function = EVP_sha1();
 		break;
-	case RSA_OAEPwithSHA224andMGF1Padding:
+	case OAEPwithSHA224andMGF1Padding:
 		hash = Hex::decode("d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f");
 		hash_size = SHA224_DIGEST_LENGTH;
 		hash_function = EVP_sha224();
 		break;
-	case RSA_OAEPwithSHA256andMGF1Padding:
+	case OAEPwithSHA256andMGF1Padding:
 		hash = Hex::decode("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
 		hash_size = SHA256_DIGEST_LENGTH;
 		hash_function = EVP_sha256();
 		break;
-	case RSA_OAEPwithSHA384andMGF1Padding:
+	case OAEPwithSHA384andMGF1Padding:
 		hash = Hex::decode("38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b");
 		hash_size = SHA384_DIGEST_LENGTH;
 		hash_function = EVP_sha384();
 		break;
-	case RSA_OAEPwithSHA512andMGF1Padding:
+	case OAEPwithSHA512andMGF1Padding:
 		hash = Hex::decode("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e");
 		hash_size = SHA512_DIGEST_LENGTH;
 		hash_function = EVP_sha512();
@@ -123,26 +123,26 @@ size_t Crypto::Rsa::RSA_message_max_length(const size_t& key_size, const RSA_PAD
 	size_t max_data_size;
 	switch (padding)
 	{
-	case RSA_NoPadding:
+	case NoPadding:
 		max_data_size = key_size - 1;
 		break;
-	case RSA_PKCS1Padding:
+	case PKCS1Padding:
 		max_data_size = key_size - RSA_PKCS1_PADDING_SIZE - 1;
 		break;
-	case RSA_OAEPPadding:
-	case RSA_OAEPwithSHA1andMGF1Padding:
+	case OAEPPadding:
+	case OAEPwithSHA1andMGF1Padding:
 		max_data_size = key_size - 2 * SHA_DIGEST_LENGTH - 2;
 		break;
-	case RSA_OAEPwithSHA224andMGF1Padding:
+	case OAEPwithSHA224andMGF1Padding:
 		max_data_size = key_size - 2 * SHA224_DIGEST_LENGTH - 2;
 		break;
-	case RSA_OAEPwithSHA256andMGF1Padding:
+	case OAEPwithSHA256andMGF1Padding:
 		max_data_size = key_size - 2 * SHA256_DIGEST_LENGTH - 2;
 		break;
-	case RSA_OAEPwithSHA384andMGF1Padding:
+	case OAEPwithSHA384andMGF1Padding:
 		max_data_size = key_size - 2 * SHA384_DIGEST_LENGTH - 2;
 		break;
-	case RSA_OAEPwithSHA512andMGF1Padding:
+	case OAEPwithSHA512andMGF1Padding:
 		max_data_size = key_size - 2 * SHA512_DIGEST_LENGTH - 2;
 		break;
 	default:
@@ -179,7 +179,7 @@ RSA* Crypto::Rsa::key(const string& key_str, const KEY_TYPE& key_type)
 	return rsa_key;
 }
 
-vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
+vector<byte> Crypto::Rsa::encrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
 {
 	if (RSA_check_key(key) < 0)
 	{
@@ -196,17 +196,22 @@ vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_P
 	int PADDING = padding;
 	switch (padding)
 	{
+<<<<<<< HEAD
 	case RSA_NoPadding:
 		plain_text_buffer = vector<byte>(key_size);
 		copy(data.begin(), data.end(), plain_text_buffer.begin() + (key_size - data.size()));
+=======
+	case NoPadding:
+		plain_text_str = string(key_size - data.size(), 0) + plain_text_str;
+>>>>>>> rsa
 		break;
-	case RSA_PKCS1Padding: break;
-	case RSA_OAEPPadding: break;
-	case RSA_OAEPwithSHA1andMGF1Padding:
-	case RSA_OAEPwithSHA224andMGF1Padding:
-	case RSA_OAEPwithSHA256andMGF1Padding:
-	case RSA_OAEPwithSHA384andMGF1Padding:
-	case RSA_OAEPwithSHA512andMGF1Padding:
+	case PKCS1Padding: break;
+	case OAEPPadding: break;
+	case OAEPwithSHA1andMGF1Padding:
+	case OAEPwithSHA224andMGF1Padding:
+	case OAEPwithSHA256andMGF1Padding:
+	case OAEPwithSHA384andMGF1Padding:
+	case OAEPwithSHA512andMGF1Padding:
 		PADDING = RSA_NO_PADDING;
 		plain_text_buffer = RSA_encode_PKCS1_OAEP_padding(data, key_size, padding);
 		break;
@@ -236,7 +241,7 @@ vector<byte> Crypto::Rsa::encode(const vector<byte>& data, RSA* key, const RSA_P
 	return encrypt_text;
 }
 
-vector<byte> Crypto::Rsa::decode(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
+vector<byte> Crypto::Rsa::decrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
 {
 	size_t rsa_key_size = RSA_size(key);
 	byte* plain_data = new byte[rsa_key_size];
@@ -245,14 +250,14 @@ vector<byte> Crypto::Rsa::decode(const vector<byte>& data, RSA* key, const RSA_P
 	int PADDING = padding;
 	switch (padding)
 	{
-	case RSA_NoPadding: break;
-	case RSA_PKCS1Padding: break;
-	case RSA_OAEPPadding: break;
-	case RSA_OAEPwithSHA1andMGF1Padding:
-	case RSA_OAEPwithSHA224andMGF1Padding:
-	case RSA_OAEPwithSHA256andMGF1Padding:
-	case RSA_OAEPwithSHA384andMGF1Padding:
-	case RSA_OAEPwithSHA512andMGF1Padding:
+	case NoPadding: break;
+	case PKCS1Padding: break;
+	case OAEPPadding: break;
+	case OAEPwithSHA1andMGF1Padding:
+	case OAEPwithSHA224andMGF1Padding:
+	case OAEPwithSHA256andMGF1Padding:
+	case OAEPwithSHA384andMGF1Padding:
+	case OAEPwithSHA512andMGF1Padding:
 		PADDING = RSA_NO_PADDING;
 		break;
 	default:
@@ -280,7 +285,7 @@ vector<byte> Crypto::Rsa::decode(const vector<byte>& data, RSA* key, const RSA_P
 	size_t pos = 0;
 	switch (padding)
 	{
-	case RSA_NoPadding:
+	case NoPadding:
 		while (pos < plain_text.size() && plain_text[pos] == 0)
 		{
 			pos++;
@@ -294,13 +299,13 @@ vector<byte> Crypto::Rsa::decode(const vector<byte>& data, RSA* key, const RSA_P
 			plain_text = vector<byte>();
 		}
 		break;
-	case RSA_PKCS1Padding: break;
-	case RSA_OAEPPadding: break;
-	case RSA_OAEPwithSHA1andMGF1Padding:
-	case RSA_OAEPwithSHA224andMGF1Padding:
-	case RSA_OAEPwithSHA256andMGF1Padding:
-	case RSA_OAEPwithSHA384andMGF1Padding:
-	case RSA_OAEPwithSHA512andMGF1Padding:
+	case PKCS1Padding: break;
+	case OAEPPadding: break;
+	case OAEPwithSHA1andMGF1Padding:
+	case OAEPwithSHA224andMGF1Padding:
+	case OAEPwithSHA256andMGF1Padding:
+	case OAEPwithSHA384andMGF1Padding:
+	case OAEPwithSHA512andMGF1Padding:
 		plain_text = RSA_decode_PKCS1_OAEP_padding(plain_text, padding);
 		break;
 	default:
