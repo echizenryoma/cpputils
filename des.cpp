@@ -32,7 +32,6 @@ const EVP_CIPHER* Crypto::Des::get_mode(const DES_MODE& mode)
 	return cipher_mode;
 }
 
-
 vector<byte> Crypto::Des::key(const string& des_key_str)
 {
 	DES_cblock key_buffer;
@@ -65,29 +64,12 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 		throw exception("The key is unsupported.");
 	}
 
-	int cipher_text_buffer_length = data.size() % DES_KEY_SZ == 0 ? data.size() : (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
-	DES_PADDING PADDING = padding;
+	int cipher_text_buffer_length = (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
 	vector<byte> message(data);
-	switch (padding)
-	{
-	case NoPadding: break;
-	case PKCS5Padding:
-		PADDING = PKCS7Padding;
-		cipher_text_buffer_length = (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
-		if (data.size() % DES_KEY_SZ == 0)
-		{
-			message.insert(message.end(), DES_KEY_SZ, DES_KEY_SZ);
-		}
-		break;
-	case PKCS7Padding: break;
-	case ISO10126Padding: break;
-	default:
-		throw exception("Padding is unsupported.");
-	}
 
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
-	EVP_CIPHER_CTX_set_padding(ctx, PADDING);
+	EVP_CIPHER_CTX_set_padding(ctx, padding);
 	const EVP_CIPHER* cipher_type = get_mode(mode);
 
 	vector<byte> iv(DES_KEY_SZ);
@@ -105,17 +87,15 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 		throw exception(ERR_error_string(ERR_get_error(), nullptr));
 	}
 
-	if (cipher_text_buffer_written_length < cipher_text_buffer_length)
+	int ex_length = 0;
+	ret = EVP_EncryptFinal_ex(ctx, &cipher_text_buffer[0] + cipher_text_buffer_written_length, &ex_length);
+	if (ret <= 0)
 	{
-		ret = EVP_EncryptFinal_ex(ctx, &cipher_text_buffer[0] + cipher_text_buffer_written_length, &cipher_text_buffer_length);
-		if (ret <= 0)
-		{
-			throw exception(ERR_error_string(ERR_get_error(), nullptr));
-		}
+		throw exception(ERR_error_string(ERR_get_error(), nullptr));
 	}
+	cipher_text_buffer_written_length += ex_length;
 	EVP_CIPHER_CTX_cleanup(ctx);
-
-	vector<byte> cipher_text(cipher_text_buffer.begin(), cipher_text_buffer.end());	
+	vector<byte> cipher_text(cipher_text_buffer.begin(), cipher_text_buffer.begin() + cipher_text_buffer_written_length);
 	return cipher_text;
 }
 
@@ -131,22 +111,9 @@ vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& 
 		throw exception("The length of cipher-text is error.");
 	}
 
-	DES_PADDING PADDING = padding;
-	switch (padding)
-	{
-	case NoPadding: break;
-	case PKCS5Padding:
-		PADDING = PKCS7Padding;
-		break;
-	case PKCS7Padding: break;
-	case ISO10126Padding: break;
-	default:
-		throw exception("Padding is unsupported.");
-	}
-
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
-	EVP_CIPHER_CTX_set_padding(ctx, PADDING);
+	EVP_CIPHER_CTX_set_padding(ctx, padding);
 	const EVP_CIPHER* cipher_type = get_mode(mode);
 
 	vector<byte> cipher_text(data);
@@ -167,6 +134,7 @@ vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& 
 	{
 		throw exception(ERR_error_string(ERR_get_error(), nullptr));
 	}
+
 	int ex_length = 0;
 	ret = EVP_DecryptFinal_ex(ctx, &plain_text_buffer[0] + plain_text_buffer_written_length, &ex_length);
 	if (ret <= 0)

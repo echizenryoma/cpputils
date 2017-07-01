@@ -196,14 +196,9 @@ vector<byte> Crypto::Rsa::encrypt(const vector<byte>& data, RSA* key, const RSA_
 	int PADDING = padding;
 	switch (padding)
 	{
-<<<<<<< HEAD
-	case RSA_NoPadding:
+	case NoPadding:
 		plain_text_buffer = vector<byte>(key_size);
 		copy(data.begin(), data.end(), plain_text_buffer.begin() + (key_size - data.size()));
-=======
-	case NoPadding:
-		plain_text_str = string(key_size - data.size(), 0) + plain_text_str;
->>>>>>> rsa
 		break;
 	case PKCS1Padding: break;
 	case OAEPPadding: break;

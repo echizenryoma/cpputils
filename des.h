@@ -17,7 +17,7 @@ namespace Crypto
 		enum DES_PADDING
 		{
 			NoPadding = EVP_CIPH_NO_PADDING,
-			PKCS5Padding = 105,
+			PKCS5Padding = EVP_PADDING_PKCS7,
 			PKCS7Padding = EVP_PADDING_PKCS7,
 			ISO10126Padding = EVP_PADDING_ISO10126
 		};
