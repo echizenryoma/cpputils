@@ -33,11 +33,10 @@ namespace Crypto
 		};
 
 	private:
-		static const EVP_CIPHER* get_mode(const DES3_MODE& mode);
+		static const EVP_CIPHER* get_mode(const DES3_MODE& mode, const size_t& key_count);
 	public:
-		static vector<byte> key(const string& des_key_str);
-		static bool check_key(const vector<byte>& des_key);
-		static vector<byte> radom_key();
+		static bool check_key(const vector<byte>& des3_key);
+		static vector<byte> radom_key(const size_t& key_count);
 		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const DES3_MODE& mode, const DES3_PADDING& padding);
 		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const DES3_MODE& mode, const DES3_PADDING& padding);
 	};

@@ -9,52 +9,64 @@ using std::vector;
 using std::string;
 using std::exception;
 
-const EVP_CIPHER* Crypto::Des3::get_mode(const DES3_MODE& mode)
+const EVP_CIPHER* Crypto::Des3::get_mode(const DES3_MODE& mode, const size_t& key_count)
 {
+	if (key_count != 2 && key_count != 3)
+	{
+		throw exception("key_count is unsupported.");
+	}
+
 	const EVP_CIPHER* cipher_mode;
 	switch (mode)
 	{
 	case CBC:
-		cipher_mode = EVP_des_cbc();
+		cipher_mode = key_count == 2 ? EVP_des_ede_cbc() : EVP_des_ede3_cbc();
 		break;
 	case CFB:
-		cipher_mode = EVP_des_cfb();
+		cipher_mode = key_count == 2 ? EVP_des_ede_cfb() : EVP_des_ede3_cfb();
 		break;
 	case ECB:
-		cipher_mode = EVP_des_ecb();
+		cipher_mode = key_count == 2 ? EVP_des_ede_ecb() : EVP_des_ede3_ecb();
 		break;
 	case OFB:
-		cipher_mode = EVP_des_ofb();
+		cipher_mode = key_count == 2 ? EVP_des_ede_ofb() : EVP_des_ede3_ofb();
 		break;
 	default:
-		throw exception("Mode is unsupported.");
+		throw exception("mode is unsupported.");
 	}
 	return cipher_mode;
 }
 
-vector<byte> Crypto::Des3::key(const string& des_key_str)
-{
-	DES_cblock key_buffer;
-	DES_string_to_key(des_key_str.c_str(), &key_buffer);
-	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
-}
-
 bool Crypto::Des3::check_key(const vector<byte>& des_key)
 {
-	if (des_key.size() != DES_KEY_SZ)
+	if (des_key.size() != 2 * DES_KEY_SZ && des_key.size() != 3 * DES_KEY_SZ)
 	{
 		return false;
 	}
-	DES_cblock key_buffer;
-	copy(des_key.begin(), des_key.end(), key_buffer);
-	return DES_check_key_parity(&key_buffer);
+
+	for (size_t i = 0; i < des_key.size() / DES_KEY_SZ; ++i)
+	{
+		DES_cblock key_buffer;
+		copy(des_key.begin() + i * DES_KEY_SZ, des_key.begin() + (i + 1) * DES_KEY_SZ, key_buffer);
+		if (!DES_check_key_parity(&key_buffer))
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
-vector<byte> Crypto::Des3::radom_key()
+vector<byte> Crypto::Des3::radom_key(const size_t& key_count)
 {
+	vector<byte> key;
 	DES_cblock key_buffer;
-	DES_random_key(&key_buffer);
-	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
+
+	for (size_t i = 0; i < key_count; ++i)
+	{
+		DES_random_key(&key_buffer);
+		key.insert(key.end(), &key_buffer[0], &key_buffer[DES_KEY_SZ]);
+	}
+	return key;
 }
 
 vector<byte> Crypto::Des3::encrypt(const vector<byte>& data, const vector<byte>& key, const DES3_MODE& mode, const DES3_PADDING& padding)
@@ -70,7 +82,7 @@ vector<byte> Crypto::Des3::encrypt(const vector<byte>& data, const vector<byte>&
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
 	EVP_CIPHER_CTX_set_padding(ctx, padding);
-	const EVP_CIPHER* cipher_type = get_mode(mode);
+	const EVP_CIPHER* cipher_type = get_mode(mode, key.size() / DES_KEY_SZ);
 
 	vector<byte> iv(DES_KEY_SZ);
 	int ret = EVP_EncryptInit_ex(ctx, cipher_type, nullptr, &key[0], &iv[0]);
@@ -114,7 +126,7 @@ vector<byte> Crypto::Des3::decrypt(const vector<byte>& data, const vector<byte>&
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
 	EVP_CIPHER_CTX_set_padding(ctx, padding);
-	const EVP_CIPHER* cipher_type = get_mode(mode);
+	const EVP_CIPHER* cipher_type = get_mode(mode, key.size() / DES_KEY_SZ);
 
 	vector<byte> cipher_text(data);
 	vector<byte> iv(DES_KEY_SZ);
