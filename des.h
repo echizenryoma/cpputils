@@ -38,8 +38,11 @@ namespace Crypto
 		static vector<byte> key(const string& des_key_str);
 		static bool check_key(const vector<byte>& des_key);
 		static vector<byte> radom_key();
-		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding);
-		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding);
+
+		static bool check_iv(const vector<byte>& IV);
+
+		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV = vector<byte>(DES_KEY_SZ));
+		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV = vector<byte>(DES_KEY_SZ));
 	};
 }
 

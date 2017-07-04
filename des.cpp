@@ -57,11 +57,21 @@ vector<byte> Crypto::Des::radom_key()
 	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
 }
 
-vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+bool Crypto::Des::check_iv(const vector<byte>& IV)
+{
+	return IV.size() == DES_KEY_SZ;
+}
+
+vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV)
 {
 	if (!check_key(key))
 	{
 		throw exception("The key is unsupported.");
+	}
+
+	if (!check_iv(IV))
+	{
+		throw exception("The initialization vector is unsupported.");
 	}
 
 	int cipher_text_buffer_length = (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
@@ -99,11 +109,16 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 	return cipher_text;
 }
 
-vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV)
 {
 	if (!check_key(key))
 	{
 		throw exception("The key is unsupported.");
+	}
+
+	if (!check_iv(IV))
+	{
+		throw exception("The initialization vector is unsupported.");
 	}
 
 	if (data.size() % DES_KEY_SZ != 0)
