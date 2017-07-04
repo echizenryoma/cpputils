@@ -11,7 +11,7 @@ using std::vector;
 using std::string;
 using std::exception;
 
-vector<byte> Crypto::Rsa::RSA_encode_PKCS1_OAEP_padding(const vector<byte>& from, const size_t& key_size, const RSA_PADDING& padding)
+vector<byte> Crypto::Rsa::RSA_encode_PKCS1_OAEP_padding(const vector<byte>& from, const size_t& key_size, const PADDING& padding)
 {
 	if (!RSA_message_check_length(from, key_size, padding))
 	{
@@ -46,7 +46,7 @@ vector<byte> Crypto::Rsa::RSA_encode_PKCS1_OAEP_padding(const vector<byte>& from
 	return buffer;
 }
 
-vector<byte> Crypto::Rsa::RSA_decode_PKCS1_OAEP_padding(const vector<byte>& from, const RSA_PADDING& padding)
+vector<byte> Crypto::Rsa::RSA_decode_PKCS1_OAEP_padding(const vector<byte>& from, const PADDING& padding)
 {
 	size_t hash_size;
 	vector<byte> hash;
@@ -113,12 +113,12 @@ vector<byte> Crypto::Rsa::RSA_decode_PKCS1_OAEP_padding(const vector<byte>& from
 	return m;
 }
 
-bool Crypto::Rsa::RSA_message_check_length(const vector<byte>& data, const size_t& key_size, const RSA_PADDING& padding)
+bool Crypto::Rsa::RSA_message_check_length(const vector<byte>& data, const size_t& key_size, const PADDING& padding)
 {
 	return data.size() <= RSA_message_max_length(key_size, padding);
 }
 
-size_t Crypto::Rsa::RSA_message_max_length(const size_t& key_size, const RSA_PADDING& padding)
+size_t Crypto::Rsa::RSA_message_max_length(const size_t& key_size, const PADDING& padding)
 {
 	size_t max_data_size;
 	switch (padding)
@@ -179,7 +179,7 @@ RSA* Crypto::Rsa::key(const string& key_str, const KEY_TYPE& key_type)
 	return rsa_key;
 }
 
-vector<byte> Crypto::Rsa::encrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
+vector<byte> Crypto::Rsa::encrypt(const vector<byte>& data, RSA* key, const PADDING& padding, const KEY_TYPE& key_type)
 {
 	if (RSA_check_key(key) < 0)
 	{
@@ -236,7 +236,7 @@ vector<byte> Crypto::Rsa::encrypt(const vector<byte>& data, RSA* key, const RSA_
 	return encrypt_text;
 }
 
-vector<byte> Crypto::Rsa::decrypt(const vector<byte>& data, RSA* key, const RSA_PADDING& padding, const KEY_TYPE& key_type)
+vector<byte> Crypto::Rsa::decrypt(const vector<byte>& data, RSA* key, const PADDING& padding, const KEY_TYPE& key_type)
 {
 	size_t rsa_key_size = RSA_size(key);
 	byte* plain_data = new byte[rsa_key_size];

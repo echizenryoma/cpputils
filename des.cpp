@@ -5,11 +5,12 @@
 #include <openssl/des.h>
 #include "type.h"
 #include "des.h"
+#include <openssl/rand.h>
 using std::vector;
 using std::string;
 using std::exception;
 
-const EVP_CIPHER* Crypto::Des::get_mode(const DES_MODE& mode)
+const EVP_CIPHER* Crypto::Des::get_mode(const MODE& mode)
 {
 	const EVP_CIPHER* cipher_mode;
 	switch (mode)
@@ -30,6 +31,11 @@ const EVP_CIPHER* Crypto::Des::get_mode(const DES_MODE& mode)
 		throw exception("Mode is unsupported.");
 	}
 	return cipher_mode;
+}
+
+bool Crypto::Des::check_cipher_text(const vector<byte>& cipher_text)
+{
+	return cipher_text.size() % DES_KEY_SZ == 0;
 }
 
 vector<byte> Crypto::Des::key(const string& des_key_str)
@@ -57,11 +63,36 @@ vector<byte> Crypto::Des::radom_key()
 	return vector<byte>(key_buffer, key_buffer + DES_KEY_SZ);
 }
 
-vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+bool Crypto::Des::check_iv(const vector<byte>& iv)
+{
+	return iv.size() == DES_KEY_SZ;
+}
+
+vector<byte> Crypto::Des::radom_iv()
+{
+	vector<byte> iv(DES_KEY_SZ);
+	if (!RAND_bytes(&iv[0], DES_KEY_SZ))
+	{
+		throw exception(ERR_error_string(ERR_get_error(), nullptr));
+	}
+	return iv;
+}
+
+vector<byte> Crypto::Des::default_iv()
+{
+	return vector<byte>(DES_KEY_SZ);
+}
+
+vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv)
 {
 	if (!check_key(key))
 	{
 		throw exception("The key is unsupported.");
+	}
+
+	if (!check_iv(iv))
+	{
+		throw exception("The iv is unsupported.");
 	}
 
 	int cipher_text_buffer_length = (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
@@ -72,7 +103,6 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 	EVP_CIPHER_CTX_set_padding(ctx, padding);
 	const EVP_CIPHER* cipher_type = get_mode(mode);
 
-	vector<byte> iv(DES_KEY_SZ);
 	int ret = EVP_EncryptInit_ex(ctx, cipher_type, nullptr, &key[0], &iv[0]);
 	if (ret <= 0)
 	{
@@ -99,14 +129,19 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 	return cipher_text;
 }
 
-vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding)
+vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv)
 {
 	if (!check_key(key))
 	{
 		throw exception("The key is unsupported.");
 	}
 
-	if (data.size() % DES_KEY_SZ != 0)
+	if (!check_iv(iv))
+	{
+		throw exception("The iv is unsupported.");
+	}
+
+	if (!check_cipher_text(data))
 	{
 		throw exception("The length of cipher-text is error.");
 	}
@@ -117,7 +152,6 @@ vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& 
 	const EVP_CIPHER* cipher_type = get_mode(mode);
 
 	vector<byte> cipher_text(data);
-	vector<byte> iv(DES_KEY_SZ);
 
 	int ret = EVP_DecryptInit_ex(ctx, cipher_type, nullptr, &key[0], &iv[0]);
 	if (ret <= 0)

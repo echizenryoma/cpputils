@@ -14,7 +14,7 @@ namespace Crypto
 	class Des
 	{
 	public:
-		enum DES_PADDING
+		enum PADDING
 		{
 			NoPadding = EVP_CIPH_NO_PADDING,
 			PKCS5Padding = EVP_PADDING_PKCS7,
@@ -22,7 +22,7 @@ namespace Crypto
 			ISO10126Padding = EVP_PADDING_ISO10126
 		};
 
-		enum DES_MODE
+		enum MODE
 		{
 			CBC,
 			CFB,
@@ -33,13 +33,19 @@ namespace Crypto
 		};
 
 	private:
-		static const EVP_CIPHER* get_mode(const DES_MODE& mode);
+		static const EVP_CIPHER* get_mode(const MODE& mode);
+		static bool check_cipher_text(const vector<byte>& cipher_text);
 	public:
-		static vector<byte> key(const string& des_key_str);
 		static bool check_key(const vector<byte>& des_key);
+		static vector<byte> key(const string& des_key_str);
 		static vector<byte> radom_key();
-		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding);
-		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding);
+
+		static bool check_iv(const vector<byte>& iv);
+		static vector<byte> radom_iv();
+		static vector<byte> default_iv();
+
+		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv = default_iv());
+		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv = default_iv());
 	};
 }
 

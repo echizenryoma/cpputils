@@ -43,7 +43,7 @@ inline RSA* RSA_ReadPrivateKey_Test()
 	return Crypto::Rsa::key(key_str, Crypto::Rsa::KEY_TYPE::PRIVATE_KEY);
 }
 
-inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RSA_PADDING& padding)
+inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::PADDING& padding)
 {
 	size_t rsa_key_size = RSA_size(PK);
 
@@ -62,7 +62,7 @@ inline size_t RSA_PKEncode_SKDecode_Test(RSA* PK, RSA* SK, const Crypto::Rsa::RS
 			rand_buffer[j] = uniform_int(random_engine);
 		}
 
-		if (padding == Crypto::Rsa::RSA_PADDING::NoPadding)
+		if (padding == Crypto::Rsa::PADDING::NoPadding)
 		{
 			while (rand_buffer[0] == 0)
 			{
@@ -111,31 +111,31 @@ inline int RSA_Test()
 	size_t success = 0;
 
 	cout << "RSA PKEncode_SKDecode with NoPadding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::NoPadding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::NoPadding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with PKCS1Padding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::PKCS1Padding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::PKCS1Padding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with OAEPPadding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::OAEPPadding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::OAEPPadding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with OAEPwithSHA1andMGF1Padding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::OAEPwithSHA1andMGF1Padding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::OAEPwithSHA1andMGF1Padding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with OAEPwithSHA224andMGF1Padding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::OAEPwithSHA224andMGF1Padding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::OAEPwithSHA224andMGF1Padding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with OAEPwithSHA256andMGF1Padding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::OAEPwithSHA256andMGF1Padding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::OAEPwithSHA256andMGF1Padding);
 	cout << "[" << success << "]" << endl;
 
 	cout << "RSA PKEncode_SKDecode with OAEPwithSHA384andMGF1Padding Test: ";
-	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::RSA_PADDING::OAEPwithSHA384andMGF1Padding);
+	success = RSA_PKEncode_SKDecode_Test(rsa_public_key, rsa_private_key, Crypto::Rsa::PADDING::OAEPwithSHA384andMGF1Padding);
 	cout << "[" << success << "]" << endl;
 
 	RSA_free(rsa_public_key);
