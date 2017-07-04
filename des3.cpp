@@ -13,7 +13,7 @@ const EVP_CIPHER* Crypto::Des3::get_mode(const DES3_MODE& mode, const size_t& ke
 {
 	if (key_count != 2 && key_count != 3)
 	{
-		throw exception("key_count is unsupported.");
+		throw exception("The key_count is unsupported.");
 	}
 
 	const EVP_CIPHER* cipher_mode;
@@ -32,7 +32,7 @@ const EVP_CIPHER* Crypto::Des3::get_mode(const DES3_MODE& mode, const size_t& ke
 		cipher_mode = key_count == 2 ? EVP_des_ede_ofb() : EVP_des_ede3_ofb();
 		break;
 	default:
-		throw exception("mode is unsupported.");
+		throw exception("The mode is unsupported.");
 	}
 	return cipher_mode;
 }
