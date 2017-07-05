@@ -182,7 +182,7 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
 	EVP_CIPHER_CTX_set_padding(ctx, padding);
-	const EVP_CIPHER* cipher_type = get_mode(mode, key.size() / DES_KEY_SZ);
+	const EVP_CIPHER* cipher_type = get_mode(mode, key.size());
 
 	int ret = EVP_EncryptInit_ex(ctx, cipher_type, nullptr, &key[0], &iv[0]);
 	if (ret <= 0)
@@ -230,7 +230,7 @@ vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& 
 	EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	EVP_CIPHER_CTX_init(ctx);
 	EVP_CIPHER_CTX_set_padding(ctx, padding);
-	const EVP_CIPHER* cipher_type = get_mode(mode, key.size() / DES_KEY_SZ);
+	const EVP_CIPHER* cipher_type = get_mode(mode, key.size());
 
 	vector<byte> cipher_text(data);
 	int ret = EVP_DecryptInit_ex(ctx, cipher_type, nullptr, &key[0], &iv[0]);
