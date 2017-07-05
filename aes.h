@@ -42,8 +42,8 @@ namespace Crypto
 	public:
 		static KEY_SIZE get_key_size(const vector<byte>& key);
 		static KEY_SIZE get_key_size(const size_t& key_size);
-		static bool check_key(const vector<byte>& aes_key);
-		static bool check_key_size(const size_t& aes_key_size);
+		static bool check_key(const vector<byte>& key);
+		static bool check_key_size(const size_t& key_size);
 		static vector<byte> radom_key(const KEY_SIZE& key_size);
 
 		static bool check_iv(const vector<byte>& iv);

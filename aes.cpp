@@ -99,14 +99,14 @@ bool Crypto::Aes::check_cipher_text(const vector<byte>& cipher_text)
 	return cipher_text.size() % AES_BLOCK_SIZE == 0;
 }
 
-bool Crypto::Aes::check_key(const vector<byte>& aes_key)
+bool Crypto::Aes::check_key(const vector<byte>& key)
 {
-	return check_key_size(aes_key.size() * 8);
+	return check_key_size(key.size() * 8);
 }
 
-bool Crypto::Aes::check_key_size(const size_t& aes_key_size)
+bool Crypto::Aes::check_key_size(const size_t& key_size)
 {
-	switch (aes_key_size)
+	switch (key_size)
 	{
 	case AES_128:
 	case AES_192:
