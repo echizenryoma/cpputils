@@ -5,14 +5,13 @@
 #include <string>
 #include "../type.h"
 #include "../base64.h"
-#include "../des3.h"
+#include "../des.h"
 using namespace std;
-
 
 inline int DES3_Test()
 {
-	vector<byte> key = Crypto::Des3::radom_key(2);
+	vector<byte> key = Crypto::Des::radom_key(Crypto::Des::MOTHED::DES_EDE);
 	cout << Base64::encode(key) << endl;
-	Crypto::Des3::check_key(key);
+	Crypto::Des::check_key(key);
 	return 0;
 }

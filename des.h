@@ -1,10 +1,11 @@
 #pragma once
 
-#ifndef __DES_H__
-#define __DES_H__
+#ifndef __TRIPLE_DES_H__
+#define __TRIPLE_DES_H__
 
 #include <vector>
 #include <openssl/evp.h>
+#include <openssl/des.h>
 #include "type.h"
 using std::vector;
 using std::string;
@@ -32,13 +33,20 @@ namespace Crypto
 			OFB,
 		};
 
+		enum MOTHED
+		{
+			DES = DES_KEY_SZ,
+			DES_EDE = 2 * DES_KEY_SZ,
+			DES_EDE3 = 3 * DES_KEY_SZ
+		};
+
 	private:
-		static const EVP_CIPHER* get_mode(const MODE& mode);
+		static const EVP_CIPHER* get_mode(const MODE& mode, const size_t& key_size);
 		static bool check_cipher_text(const vector<byte>& cipher_text);
 	public:
-		static bool check_key(const vector<byte>& des_key);
-		static vector<byte> key(const string& des_key_str);
-		static vector<byte> radom_key();
+		static bool check_key(const vector<byte>& key);
+		static bool check_key_size(const size_t& key_size);
+		static vector<byte> radom_key(const MOTHED& key_count);
 
 		static bool check_iv(const vector<byte>& iv);
 		static vector<byte> radom_iv();
@@ -49,4 +57,4 @@ namespace Crypto
 	};
 }
 
-#endif __DES_H__
+#endif __TRIPLE_DES_H__
