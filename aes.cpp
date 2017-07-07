@@ -56,6 +56,35 @@ const EVP_CIPHER* Crypto::Aes::get_mode(const MODE& mode, const KEY_SIZE& key_si
 			throw exception("The key size is unsupported.");
 		}
 		break;
+	case CTR:
+		switch (key_size)
+		{
+		case AES_128:
+			cipher_mode = EVP_aes_128_ctr();
+			break;
+		case AES_192:
+			cipher_mode = EVP_aes_192_ctr();
+			break;
+		case AES_256:
+			cipher_mode = EVP_aes_256_ctr();
+			break;
+		default:
+			throw exception("The key size is unsupported.");
+		}
+		break;
+	case CTS:
+		switch (key_size)
+		{
+		case AES_128:
+			cipher_mode = EVP_aes_128_xts();
+			break;
+		case AES_256:
+			cipher_mode = EVP_aes_256_xts();
+			break;
+		default:
+			throw exception("The key size is unsupported.");
+		}
+		break;
 	case ECB:
 		switch (key_size)
 		{

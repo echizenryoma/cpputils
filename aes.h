@@ -23,8 +23,8 @@ namespace Crypto
 		{
 			CBC,
 			CFB,
-			//CTR, //Unimplemented
-			//CTS, //Unimplemented
+			CTR,
+			CTS,
 			ECB,
 			OFB,
 		};
