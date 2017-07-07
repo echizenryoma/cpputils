@@ -33,7 +33,7 @@ namespace Crypto
 			OFB,
 		};
 
-		enum MOTHED
+		enum KEY_SIZE
 		{
 			DES = DES_KEY_SZ,
 			DES_EDE = 2 * DES_KEY_SZ,
@@ -46,7 +46,7 @@ namespace Crypto
 	public:
 		static bool check_key(const vector<byte>& key);
 		static bool check_key_size(const size_t& key_size);
-		static vector<byte> radom_key(const MOTHED& key_count);
+		static vector<byte> radom_key(const KEY_SIZE& key_count);
 
 		static bool check_iv(const vector<byte>& iv);
 		static vector<byte> radom_iv();

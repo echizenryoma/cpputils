@@ -127,7 +127,7 @@ bool Crypto::Des::check_key_size(const size_t& key_size)
 	}
 }
 
-vector<byte> Crypto::Des::radom_key(const MOTHED& key_mothed)
+vector<byte> Crypto::Des::radom_key(const KEY_SIZE& key_mothed)
 {
 	if (!check_key_size(key_mothed))
 	{
