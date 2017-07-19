@@ -149,7 +149,6 @@ bool Crypto::Des::check_iv(const vector<byte>& iv)
 	return iv.size() == DES_KEY_SZ;
 }
 
-<<<<<<< HEAD
 vector<byte> Crypto::Des::radom_iv()
 {
 	vector<byte> iv(DES_KEY_SZ);
@@ -166,29 +165,15 @@ vector<byte> Crypto::Des::default_iv()
 }
 
 vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv)
-=======
-bool Crypto::Des::check_iv(const vector<byte>& IV)
-{
-	return IV.size() == DES_KEY_SZ;
-}
-
-vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV)
->>>>>>> triple-des
 {
 	if (!check_key(key))
 	{
 		throw exception("The key is unsupported.");
 	}
 
-<<<<<<< HEAD
 	if (!check_iv(iv))
 	{
 		throw exception("The iv is unsupported.");
-=======
-	if (!check_iv(IV))
-	{
-		throw exception("The initialization vector is unsupported.");
->>>>>>> triple-des
 	}
 
 	int cipher_text_buffer_length = (data.size() / DES_KEY_SZ + 1) * DES_KEY_SZ;
@@ -225,32 +210,19 @@ vector<byte> Crypto::Des::encrypt(const vector<byte>& data, const vector<byte>& 
 	return cipher_text;
 }
 
-<<<<<<< HEAD
 vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv)
-=======
-vector<byte> Crypto::Des::decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV)
->>>>>>> triple-des
 {
 	if (!check_key(key))
 	{
 		throw exception("The key is unsupported.");
 	}
 
-<<<<<<< HEAD
 	if (!check_iv(iv))
 	{
 		throw exception("The iv is unsupported.");
 	}
 
 	if (!check_cipher_text(data))
-=======
-	if (!check_iv(IV))
-	{
-		throw exception("The initialization vector is unsupported.");
-	}
-
-	if (data.size() % DES_KEY_SZ != 0)
->>>>>>> triple-des
 	{
 		throw exception("The length of cipher-text is error.");
 	}
