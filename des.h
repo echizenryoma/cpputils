@@ -44,6 +44,7 @@ namespace Crypto
 		static const EVP_CIPHER* get_mode(const MODE& mode, const size_t& key_size);
 		static bool check_cipher_text(const vector<byte>& cipher_text);
 	public:
+<<<<<<< HEAD
 		static bool check_key(const vector<byte>& key);
 		static bool check_key_size(const size_t& key_size);
 		static vector<byte> radom_key(const KEY_SIZE& key_count);
@@ -54,6 +55,16 @@ namespace Crypto
 
 		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv = default_iv());
 		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv = default_iv());
+=======
+		static vector<byte> key(const string& des_key_str);
+		static bool check_key(const vector<byte>& des_key);
+		static vector<byte> radom_key();
+
+		static bool check_iv(const vector<byte>& IV);
+
+		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV = vector<byte>(DES_KEY_SZ));
+		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const DES_MODE& mode, const DES_PADDING& padding, const vector<byte>& IV = vector<byte>(DES_KEY_SZ));
+>>>>>>> triple-des
 	};
 }
 
