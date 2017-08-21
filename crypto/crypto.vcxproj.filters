@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{2e01e091-50ea-470a-8ec5-3d97ffb10dad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="des.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="rsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aes.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="des.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hash.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hmac.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="rsa.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="type.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
