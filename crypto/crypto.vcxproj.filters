@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{81df32ce-ac5e-49b8-95ea-9f65a7956097}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="hash.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="hmac.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="hex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="base64.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="aes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="padding.h">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="pkcs5padding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="iso10126padding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="nopadding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="zeropadding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="des.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="rc4.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="blowfish.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="rsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="hash.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hmac.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="aes.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs5padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="iso10126padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="nopadding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs7padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="zeropadding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="des.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="rc4.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="blowfish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="arc4.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="rsa.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
