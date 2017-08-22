@@ -9,21 +9,21 @@
 #include <cryptopp/arc4.h>
 #include <cryptopp/osrng.h>
 
-bool RC4::CheckKey(const vector<byte>& key)
+bool crypto::RC4::CheckKey(const vector<byte>& key)
 {
 	return CheckKeySize(key.size());
 }
 
-bool RC4::CheckKeySize(const size_t& key_size)
+bool crypto::RC4::CheckKeySize(size_t key_size)
 {
 	return key_size >= CryptoPP::Weak::ARC4::MIN_KEYLENGTH && key_size <= CryptoPP::Weak::ARC4::MAX_KEYLENGTH;
 }
 
-vector<byte> RC4::random_key(const size_t& key_size)
+vector<byte> crypto::RC4::random_key(size_t key_size)
 {
 	if (!CheckKeySize(key_size))
 	{
-		throw std::invalid_argument("[invalid_argument] <rc4.cpp> RC4::random_key(const size_t&): {key_size}.");
+		throw std::invalid_argument("[invalid_argument] <rc4.cpp> crypto::RC4::random_key(size_t): {key_size}.");
 	}
 
 	vector<byte> key(key_size);
@@ -31,7 +31,7 @@ vector<byte> RC4::random_key(const size_t& key_size)
 	return key;
 }
 
-vector<byte> RC4::encrypt(const vector<byte>& plain, const vector<byte>& key)
+vector<byte> crypto::RC4::encrypt(const vector<byte>& plain, const vector<byte>& key)
 {
 	vector<byte> cipher = plain;
 	CryptoPP::Weak::ARC4 rc4(key.data(), key.size());
@@ -39,7 +39,7 @@ vector<byte> RC4::encrypt(const vector<byte>& plain, const vector<byte>& key)
 	return cipher;
 }
 
-vector<byte> RC4::decrypt(const vector<byte>& cipher, const vector<byte>& key)
+vector<byte> crypto::RC4::decrypt(const vector<byte>& cipher, const vector<byte>& key)
 {
 	vector<byte> plain = cipher;
 	CryptoPP::Weak::ARC4 rc4(key.data(), key.size());

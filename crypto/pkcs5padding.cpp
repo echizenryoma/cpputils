@@ -5,12 +5,12 @@
 
 #include "pkcs5padding.h"
 
-PKCS5Padding::PKCS5Padding(size_t blockSize)
+crypto::padding::PKCS5Padding::PKCS5Padding(size_t block_size)
 {
-	block_size = blockSize;
+	block_size_ = block_size;
 }
 
-void PKCS5Padding::Pad(vector<byte>& in)
+void crypto::padding::PKCS5Padding::Pad(vector<byte>& in)
 {
 	if (in.empty())
 	{
@@ -22,7 +22,7 @@ void PKCS5Padding::Pad(vector<byte>& in)
 	in.insert(in.end(), len, paddingOctet);
 }
 
-int PKCS5Padding::Unpad(vector<byte>& in)
+int crypto::padding::PKCS5Padding::Unpad(vector<byte>& in)
 {
 	if (in.empty())
 	{
@@ -31,7 +31,7 @@ int PKCS5Padding::Unpad(vector<byte>& in)
 
 	byte lastByte = in.back();
 	size_t padValue = lastByte & 0x0ff;
-	if (padValue < 0x01 || padValue > block_size)
+	if (padValue < 0x01 || padValue > block_size_)
 	{
 		return -1;
 	}
@@ -47,7 +47,7 @@ int PKCS5Padding::Unpad(vector<byte>& in)
 	return start;
 }
 
-size_t PKCS5Padding::GetPadLength(const size_t& len)
+size_t crypto::padding::PKCS5Padding::GetPadLength(const size_t& len)
 {
-	return block_size - len % block_size;
+	return block_size_ - len % block_size_;
 }

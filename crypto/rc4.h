@@ -5,18 +5,19 @@
 
 #pragma once
 
-#include <vector>
-using std::vector;
-using std::string;
+#include "type.h"
 
-#include <cryptopp/config.h>
+namespace crypto
+{
+	class RC4;
+}
 
-class RC4
+class crypto::RC4
 {
 	static bool CheckKey(const vector<byte>& key);
-	static bool CheckKeySize(const size_t& key_size);
+	static bool CheckKeySize(size_t key_size);
 public:
-	static vector<byte> random_key(const size_t& key_size);
+	static vector<byte> random_key(size_t key_size);
 
 	static vector<byte> encrypt(const vector<byte>& plain, const vector<byte>& key);
 	static vector<byte> decrypt(const vector<byte>& cipher, const vector<byte>& key);

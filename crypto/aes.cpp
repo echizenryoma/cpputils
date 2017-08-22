@@ -3,6 +3,9 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "padding.h"
+using crypto::padding::Padding;
+
 #include "aes.h"
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
@@ -13,12 +16,12 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/osrng.h>
 
-bool Aes::CheckKey(const vector<byte>& key)
+bool crypto::Aes::CheckKey(const vector<byte>& key)
 {
 	return CheckKeySize(key.size());
 }
 
-bool Aes::CheckKeySize(const size_t& key_size)
+bool crypto::Aes::CheckKeySize(size_t key_size)
 {
 	switch (key_size)
 	{
@@ -31,40 +34,40 @@ bool Aes::CheckKeySize(const size_t& key_size)
 	}
 }
 
-bool Aes::CheckIV(const vector<byte>& iv)
+bool crypto::Aes::CheckIV(const vector<byte>& iv)
 {
 	return CheckIVSize(iv.size());
 }
 
-bool Aes::CheckIVSize(const size_t& iv_size)
+bool crypto::Aes::CheckIVSize(size_t iv_size)
 {
 	return iv_size == CryptoPP::AES::BLOCKSIZE;
 }
 
-Padding* Aes::GetPaadingScheme(const PaddingScheme& padding_scheme)
+Padding* crypto::Aes::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	Padding* padding;
 	switch (padding_scheme)
 	{
-	case Zero_Padding:
-		padding = new ZeroPadding(CryptoPP::AES::BLOCKSIZE);
+	case ZeroPadding:
+		padding = new padding::ZeroPadding(CryptoPP::AES::BLOCKSIZE);
 		break;
-	case PKCS5_Padding:
-		padding = new PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
+	case PKCS5Padding:
+		padding = new padding::PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
 		break;
-	case PKCS7_Padding:
-		padding = new PKCS7Padding(CryptoPP::AES::BLOCKSIZE);
+	case PKCS7Padding:
+		padding = new padding::PKCS7Padding(CryptoPP::AES::BLOCKSIZE);
 		break;
-	case ISO10126_Padding:
-		padding = new ISO10126Padding(CryptoPP::AES::BLOCKSIZE);
+	case ISO10126Padding:
+		padding = new padding::ISO10126Padding(CryptoPP::AES::BLOCKSIZE);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::GetPaadingScheme(const PaddingScheme&): {padding_scheme}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
 	return padding;
 }
 
-vector<byte> Aes::random_key(const KeySize& key_size)
+vector<byte> crypto::Aes::random_key(KeySize key_size)
 {
 	switch (key_size)
 	{
@@ -73,42 +76,42 @@ vector<byte> Aes::random_key(const KeySize& key_size)
 	case AES_256:
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::random_key(const KeySize&): {key_size}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::random_key(KeySize): {key_size}.");
 	}
 	vector<byte> key = vector<byte>(key_size);
 	CryptoPP::OS_GenerateRandomBlock(true, key.data(), key.size());
 	return key;
 }
 
-vector<byte> Aes::random_iv()
+vector<byte> crypto::Aes::random_iv()
 {
 	vector<byte> iv(CryptoPP::AES::BLOCKSIZE);
 	CryptoPP::OS_GenerateRandomBlock(true, iv.data(), iv.size());
 	return iv;
 }
 
-vector<byte> Aes::default_iv()
+vector<byte> crypto::Aes::default_iv()
 {
 	return vector<byte>(CryptoPP::AES::BLOCKSIZE, 0);
 }
 
-vector<byte> Aes::encrypt(const vector<byte>& plain, const vector<byte>& key, const CipherMode& cipher_mode, const PaddingScheme& padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {key.size()}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::encrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {key.size()}.");
 	}
 
 	if (!CheckIV(iv))
 	{
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {iv.size()}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::encrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
-	vector<byte> padded = plain;
+	vector<byte> padded = ptext;
 
-	if (padding_scheme != No_Padding)
+	if (padding_scheme != NoPadding)
 	{
-		Padding* padding = GetPaadingScheme(padding_scheme);
+		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Pad(padded);
 		delete padding;
 	}
@@ -190,74 +193,74 @@ vector<byte> Aes::encrypt(const vector<byte>& plain, const vector<byte>& key, co
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Aes::decrypt(const vector<byte>& cipher, const vector<byte>& key, const CipherMode& cipher_mode, const PaddingScheme& padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {key.size()}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {key.size()}.");
 	}
 
 	if (!CheckIV(iv))
 	{
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {iv.size()}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
-	string plain;
+	string ptext;
 	CryptoPP::GCM<CryptoPP::AES>::Decryption gcm;
 	switch (cipher_mode)
 	{
 	case CBC:
 	case CTS:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(plain),
+				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
 		break;
 	case CFB:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(plain),
+				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
 		break;
 	case CTR:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(plain),
+				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
 		break;
 	case ECB:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::ECB_Mode<CryptoPP::AES>::Decryption(key.data(), key.size()),
-				new CryptoPP::StringSink(plain),
+				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
 		break;
 	case OFB:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::OFB_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(plain),
+				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
@@ -265,25 +268,25 @@ vector<byte> Aes::decrypt(const vector<byte>& cipher, const vector<byte>& key, c
 	case GCM:
 		gcm.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::AuthenticatedDecryptionFilter(
 				gcm,
-				new CryptoPP::StringSink(plain)
+				new CryptoPP::StringSink(ptext)
 			)
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {cipher_mode}.");
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {cipher_mode}.");
 	}
 
-	vector<byte> message(plain.begin(), plain.end());
+	vector<byte> out(ptext.begin(), ptext.end());
 
-	if (padding_scheme != No_Padding)
+	if (padding_scheme != NoPadding)
 	{
-		Padding* padding = GetPaadingScheme(padding_scheme);
-		padding->Unpad(message);
+		Padding* padding = GetPaadingFunction(padding_scheme);
+		padding->Unpad(out);
 		delete padding;
 	}
-	return message;
+	return out;
 }

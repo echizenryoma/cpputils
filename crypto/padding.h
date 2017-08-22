@@ -5,11 +5,18 @@
 
 #pragma once
 
-#include <vector>
-#include <cryptopp/config.h>
-using std::vector;
+#include "type.h"
 
-class Padding
+namespace crypto
+{
+	namespace padding
+	{
+		class Padding;
+	}
+}
+
+
+class crypto::padding::Padding
 {
 public:
 	virtual ~Padding() = default;

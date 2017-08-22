@@ -7,9 +7,17 @@
 
 #include "padding.h"
 
-class ZeroPadding : public Padding
+namespace crypto
 {
-	size_t block_size;
+	namespace padding
+	{
+		class ZeroPadding;
+	}
+}
+
+class crypto::padding::ZeroPadding : public Padding
+{
+	size_t block_size_;
 public:
 	explicit ZeroPadding(size_t blockSize);
 
@@ -18,21 +26,21 @@ public:
 	* The value of the padding bytes is determined
 	* by the specific padding mechanism that implements this
 	* interface.
-	* \param in the input buffer with the data to pad
-	* \exception length_error if <code>in</code> is too small to hold
+	* \param in_out the input buffer with the data to pad
+	* \exception length_error if <code>in_out</code> is too small to hold
 	* the padding bytes
 	*/
-	void Pad(vector<byte> &in) override;
+	void Pad(vector<byte>& in_out) override;
 
 	/**
 	* \brief Returns the index where padding starts.
 	* Given a buffer with data and their padding, this method returns the
 	* index where the padding starts.
-	* \param in the buffer with the data and their padding
+	* \param in_out the buffer with the data and their padding
 	* \return the index where the padding starts, or -1 if the input is
 	* not properly padded
 	*/
-	int Unpad(vector<byte> &in) override;
+	int Unpad(vector<byte>& in_out) override;
 
 	/**
 	* \brief Determines how long the padding will be for a given input length.

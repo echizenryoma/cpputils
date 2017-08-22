@@ -10,54 +10,54 @@
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
 
-bool Blowfish::CheckKey(const vector<byte>& key)
+bool crypto::Blowfish::CheckKey(const vector<byte>& key)
 {
 	return CheckKeySize(key.size());
 }
 
-bool Blowfish::CheckKeySize(const size_t& key_size)
+bool crypto::Blowfish::CheckKeySize(size_t key_size)
 {
 	return key_size >= CryptoPP::Blowfish::MIN_KEYLENGTH && key_size <= CryptoPP::Blowfish::MAX_KEYLENGTH;
 }
 
-bool Blowfish::CheckIV(const vector<byte>& iv)
+bool crypto::Blowfish::CheckIV(const vector<byte>& iv)
 {
 	return CheckIVSize(iv.size());
 }
 
-bool Blowfish::CheckIVSize(const size_t& iv_size)
+bool crypto::Blowfish::CheckIVSize(size_t iv_size)
 {
 	return iv_size == CryptoPP::Blowfish::BLOCKSIZE;
 }
 
-Padding* Blowfish::GetPaadingScheme(const PaddingScheme& padding_scheme)
+Padding* crypto::Blowfish::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	Padding* padding;
 	switch (padding_scheme)
 	{
-	case Zero_Padding:
-		padding = new ZeroPadding(CryptoPP::Blowfish::BLOCKSIZE);
+	case ZeroPadding:
+		padding = new padding::ZeroPadding(CryptoPP::Blowfish::BLOCKSIZE);
 		break;
-	case PKCS5_Padding:
-		padding = new PKCS5Padding(CryptoPP::Blowfish::BLOCKSIZE);
+	case PKCS5Padding:
+		padding = new padding::PKCS5Padding(CryptoPP::Blowfish::BLOCKSIZE);
 		break;
-	case PKCS7_Padding:
-		padding = new PKCS7Padding(CryptoPP::Blowfish::BLOCKSIZE);
+	case PKCS7Padding:
+		padding = new padding::PKCS7Padding(CryptoPP::Blowfish::BLOCKSIZE);
 		break;
-	case ISO10126_Padding:
-		padding = new ISO10126Padding(CryptoPP::Blowfish::BLOCKSIZE);
+	case ISO10126Padding:
+		padding = new padding::ISO10126Padding(CryptoPP::Blowfish::BLOCKSIZE);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> Blowfish::GetPaadingScheme(const PaddingScheme&): {padding_scheme}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
 	return padding;
 }
 
-vector<byte> Blowfish::random_key(const size_t& key_size)
+vector<byte> crypto::Blowfish::random_key(size_t key_size)
 {
 	if (!CheckKeySize(key_size))
 	{
-		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> Blowfish::random_key(const size_t&): {key_size}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::random_key(size_t): {key_size}.");
 	}
 
 	vector<byte> key(key_size);
@@ -65,35 +65,35 @@ vector<byte> Blowfish::random_key(const size_t& key_size)
 	return key;
 }
 
-vector<byte> Blowfish::random_iv()
+vector<byte> crypto::Blowfish::random_iv()
 {
 	vector<byte> iv(CryptoPP::Blowfish::BLOCKSIZE);
 	CryptoPP::OS_GenerateRandomBlock(true, iv.data(), iv.size());
 	return iv;
 }
 
-vector<byte> Blowfish::default_iv()
+vector<byte> crypto::Blowfish::default_iv()
 {
 	return vector<byte>(CryptoPP::Blowfish::BLOCKSIZE, 0);
 }
 
-vector<byte> Blowfish::encrypt(const vector<byte>& plain, const vector<byte>& key, const CipherMode& cipher_mode, const PaddingScheme& padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
-		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> Blowfish::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {key.size()}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::encrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {key.size()}.");
 	}
 
 	if (!CheckIV(iv))
 	{
-		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> Blowfish::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {iv.size()}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::encrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
-	vector<byte> padded = plain;
+	vector<byte> padded = ptext;
 
-	if (padding_scheme != No_Padding)
+	if (padding_scheme != NoPadding)
 	{
-		Padding* padding = GetPaadingScheme(padding_scheme);
+		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Pad(padded);
 		delete padding;
 	}
@@ -158,21 +158,21 @@ vector<byte> Blowfish::encrypt(const vector<byte>& plain, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {padding_scheme}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::encrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {padding_scheme}.");
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Blowfish::decrypt(const vector<byte>& cipher, const vector<byte>& key, const CipherMode& cipher_mode, const PaddingScheme& padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
-		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> Blowfish::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {key.size()}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {key.size()}.");
 	}
 
 	if (!CheckIV(iv))
 	{
-		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> Blowfish::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {iv.size()}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
 	string plain;
@@ -235,14 +235,14 @@ vector<byte> Blowfish::decrypt(const vector<byte>& cipher, const vector<byte>& k
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {cipher_mode}.");
+		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {cipher_mode}.");
 	}
 
 	vector<byte> message(plain.begin(), plain.end());
 
-	if (padding_scheme != No_Padding)
+	if (padding_scheme != NoPadding)
 	{
-		Padding* padding = GetPaadingScheme(padding_scheme);
+		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Unpad(message);
 		delete padding;
 	}

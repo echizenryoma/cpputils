@@ -1,6 +1,10 @@
 #include "pch.h"
+
 #include "../crypto/rc4.h"
+using crypto::RC4;
+
 #include "../crypto/base64.h"
+using crypto::encode::Base64;
 
 TEST(RC4, RC4_ECB_NoPadding)
 {

@@ -5,9 +5,8 @@
 
 #pragma once
 
-#include "rc4.h"
+#include <vector>
+using std::vector;
+using std::string;
 
-namespace crypto
-{
-	typedef RC4 ARC4;
-}
+typedef unsigned char byte;

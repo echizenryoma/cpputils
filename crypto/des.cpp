@@ -10,9 +10,14 @@
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
 
-bool Des::CheckKey(const vector<byte>& key)
+bool crypto::Des::CheckKey(const vector<byte>& key)
 {
-	switch (key.size())
+	return CheckKeySize(key.size());
+}
+
+bool crypto::Des::CheckKeySize(size_t key_size)
+{
+	switch (key_size)
 	{
 	case DES:
 	case DESede2:
@@ -23,35 +28,40 @@ bool Des::CheckKey(const vector<byte>& key)
 	}
 }
 
-bool Des::CheckIV(const vector<byte>& iv)
+bool crypto::Des::CheckIV(const vector<byte>& iv)
 {
-	return iv.size() == CryptoPP::DES::BLOCKSIZE;
+	return CheckIVSize(iv.size());
 }
 
-Padding* Des::GetPaadingScheme(const PaddingScheme& padding_scheme)
+bool crypto::Des::CheckIVSize(size_t iv_size)
+{
+	return iv_size == CryptoPP::DES::BLOCKSIZE;
+}
+
+Padding* crypto::Des::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	Padding* padding;
 	switch (padding_scheme)
 	{
-	case Zero_Padding:
-		padding = new ZeroPadding(CryptoPP::DES::BLOCKSIZE);
+	case ZeroPadding:
+		padding = new padding::ZeroPadding(CryptoPP::DES::BLOCKSIZE);
 		break;
-	case PKCS5_Padding:
-		padding = new PKCS5Padding(CryptoPP::DES::BLOCKSIZE);
+	case PKCS5Padding:
+		padding = new padding::PKCS5Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
-	case PKCS7_Padding:
-		padding = new PKCS7Padding(CryptoPP::DES::BLOCKSIZE);
+	case PKCS7Padding:
+		padding = new padding::PKCS7Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
-	case ISO10126_Padding:
-		padding = new ISO10126Padding(CryptoPP::DES::BLOCKSIZE);
+	case ISO10126Padding:
+		padding = new padding::ISO10126Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::GetPaadingScheme(const PaddingScheme&): {padding_scheme}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
 	return padding;
 }
 
-vector<byte> Des::Encrypt_CBC(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Encrypt_CBC(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
 {
 	string cipher;
 	switch (key.size())
@@ -90,12 +100,12 @@ vector<byte> Des::Encrypt_CBC(const vector<byte>& padded, const vector<byte>& ke
 		);
 		break;
 	default: 
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Encrypt_CBC(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CBC(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Des::Encrypt_CFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Encrypt_CFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
 {
 	string cipher;
 	switch (key.size())
@@ -134,12 +144,12 @@ vector<byte> Des::Encrypt_CFB(const vector<byte>& padded, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Encrypt_CFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Des::Encrypt_CTR(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Encrypt_CTR(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
 {
 	string cipher;
 	switch (key.size())
@@ -178,12 +188,12 @@ vector<byte> Des::Encrypt_CTR(const vector<byte>& padded, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Encrypt_CTR(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CTR(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Des::Encrypt_ECB(const vector<byte>& padded, const vector<byte>& key)
+vector<byte> crypto::Des::Encrypt_ECB(const vector<byte>& padded, const vector<byte>& key)
 {
 	string cipher;
 	switch (key.size())
@@ -222,12 +232,12 @@ vector<byte> Des::Encrypt_ECB(const vector<byte>& padded, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Encrypt_ECB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_ECB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Des::Encrypt_OFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Encrypt_OFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
 {
 	string cipher;
 	switch (key.size())
@@ -266,12 +276,12 @@ vector<byte> Des::Encrypt_OFB(const vector<byte>& padded, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Encrypt_OFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_OFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Des::Decrypt_CBC(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Decrypt_CBC(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
 {
 	string plain;
 	switch (key.size())
@@ -310,12 +320,12 @@ vector<byte> Des::Decrypt_CBC(const vector<byte>& cipher, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Decrypt_CBC(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CBC(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(plain.begin(), plain.end());
 }
 
-vector<byte> Des::Decrypt_CFB(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Decrypt_CFB(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
 {
 	string plain;
 	switch (key.size())
@@ -354,12 +364,12 @@ vector<byte> Des::Decrypt_CFB(const vector<byte>& cipher, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Decrypt_CFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(plain.begin(), plain.end());
 }
 
-vector<byte> Des::Decrypt_CTR(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Decrypt_CTR(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
 {
 	string plain;
 	switch (key.size())
@@ -398,12 +408,12 @@ vector<byte> Des::Decrypt_CTR(const vector<byte>& cipher, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Decrypt_CTR(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CTR(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(plain.begin(), plain.end());
 }
 
-vector<byte> Des::Decrypt_ECB(const vector<byte>& cipher, const vector<byte>& key)
+vector<byte> crypto::Des::Decrypt_ECB(const vector<byte>& cipher, const vector<byte>& key)
 {
 	string plain;
 	switch (key.size())
@@ -442,12 +452,12 @@ vector<byte> Des::Decrypt_ECB(const vector<byte>& cipher, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Decrypt_ECB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_ECB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(plain.begin(), plain.end());
 }
 
-vector<byte> Des::Decrypt_OFB(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
+vector<byte> crypto::Des::Decrypt_OFB(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv)
 {
 	string plain;
 	switch (key.size())
@@ -486,40 +496,40 @@ vector<byte> Des::Decrypt_OFB(const vector<byte>& cipher, const vector<byte>& ke
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::Decrypt_OFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_OFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(plain.begin(), plain.end());
 }
 
-vector<byte> Des::random_iv()
+vector<byte> crypto::Des::random_iv()
 {
 	vector<byte> iv(CryptoPP::DES::BLOCKSIZE);
 	CryptoPP::OS_GenerateRandomBlock(true, iv.data(), iv.size());
 	return iv;
 }
 
-vector<byte> Des::default_iv()
+vector<byte> crypto::Des::default_iv()
 {
 	return vector<byte>(CryptoPP::DES::BLOCKSIZE, 0);
 }
 
-vector<byte> Des::encrypt(const vector<byte>& plain, const vector<byte>& key, const CipherMode& cipher_mode, const PaddingScheme& padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Des::encrypt(const vector<byte>& ptext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {key.size()}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::encrypt(const vector<byte>&, const vector<byte>& key, CipherMode, PaddingScheme, const vector<byte>&): {key.size()}.");
 	}
 
 	if (!CheckIV(iv))
 	{
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {iv.size()}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::encrypt(const vector<byte>&, const vector<byte>& key, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
-	vector<byte> padded = plain;
+	vector<byte> padded = ptext;
 
-	if (padding_scheme != No_Padding)
+	if (padding_scheme != NoPadding)
 	{
-		Padding* padding = GetPaadingScheme(padding_scheme);
+		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Pad(padded);
 		delete padding;
 	}
@@ -544,21 +554,21 @@ vector<byte> Des::encrypt(const vector<byte>& plain, const vector<byte>& key, co
 		cipher = Encrypt_OFB(padded, key, iv);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> Aes::encrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {cipher_mode}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::encrypt(const vector<byte>&, const vector<byte>& key, CipherMode, PaddingScheme, const vector<byte>&): {cipher_mode}.");
 	}
 	return vector<byte>(cipher.begin(), cipher.end());
 }
 
-vector<byte> Des::decrypt(const vector<byte>& cipher, const vector<byte>& key, const CipherMode& cipher_mode, const PaddingScheme& padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Des::decrypt(const vector<byte>& cipher, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {key.size()}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::decrypt(const vector<byte>&, const vector<byte>& key, CipherMode, PaddingScheme, const vector<byte>&): {key.size()}.");
 	}
 
 	if (!CheckIV(iv))
 	{
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {iv.size()}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::decrypt(const vector<byte>&, const vector<byte>& key, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
 	vector<byte> plain;
@@ -581,14 +591,14 @@ vector<byte> Des::decrypt(const vector<byte>& cipher, const vector<byte>& key, c
 		plain = Decrypt_OFB(cipher, key, iv);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, const CipherMode&, const PaddingScheme&, const vector<byte>&): {cipher_mode}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, const CIPHER_MODE&, const PADDING_SCHEME&, const vector<byte>&): {cipher_mode}.");
 	}
 
 	vector<byte> message(plain.begin(), plain.end());
 
-	if (padding_scheme != No_Padding)
+	if (padding_scheme != NoPadding)
 	{
-		Padding* padding = GetPaadingScheme(padding_scheme);
+		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Unpad(message);
 		delete padding;
 	}

@@ -45,9 +45,6 @@
     <ClCompile Include="blowfish.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="rsa.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash.h">
@@ -92,7 +89,7 @@
     <ClInclude Include="arc4.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="rsa.h">
+    <ClInclude Include="type.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

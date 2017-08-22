@@ -14,13 +14,11 @@
 #include <cryptopp/sha.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/base64.h>
-using std::string;
-using std::vector;
 
-CryptoPP::SimpleProxyFilter* Hmac::GetFilter(const Encode& encode, CryptoPP::BufferedTransformation* attachment)
+CryptoPP::SimpleProxyFilter* crypto::mac::Hmac::GetFilter(EncodeScheme encode_scheme, CryptoPP::BufferedTransformation* const attachment)
 {
 	CryptoPP::SimpleProxyFilter* filter;
-	switch (encode)
+	switch (encode_scheme)
 	{
 	case Base64:
 		filter = new CryptoPP::Base64Encoder(attachment, false);
@@ -45,7 +43,7 @@ CryptoPP::SimpleProxyFilter* Hmac::GetFilter(const Encode& encode, CryptoPP::Buf
 		filter = new CryptoPP::HexEncoder(attachment, false);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <hmac.cpp> Hash::getFilter(const Encode&, CryptoPP::BufferedTransformation*): {encode}.");
+		throw std::invalid_argument("[invalid_argument] <hmac.cpp> crypto::mac::Hmac::GetFilter(EncodeScheme, CryptoPP::BufferedTransformation* const): {encode_scheme}.");
 	}
 
 	if (filter == nullptr)
@@ -55,37 +53,37 @@ CryptoPP::SimpleProxyFilter* Hmac::GetFilter(const Encode& encode, CryptoPP::Buf
 	return filter;
 }
 
-CryptoPP::HMAC_Base* Hmac::GetHMAC(const Algorithm& algorithm, const vector<byte>& key)
+CryptoPP::HMAC_Base* crypto::mac::Hmac::GetHmacFunction(HashScheme hash_scheme, const vector<byte>& key)
 {
 	CryptoPP::HMAC_Base* hmac;
-	switch (algorithm)
+	switch (hash_scheme)
 	{
-	case HMAC_MD2:
+	case MD2:
 		hmac = new CryptoPP::HMAC<CryptoPP::Weak::MD2>(&key[0], key.size());
 		break;
-	case HMAC_MD4:
+	case MD4:
 		hmac = new CryptoPP::HMAC<CryptoPP::Weak::MD4>(&key[0], key.size());
 		break;
-	case HMAC_MD5:
+	case MD5:
 		hmac = new CryptoPP::HMAC<CryptoPP::Weak::MD5>(&key[0], key.size());
 		break;
-	case HMAC_SHA1:
+	case SHA1:
 		hmac = new CryptoPP::HMAC<CryptoPP::SHA1>(&key[0], key.size());
 		break;
-	case HMAC_SHA224:
+	case SHA224:
 		hmac = new CryptoPP::HMAC<CryptoPP::SHA224>(&key[0], key.size());
 		break;
-	case HMAC_SHA256:
+	case SHA256:
 		hmac = new CryptoPP::HMAC<CryptoPP::SHA256>(&key[0], key.size());
 		break;
-	case HMAC_SHA384:
+	case SHA384:
 		hmac = new CryptoPP::HMAC<CryptoPP::SHA384>(&key[0], key.size());
 		break;
-	case HMAC_SHA512:
+	case SHA512:
 		hmac = new CryptoPP::HMAC<CryptoPP::SHA512>(&key[0], key.size());
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <hmac.cpp> Hmac::calculate(const string&, const vector<byte>&, const Algorithm&): {algorithm}.");
+		throw std::invalid_argument("[invalid_argument] <hmac.cpp> crypto::mac::Hmac::GetHmacFunction(HashScheme, const vector<byte>&): {hash_scheme}.");
 	}
 
 	if (hmac == nullptr)
@@ -96,32 +94,31 @@ CryptoPP::HMAC_Base* Hmac::GetHMAC(const Algorithm& algorithm, const vector<byte
 }
 
 
-
-vector<byte> Hmac::calculate(const vector<byte>& plain, const vector<byte>& key, const Algorithm& algorithm)
+vector<byte> crypto::mac::Hmac::mac(const vector<byte>& msg, const vector<byte>& key, HashScheme hash_scheme)
 {
-	return calculate(string(plain.begin(), plain.end()), key, algorithm);
+	return mac(string(msg.begin(), msg.end()), key, hash_scheme);
 }
 
-vector<byte> Hmac::calculate(const string& plain, const vector<byte>& key, const Algorithm& algorithm)
+vector<byte> crypto::mac::Hmac::mac(const string& msg, const vector<byte>& key, HashScheme hash_scheme)
 {
 	string mac;
-	CryptoPP::HMAC_Base* hmac = GetHMAC(algorithm, key);
-	CryptoPP::StringSource(plain, true, new CryptoPP::HashFilter(*hmac, new CryptoPP::StringSink(mac)));
+	CryptoPP::HMAC_Base* hmac = GetHmacFunction(hash_scheme, key);
+	CryptoPP::StringSource(msg, true, new CryptoPP::HashFilter(*hmac, new CryptoPP::StringSink(mac)));
 	delete hmac;
 	return vector<byte>(mac.begin(), mac.end());
 }
 
-string Hmac::calculate(const vector<byte>& message, const Algorithm& algorithm, const vector<byte>& key, const Encode& encode)
+string crypto::mac::Hmac::mac(const vector<byte>& msg, const vector<byte>& key, HashScheme hash_scheme, EncodeScheme encode_scheme)
 {
-	return calculate(string(message.begin(), message.end()), algorithm, key, encode);
+	return mac(string(msg.begin(), msg.end()), key, hash_scheme, encode_scheme);
 }
 
-string Hmac::calculate(const string& message, const Algorithm& algorithm, const vector<byte>& key, const Encode& encode)
+string crypto::mac::Hmac::mac(const string& msg, const vector<byte>& key, HashScheme hash_scheme, EncodeScheme encode_scheme)
 {
 	string digest;
 
-	CryptoPP::HashTransformation* hmac = GetHMAC(algorithm, key);
-	CryptoPP::StringSource(message, true, new CryptoPP::HashFilter(*hmac, GetFilter(encode, new CryptoPP::StringSink(digest))));
+	CryptoPP::HashTransformation* hmac = GetHmacFunction(hash_scheme, key);
+	CryptoPP::StringSource(msg, true, new CryptoPP::HashFilter(*hmac, GetFilter(encode_scheme, new CryptoPP::StringSink(digest))));
 
 	delete hmac;
 	return digest;

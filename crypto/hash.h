@@ -5,17 +5,25 @@
 
 #pragma once
 
-#include <vector>
-#include <cryptopp/config.h>
-#include <cryptopp/cryptlib.h>
+#include "type.h"
 #include <cryptopp/filters.h>
-using std::vector;
-using std::string;
 
-class Hash
+
+namespace crypto
+{
+	namespace message
+	{
+		namespace digest
+		{
+			class Hash;
+		}
+	}
+}
+
+class crypto::message::digest::Hash
 {
 public:
-	enum Algorithm
+	enum HashScheme
 	{
 		MD2 = 12,
 		MD4 = 14,
@@ -27,7 +35,7 @@ public:
 		SHA512 = 512
 	};
 
-	enum Encode
+	enum EncodeScheme
 	{
 		Base64 = 64,
 		Base64_NewLine_64 = 64064,
@@ -40,13 +48,14 @@ public:
 		Hex_Uppercase = 1600,
 		Hex_Lowercase = 1601
 	};
-private:
-	static CryptoPP::SimpleProxyFilter* getFilter(const Encode& encode, CryptoPP::BufferedTransformation* attachment);
-	static CryptoPP::HashTransformation* getHashTransformation(const Algorithm& algorithm);
-public:
-	static vector<byte> caculate(const vector<byte>& message, const Algorithm& algorithm);
-	static vector<byte> caculate(const string& message, const Algorithm& algorithm);
 
-	static string caculate(const vector<byte>& message, const Algorithm& algorithm, const Encode& encode);
-	static string caculate(const string& message, const Algorithm& algorithm, const Encode& encode);
+private:
+	static CryptoPP::SimpleProxyFilter* getFilter(EncodeScheme encode_scheme, CryptoPP::BufferedTransformation* const attachment);
+	static CryptoPP::HashTransformation* getHashTransformation(HashScheme hash_scheme);
+public:
+	static vector<byte> digest(const vector<byte>& msg, HashScheme algorithm);
+	static vector<byte> digest(const string& msg, HashScheme algorithm);
+
+	static string digest(const vector<byte>& msg, HashScheme hash_scheme, EncodeScheme encode_scheme);
+	static string digest(const string& msg, HashScheme hash_scheme, EncodeScheme encode_scheme);
 };

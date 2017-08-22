@@ -5,29 +5,22 @@
 
 #include "hex.h"
 #include <cryptopp/hex.h>
-using std::string;
-using std::vector;
 
-string Hex::encode(const byte* message, const size_t& messageSize, const bool& uppercase)
+string crypto::encode::Hex::encode(const vector<byte>& msg, const bool& uppercase)
 {
-	return encode(string(message, message + messageSize), uppercase);
+	return encode(string(msg.begin(), msg.end()), uppercase);
 }
 
-string Hex::encode(const vector<byte>& message, const bool& uppercase)
+string crypto::encode::Hex::encode(const string& msg, const bool& uppercase)
 {
-	return encode(string(message.begin(), message.end()), uppercase);
+	string etext;
+	CryptoPP::StringSource(msg, true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(etext), uppercase));
+	return etext;
 }
 
-string Hex::encode(const string& message, const bool& uppercase)
-{
-	string encoded;
-	CryptoPP::StringSource(message, true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(encoded), uppercase));
-	return encoded;
-}
-
-vector<byte> Hex::decode(const string& encoded)
+vector<byte> crypto::encode::Hex::decode(const string& etext)
 {
 	string decoded;
-	CryptoPP::StringSource(encoded, true, new CryptoPP::HexDecoder(new CryptoPP::StringSink(decoded)));
+	CryptoPP::StringSource(etext, true, new CryptoPP::HexDecoder(new CryptoPP::StringSink(decoded)));
 	return vector<byte>(decoded.begin(), decoded.end());
 }

@@ -10,18 +10,25 @@
 using std::vector;
 using std::string;
 
-class Base64
+namespace crypto
+{
+	namespace encode
+	{
+		class Base64;
+	}
+}
+
+class crypto::encode::Base64
 {
 public:
-	enum Mode
+	enum EncodeScheme
 	{
 		Standard = 4648,
 		URL_Safe = 6920
 	};
 
-	static string encode(const byte* message, const size_t& messageSize, const Mode& mode = Standard, const bool& insertLineBreaks = false, const int& maxLineLength = 72);
-	static string encode(const vector<byte>& message, const Mode& mode = Standard, const bool& insertLineBreaks = false, const int& maxLineLength = 72);
-	static string encode(const string& message, const Mode& mode = Standard, const bool& insertLineBreaks = false, const int& maxLineLength = 72);
+	static string encode(const vector<byte>& message, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
+	static string encode(const string& message, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
 
-	static vector<byte> decode(const string& encoded, const Mode& mode = Standard);
+	static vector<byte> decode(const string& encoded, EncodeScheme encode_sheme = Standard);
 };

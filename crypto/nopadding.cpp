@@ -5,13 +5,16 @@
 
 #include "nopadding.h"
 
-NoPadding::NoPadding(size_t blockSize)
+crypto::padding::NoPadding::NoPadding(size_t block_size)
 {
-	block_size = blockSize;
+	block_size_ = block_size;
 }
 
-void NoPadding::Pad(vector<byte>& in)
+void crypto::padding::NoPadding::Pad(vector<byte>& in_out)
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return;
@@ -20,22 +23,25 @@ void NoPadding::Pad(vector<byte>& in)
 	size_t len = GetPadLength(in.size());
 	if (len > 0)
 	{
-		size_t start = in.size() + len - block_size;
+		size_t start = in.size() + len - block_size_;
 		vector<byte> lastBlock(in.begin() + start, in.end());
 		lastBlock.insert(lastBlock.begin(), len, 0);
 		in.resize(start);
-		in.insert(in.begin() + start, lastBlock.begin(), lastBlock.end());
+		out.insert(out.begin() + start, lastBlock.begin(), lastBlock.end());
 	}
 }
 
-int NoPadding::Unpad(vector<byte>& in)
+int crypto::padding::NoPadding::Unpad(vector<byte>& in_out)
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return 0;
 	}
 
-	size_t start = in.size() - block_size;
+	size_t start = in.size() - block_size_;
 	vector<byte> lastBlock(in.begin() + start, in.end());
 
 	if (lastBlock.front() == 0)
@@ -49,14 +55,14 @@ int NoPadding::Unpad(vector<byte>& in)
 		{
 			return -1;
 		}
-		in.resize(start);
-		in.insert(in.end(), it, lastBlock.end());
+		out.resize(start);
+		out.insert(out.end(), it, lastBlock.end());
 	}
-	start = in.size();
+	start = out.size();
 	return start;
 }
 
-size_t NoPadding::GetPadLength(const size_t& len)
+size_t crypto::padding::NoPadding::GetPadLength(const size_t& len)
 {
-	return (len / block_size + 1) * block_size - len;
+	return (len / block_size_ + 1) * block_size_ - len;
 }

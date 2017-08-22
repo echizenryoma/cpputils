@@ -8,13 +8,16 @@
 #include <random>
 #include <algorithm>
 
-ISO10126Padding::ISO10126Padding(size_t blockSize)
+crypto::padding::ISO10126Padding::ISO10126Padding(size_t block_size)
 {
-	block_size = blockSize;
+	block_size_ = block_size;
 }
 
-void ISO10126Padding::Pad(vector<byte>& in)
+void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out)
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return;
@@ -30,11 +33,14 @@ void ISO10126Padding::Pad(vector<byte>& in)
 	std::generate(padding.begin(), padding.end() - 1, [&]() { return static_cast<byte>(dist(mte)); });
 
 	padding.back() = paddingOctet;
-	in.insert(in.end(), padding.begin(), padding.end());
+	out.insert(out.end(), padding.begin(), padding.end());
 }
 
-int ISO10126Padding::Unpad(vector<byte>& in)
+int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out)
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return 0;
@@ -42,7 +48,7 @@ int ISO10126Padding::Unpad(vector<byte>& in)
 
 	byte lastByte = in.back();
 	size_t padValue = lastByte & 0x0ff;
-	if (padValue < 0x01 || padValue > block_size)
+	if (padValue < 0x01 || padValue > block_size_)
 	{
 		return -1;
 	}
@@ -52,7 +58,7 @@ int ISO10126Padding::Unpad(vector<byte>& in)
 	return start;
 }
 
-size_t ISO10126Padding::GetPadLength(const size_t& len)
+size_t crypto::padding::ISO10126Padding::GetPadLength(const size_t& len)
 {
-	return block_size - len % block_size;
+	return block_size_ - len % block_size_;
 }

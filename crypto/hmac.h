@@ -5,29 +5,34 @@
 
 #pragma once
 
-#include <vector>
-#include <cryptopp/config.h>
+#include "type.h"
 #include <cryptopp/filters.h>
 #include <cryptopp/hmac.h>
-using std::vector;
-using std::string;
 
-class Hmac
+namespace crypto
+{
+	namespace mac
+	{
+		class Hmac;
+	}
+}
+
+class crypto::mac::Hmac
 {
 public:
-	enum Algorithm
+	enum HashScheme
 	{
-		HMAC_MD2 = 2,
-		HMAC_MD4 = 4,
-		HMAC_MD5 = 5,
-		HMAC_SHA1 = 1,
-		HMAC_SHA224 = 224,
-		HMAC_SHA256 = 256,
-		HMAC_SHA384 = 384,
-		HMAC_SHA512 = 512
+		MD2 = 2,
+		MD4 = 4,
+		MD5 = 5,
+		SHA1 = 1,
+		SHA224 = 224,
+		SHA256 = 256,
+		SHA384 = 384,
+		SHA512 = 512
 	};
 
-	enum Encode
+	enum EncodeScheme
 	{
 		Base64 = 64,
 		Base64_NewLine_64 = 64064,
@@ -42,12 +47,12 @@ public:
 	};
 
 private:
-	static CryptoPP::SimpleProxyFilter* GetFilter(const Encode& encode, CryptoPP::BufferedTransformation* attachment);
-	static CryptoPP::HMAC_Base* GetHMAC(const Algorithm& algorithm, const vector<byte>& key);
+	static CryptoPP::SimpleProxyFilter* GetFilter(EncodeScheme encode_scheme, CryptoPP::BufferedTransformation* const attachment);
+	static CryptoPP::HMAC_Base* GetHmacFunction(HashScheme hash_scheme, const vector<byte>& key);
 public:
-	static vector<byte> calculate(const vector<byte>& plain, const vector<byte>& key, const Algorithm& algorithm);
-	static vector<byte> calculate(const string& plain, const vector<byte>& key, const Algorithm& algorithm);
+	static vector<byte> mac(const vector<byte>& msg, const vector<byte>& key, HashScheme hash_scheme);
+	static vector<byte> mac(const string& msg, const vector<byte>& key, HashScheme hash_scheme);
 
-	static string calculate(const vector<byte>& message, const Algorithm& algorithm, const vector<byte>& key, const Encode& encode);
-	static string calculate(const string& message, const Algorithm& algorithm, const vector<byte>& key, const Encode& encode);
+	static string mac(const vector<byte>& msg, const vector<byte>& key, HashScheme hash_scheme, EncodeScheme encode_scheme);
+	static string mac(const string& msg, const vector<byte>& key, HashScheme hash_scheme, EncodeScheme encode_scheme);
 };

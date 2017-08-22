@@ -5,30 +5,36 @@
 
 #include "zeropadding.h"
 
-ZeroPadding::ZeroPadding(size_t blockSize)
+crypto::padding::ZeroPadding::ZeroPadding(size_t block_size)
 {
-	block_size = blockSize;
+	block_size_ = block_size;
 }
 
-void ZeroPadding::Pad(vector<byte>& in)
+void crypto::padding::ZeroPadding::Pad(vector<byte>& in_out)
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return;
 	}
 	// the number of padding bytes to add
 	size_t len = GetPadLength(in.size());
-	in.insert(in.end(), len, 0);
+	out.insert(out.end(), len, 0);
 }
 
-int ZeroPadding::Unpad(vector<byte>& in)
+int crypto::padding::ZeroPadding::Unpad(vector<byte>& in_out)
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return 0;
 	}
 
-	size_t start = in.size() - block_size;
+	size_t start = in.size() - block_size_;
 	vector<byte>::reverse_iterator it = in.rbegin();
 	while (it != in.rend() && *it == 0)
 	{
@@ -38,11 +44,11 @@ int ZeroPadding::Unpad(vector<byte>& in)
 	{
 		return -1;
 	}
-	in.resize(in.size() - (it - in.rbegin()));
-	return in.size();
+	out.resize(out.size() - (it - in.rbegin()));
+	return out.size();
 }
 
-size_t ZeroPadding::GetPadLength(const size_t& len)
+size_t crypto::padding::ZeroPadding::GetPadLength(const size_t& len)
 {
-	return block_size - len % block_size;
+	return block_size_ - len % block_size_;
 }

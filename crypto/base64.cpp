@@ -5,24 +5,21 @@
 
 #include "base64.h"
 #include <cryptopp/base64.h>
-#include <cryptopp/basecode.h>
-using std::vector;
-using std::string;
 
-string Base64::encode(const byte* message, const size_t& messageSize, const Mode& mode, const bool& insertLineBreaks, const int& maxLineLength)
+string crypto::encode::Base64::encode(const vector<byte>& msg, EncodeScheme encode_sheme, bool new_line, int per_line_length)
 {
 	string encoded;
 	CryptoPP::SimpleProxyFilter* filter;
-	switch (mode)
+	switch (encode_sheme)
 	{
 	case Standard:
-		filter = new CryptoPP::Base64Encoder(new CryptoPP::StringSink(encoded), insertLineBreaks, maxLineLength);
+		filter = new CryptoPP::Base64Encoder(new CryptoPP::StringSink(encoded), new_line, per_line_length);
 		break;
 	case URL_Safe:
-		filter = new CryptoPP::Base64URLEncoder(new CryptoPP::StringSink(encoded), insertLineBreaks, maxLineLength);
+		filter = new CryptoPP::Base64URLEncoder(new CryptoPP::StringSink(encoded), new_line, per_line_length);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <base64.cpp> HMAC::CalculateDigest(const byte*, const size_t&, const Mode&): {mode}.");
+		throw std::invalid_argument("[invalid_argument] <base64.cpp> crypto::encode::Base64::encode(const vector<byte>&, EncodeScheme, bool, int): {encode_sheme}.");
 	}
 
 	if (filter == nullptr)
@@ -30,25 +27,20 @@ string Base64::encode(const byte* message, const size_t& messageSize, const Mode
 		throw std::bad_typeid();
 	}
 
-	CryptoPP::StringSource(message, messageSize, true, filter);
+	CryptoPP::StringSource(msg.data(), msg.size(), true, filter);
 	return encoded;
 }
 
-string Base64::encode(const vector<byte>& message, const Mode& mode, const bool& insertLineBreaks, const int& maxLineLength)
+string crypto::encode::Base64::encode(const string& msg, EncodeScheme encode_sheme, bool new_line, int per_line_length)
 {
-	return encode(message.data(), message.size(), mode);
+	return encode(vector<byte>(msg.begin(), msg.end()), encode_sheme, new_line, per_line_length);
 }
 
-string Base64::encode(const string& message, const Mode& mode, const bool& insertLineBreaks, const int& maxLineLength)
-{
-	return encode(reinterpret_cast<const byte*>(message.data()), message.size(), mode);
-}
-
-vector<byte> Base64::decode(const string& encoded, const Mode& mode)
+vector<byte> crypto::encode::Base64::decode(const string& encoded, EncodeScheme encode_mode)
 {
 	string decoded;
 	CryptoPP::BaseN_Decoder* filter;
-	switch (mode)
+	switch (encode_mode)
 	{
 	case Standard:
 		filter = new CryptoPP::Base64Decoder(new CryptoPP::StringSink(decoded));
@@ -57,7 +49,7 @@ vector<byte> Base64::decode(const string& encoded, const Mode& mode)
 		filter = new CryptoPP::Base64URLDecoder(new CryptoPP::StringSink(decoded));
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <base64.cpp> HMAC::CalculateDigest(const byte*, const size_t&, const Mode&): {mode}.");
+		throw std::invalid_argument("[invalid_argument] <base64.cpp> crypto::encode::Base64::decode(const string&, EncodeScheme): {encode_sheme}.");
 	}
 
 	if (filter == nullptr)

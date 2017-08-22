@@ -5,17 +5,21 @@
 
 #pragma once
 
-#include <vector>
-#include <cryptopp/config.h>
-using std::vector;
-using std::string;
+#include "type.h"
 
-class Hex
+namespace crypto
+{
+	namespace encode
+	{
+		class Hex;
+	}	
+}
+
+class crypto::encode::Hex
 {
 public:
-	static string encode(const byte* message, const size_t& message_size, const bool &uppercase = true);
-	static string encode(const vector<byte>& message, const bool &uppercase = true);
-	static string encode(const string& message, const bool &uppercase = true);
+	static string encode(const vector<byte>& msg, const bool &uppercase = true);
+	static string encode(const string& msg, const bool &uppercase = true);
 
-	static vector<byte> decode(const string& encoded);
+	static vector<byte> decode(const string& etext);
 };

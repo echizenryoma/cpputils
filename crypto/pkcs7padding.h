@@ -7,4 +7,10 @@
 
 #include "pkcs5padding.h"
 
-typedef PKCS5Padding PKCS7Padding;
+namespace crypto
+{
+	namespace padding
+	{
+		typedef PKCS5Padding PKCS7Padding;
+	}
+}

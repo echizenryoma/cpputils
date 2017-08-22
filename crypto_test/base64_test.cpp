@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../crypto/base64.h"
+using crypto::encode::Base64;
 
 TEST(Base64, encode_Standard)
 {

@@ -1,5 +1,7 @@
 #include "pch.h"
+
 #include "../crypto/hex.h"
+using crypto::encode::Hex;
 
 TEST(Hex, encode)
 {
