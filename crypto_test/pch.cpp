@@ -4,3 +4,8 @@
 //
 
 #include "pch.h"
+
+string bytes2str(const vector<byte>& bytes)
+{
+	return string(bytes.begin(), bytes.end());
+}

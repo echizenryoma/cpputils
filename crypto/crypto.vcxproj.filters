@@ -6,39 +6,72 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="iso10126padding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="pkcs5padding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="nopadding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="oaepping.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="zeropadding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="hex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="base64.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="hash.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="hmac.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="aes.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="des.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="rsa.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aes.h">
+    <ClInclude Include="hex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="iso10126padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs5padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs7padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="nopadding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="padding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="oaepping.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="zeropadding.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="base64.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="des.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="hash.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="hex.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="hmac.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="rsa.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="type.h">
+    <ClInclude Include="aes.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

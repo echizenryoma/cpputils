@@ -1,56 +1,67 @@
+/*
+* Copyright (c) 2012, 2017, Echizen Ryoma. All rights reserved.
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*/
+
 #pragma once
 
-#include <vector>
-#include <openssl/evp.h>
 #include "type.h"
-using std::vector;
-using std::string;
 
-namespace Crypto
+#include "padding.h"
+using crypto::padding::Padding;
+
+#include <openssl/ossl_typ.h>
+
+namespace crypto
 {
-	class Aes
-	{
-	public:
-		enum PADDING
-		{
-			NoPadding = EVP_CIPH_NO_PADDING,
-			PKCS5Padding = EVP_PADDING_PKCS7,
-			PKCS7Padding = EVP_PADDING_PKCS7,
-			ISO10126Padding = EVP_PADDING_ISO10126
-		};
-
-		enum MODE
-		{
-			CBC,
-			CFB,
-			CTR,
-			CTS,
-			ECB,
-			OFB,
-		};
-
-		enum KEY_SIZE
-		{
-			AES_128 = 128,
-			AES_192 = 192,
-			AES_256 = 256,
-		};
-
-	private:
-		static const EVP_CIPHER* get_mode(const MODE& mode, const KEY_SIZE& key_size);
-		static bool check_cipher_text(const vector<byte>& cipher_text);
-	public:
-		static KEY_SIZE get_key_size(const vector<byte>& key);
-		static KEY_SIZE get_key_size(const size_t& key_size);
-		static bool check_key(const vector<byte>& key);
-		static bool check_key_size(const size_t& key_size);
-		static vector<byte> radom_key(const KEY_SIZE& key_size);
-
-		static bool check_iv(const vector<byte>& iv);
-		static vector<byte> radom_iv();
-		static vector<byte> default_iv();
-
-		static vector<byte> encrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv = default_iv());
-		static vector<byte> decrypt(const vector<byte>& data, const vector<byte>& key, const MODE& mode, const PADDING& padding, const vector<byte>& iv = default_iv());
-	};
+	class Aes;
 }
+
+class crypto::Aes
+{
+public:
+	enum PADDING_SCHEME
+	{
+		ZeroPadding = 0,
+		NoPadding = 1,
+		PKCS5Padding = 5,
+		PKCS7Padding = 7,
+		ISO10126Padding = 10126
+	};
+
+	enum CIPHER_MODE
+	{
+		CBC,
+		CFB,
+		CTR,
+		CTS,
+		ECB,
+		OFB,
+		GCM
+	};
+
+	enum KEY_SIZE
+	{
+		AES_128 = 128 / 8,
+		AES_192 = 192 / 8,
+		AES_256 = 256 / 8,
+	};
+
+private:
+	static bool CheckKey(const vector<byte>& key);
+	static bool CheckKeySize(size_t key_size);
+
+	static bool CheckIV(const vector<byte>& iv);
+	static bool CheckIVSize(size_t iv_size);
+
+	static Padding* GetPaadingFunction(PADDING_SCHEME padding_scheme);
+	static const EVP_CIPHER* GetChiperFunction(CIPHER_MODE cipher_mode, size_t key_size);
+public:
+	static vector<byte> radom_key(const KEY_SIZE& key_size = AES_128);
+
+	static vector<byte> radom_iv();
+	static vector<byte> default_iv();
+
+	static vector<byte> encrypt(const vector<byte>& msg, const vector<byte>& key, CIPHER_MODE cipher_mode, PADDING_SCHEME padding_scheme, const vector<byte>& iv = default_iv());
+	static vector<byte> decrypt(const vector<byte>& cipher, const vector<byte>& key, CIPHER_MODE cipher_mode, PADDING_SCHEME padding_scheme, const vector<byte>& iv = default_iv());
+};

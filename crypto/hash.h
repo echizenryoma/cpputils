@@ -1,80 +1,37 @@
+/*
+* Copyright (c) 2012, 2017, Echizen Ryoma. All rights reserved.
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*/
+
 #pragma once
 
-#ifndef __HASH_H__
-#define __HASH_H__
-
-#include <openssl/sha.h>
-#include <openssl/md4.h>
-#include <openssl/md5.h>
-#include "hex.h"
 #include "type.h"
-using std::vector;
 
-namespace Hash
+namespace crypto
 {
-	inline vector<byte> md4(const vector<byte>& data)
+	namespace message
 	{
-		byte hash[MD4_DIGEST_LENGTH];
-		MD4(&data[0], data.size(), hash);
-		return vector<byte>(hash, hash + MD4_DIGEST_LENGTH);
-	}
-
-	inline vector<byte> md5(const vector<byte>& data)
-	{
-		byte hash[MD5_DIGEST_LENGTH];
-		MD5(&data[0], data.size(), hash);
-		return vector<byte>(hash, hash + MD5_DIGEST_LENGTH);
-	}
-
-	inline vector<byte> sha1(const vector<byte>& data)
-	{
-		byte hash[SHA_DIGEST_LENGTH];
-		SHA_CTX sha_ctx;
-		SHA1_Init(&sha_ctx);
-		SHA1_Update(&sha_ctx, &data[0], data.size());
-		SHA1_Final(hash, &sha_ctx);
-		return vector<byte>(hash, hash + SHA_DIGEST_LENGTH);
-	}
-
-	inline vector<byte> sha224(const vector<byte>& data)
-	{
-		byte hash[SHA224_DIGEST_LENGTH];
-		SHA256_CTX sha_ctx;
-		SHA224_Init(&sha_ctx);
-		SHA224_Update(&sha_ctx, &data[0], data.size());
-		SHA224_Final(hash, &sha_ctx);
-		return vector<byte>(hash, hash + SHA224_DIGEST_LENGTH);
-	}
-
-	inline vector<byte> sha256(const vector<byte>& data)
-	{
-		byte hash[SHA256_DIGEST_LENGTH];
-		SHA256_CTX sha_ctx;
-		SHA256_Init(&sha_ctx);
-		SHA256_Update(&sha_ctx, &data[0], data.size());
-		SHA256_Final(hash, &sha_ctx);
-		return vector<byte>(hash, hash + SHA256_DIGEST_LENGTH);
-	}
-
-	inline vector<byte> sha384(const vector<byte>& data)
-	{
-		byte hash[SHA384_DIGEST_LENGTH];
-		SHA512_CTX sha_ctx;
-		SHA384_Init(&sha_ctx);
-		SHA384_Update(&sha_ctx, &data[0], data.size());
-		SHA384_Final(hash, &sha_ctx);
-		return vector<byte>(hash, hash + SHA384_DIGEST_LENGTH);
-	}
-
-	inline vector<byte> sha512(const vector<byte>& data)
-	{
-		byte hash[SHA512_DIGEST_LENGTH];
-		SHA512_CTX sha_ctx;
-		SHA512_Init(&sha_ctx);
-		SHA512_Update(&sha_ctx, &data[0], data.size());
-		SHA512_Final(hash, &sha_ctx);
-		return vector<byte>(hash, hash + SHA512_DIGEST_LENGTH);
+		namespace digest
+		{
+			class Hash;
+		}
 	}
 }
 
-#endif __HASH_H__
+class crypto::message::digest::Hash
+{
+public:
+	enum HASH_SCHEME
+	{
+		MD4 = 4,
+		MD5 = 5,
+		SHA1 = 1,
+		SHA224 = 224,
+		SHA256 = 256,
+		SHA384 = 384,
+		SHA512 = 512
+	};
+
+	static vector<byte> digest(const vector<byte>& msg, const HASH_SCHEME& hash_scheme);
+	static vector<byte> digest(const string& msg, const HASH_SCHEME& hash_scheme);
+};
