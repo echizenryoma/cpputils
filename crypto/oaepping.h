@@ -2,29 +2,40 @@
 * Copyright (c) 2012, 2017, Echizen Ryoma. All rights reserved.
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
+
 #pragma once
 
 #include "padding.h"
+#include <cryptopp/oaep.h>
 
 namespace crypto
 {
 	namespace padding
 	{
-		/**
-		* \brief This class implements padding as specified in_out the PKCS#5 standard.
-		* \sa <A HREF="https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/com/sun/crypto/provider/PKCS5Padding.java">jdk8u-jdk/PKCS5Padding.java</A>
-		* for additional details.
-		*/
-		class PKCS5Padding;
+		class OAEPwithHashandMGF1Padding;
 	}
 }
 
-
-class crypto::padding::PKCS5Padding: public Padding
+class crypto::padding::OAEPwithHashandMGF1Padding : public Padding
 {
-	size_t block_size_;
 public:
-	explicit PKCS5Padding(size_t blockSize);
+	enum HashScheme
+	{
+		SHA1 = 1,
+		SHA224 = 224,
+		SHA256 = 256,
+		SHA384 = 384,
+		SHA512 = 512
+	};
+
+private:
+	size_t block_size_;
+	HashScheme hash_scheme_;
+	vector<byte> label_;
+
+	CryptoPP::OAEP_Base* GetOAEPFunction() const;
+public:
+	OAEPwithHashandMGF1Padding(size_t block_size, HashScheme hash_scheme, const vector<byte>& label = {});
 
 	/**
 	* \brief Adds the given number of padding bytes to the data input.

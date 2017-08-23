@@ -45,6 +45,12 @@
     <ClCompile Include="blowfish.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="oaepping.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="rsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash.h">
@@ -90,6 +96,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="type.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="oaepping.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="rsa.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

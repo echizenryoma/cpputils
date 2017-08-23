@@ -50,5 +50,5 @@ public:
 	* \param len the length of the data to pad
 	* \return the length of the padding
 	*/
-	size_t GetPadLength(const size_t& len) override;
+	int GetPadLength(size_t len) override;
 };

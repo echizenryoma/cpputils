@@ -47,7 +47,7 @@ int crypto::padding::PKCS5Padding::Unpad(vector<byte>& in)
 	return start;
 }
 
-size_t crypto::padding::PKCS5Padding::GetPadLength(const size_t& len)
+int crypto::padding::PKCS5Padding::GetPadLength(size_t len)
 {
 	return block_size_ - len % block_size_;
 }

@@ -45,5 +45,5 @@ public:
 	 * \param len the length of the data to pad
 	 * \return the length of the padding
 	 */
-	virtual size_t GetPadLength(const size_t& len) = 0;
+	virtual int GetPadLength(size_t len) = 0;
 };
