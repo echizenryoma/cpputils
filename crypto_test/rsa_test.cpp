@@ -3,6 +3,9 @@
 #include "../crypto/rsa.h"
 using crypto::Rsa;
 
+#include "../crypto/pkcs1padding.h"
+using crypto::padding::PKCS1v15Padding;
+
 #include "../crypto/oaepping.h"
 using crypto::padding::OAEPwithHashandMGF1Padding;
 
@@ -38,13 +41,24 @@ TEST(RSA, key)
 	ASSERT_NO_THROW(Rsa::pubkey(pubkey));
 }
 
-TEST(RSA, oaep)
+TEST(RSA, OAEPwithSHA1andMGF1Padding)
 {
-	OAEPwithHashandMGF1Padding oaep(size_t(1024 / 8), OAEPwithHashandMGF1Padding::HashScheme::SHA1);
+	OAEPwithHashandMGF1Padding oaep(1024 / 8, OAEPwithHashandMGF1Padding::HashScheme::SHA1);
 	vector<byte> plain;
-	vector<byte> encrypt;
 
 	plain = Base64::decode("GcRqZtvZqfz0nww=");
 	oaep.Pad(plain);
 	oaep.Unpad(plain);
+	EXPECT_EQ(Base64::encode(plain), "GcRqZtvZqfz0nww=");
+}
+
+TEST(RSA, PKCS1v15Padding)
+{
+	PKCS1v15Padding padding(1024 / 8);
+	vector<byte> plain;
+
+	plain = Base64::decode("GcRqZtvZqfz0nww=");
+	padding.Pad(plain);
+	padding.Unpad(plain);
+	EXPECT_EQ(Base64::encode(plain), "GcRqZtvZqfz0nww=");
 }

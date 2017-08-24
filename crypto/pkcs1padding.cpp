@@ -60,7 +60,7 @@ int crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
 			out.data(), out.size(),
 			block_size_
 		);
-		if (out_size != -1)
+		if (out_size == -1)
 		{
 			throw std::runtime_error("[runtime_error] <pkcs1padding.cpp> crypto::padding::PKCS1v15Padding::Pad(vector<byte>&) const: {RSA_padding_add_PKCS1_type_1} fail.");
 		}
@@ -71,7 +71,7 @@ int crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
 			in.data(), in.size(),
 			block_size_
 		);
-		if (out_size != -1)
+		if (out_size == -1)
 		{
 			throw std::runtime_error("[runtime_error] <pkcs1padding.cpp> crypto::padding::PKCS1v15Padding::Pad(vector<byte>&) const: {RSA_padding_add_PKCS1_type_2} fail.");
 		}

@@ -56,6 +56,11 @@ int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size
 	case NoPadding:
 		max_msg_size = key_size;
 		break;
+	case PKCS5Padding:
+		padding = new padding::PKCS1v15Padding(key_size);
+		max_msg_size = padding->GetPadLength(0);
+		delete padding;
+		break;
 	case OAEPwithSHA1andMGF1Padding:
 	case OAEPwithSHA224andMGF1Padding:
 	case OAEPwithSHA256andMGF1Padding:
