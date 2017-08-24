@@ -59,7 +59,7 @@ void crypto::padding::OAEPwithHashandMGF1Padding::Pad(vector<byte>& in_out) cons
 		rng,
 		in.data(), in.size(),
 		padded.data(), padded.size() * 8,
-		MakeParameters(CryptoPP::Name::EncodingParameters(), CryptoPP::ConstByteArrayParameter(label_.data(), label_.size(), true))
+		MakeParameters(CryptoPP::Name::EncodingParameters(), CryptoPP::ConstByteArrayParameter(label_.data(), label_.size(), false))
 	);
 	delete oaep;
 	out = padded;
@@ -69,6 +69,14 @@ int crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out) con
 {
 	vector<byte>& in = in_out;
 	vector<byte>& out = in_out;
+
+	if (in.size() < 1)
+	{
+		throw std::invalid_argument("[invalid_argument] <oaeppadding.cpp> crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out): {in.size()} is too short.");
+	}
+
+	in.erase(in.begin());
+
 	CryptoPP::OAEP_Base* oaep = GetOAEPFunction();
 	CryptoPP::AutoSeededRandomPool rng;
 
@@ -76,7 +84,7 @@ int crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out) con
 	CryptoPP::DecodingResult result = oaep->Unpad(
 		in.data(), in.size() * 8,
 		ptext.data(),
-		MakeParameters(CryptoPP::Name::EncodingParameters(), CryptoPP::ConstByteArrayParameter(label_.data(), label_.size(), true))
+		MakeParameters(CryptoPP::Name::EncodingParameters(), CryptoPP::ConstByteArrayParameter(label_.data(), label_.size(), false))
 	);
 	delete oaep;
 	ptext.resize(result.messageLength);

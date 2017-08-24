@@ -61,15 +61,15 @@ private:
 	static vector<byte> Encrypt_ECB(const vector<byte>& padded, const vector<byte>& key);
 	static vector<byte> Encrypt_OFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 
-	static vector<byte> Decrypt_CBC(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv);
-	static vector<byte> Decrypt_CFB(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv);
-	static vector<byte> Decrypt_CTR(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv);
-	static vector<byte> Decrypt_ECB(const vector<byte>& cipher, const vector<byte>& key);
-	static vector<byte> Decrypt_OFB(const vector<byte>& cipher, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Decrypt_CBC(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Decrypt_CFB(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Decrypt_CTR(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Decrypt_ECB(const vector<byte>& ctext, const vector<byte>& key);
+	static vector<byte> Decrypt_OFB(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 public:
 	static vector<byte> random_iv();
 	static vector<byte> default_iv();
 
-	static vector<byte> encrypt(const vector<byte>& plain, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv = default_iv());
-	static vector<byte> decrypt(const vector<byte>& cipher, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv = default_iv());
+	static vector<byte> encrypt(const vector<byte>& ptext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv = default_iv());
+	static vector<byte> decrypt(const vector<byte>& ctext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv = default_iv());
 };

@@ -31,17 +31,17 @@ vector<byte> crypto::RC4::random_key(size_t key_size)
 	return key;
 }
 
-vector<byte> crypto::RC4::encrypt(const vector<byte>& plain, const vector<byte>& key)
+vector<byte> crypto::RC4::encrypt(const vector<byte>& ptext, const vector<byte>& key)
 {
-	vector<byte> cipher = plain;
+	vector<byte> cipher = ptext;
 	CryptoPP::Weak::ARC4 rc4(key.data(), key.size());
 	rc4.ProcessString(cipher.data(), cipher.size());
 	return cipher;
 }
 
-vector<byte> crypto::RC4::decrypt(const vector<byte>& cipher, const vector<byte>& key)
+vector<byte> crypto::RC4::decrypt(const vector<byte>& ctext, const vector<byte>& key)
 {
-	vector<byte> plain = cipher;
+	vector<byte> plain = ctext;
 	CryptoPP::Weak::ARC4 rc4(key.data(), key.size());
 	rc4.ProcessString(plain.data(), plain.size());
 	return plain;

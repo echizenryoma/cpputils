@@ -6,6 +6,7 @@
 #pragma once
 
 #include "padding.h"
+#include <cryptopp/cryptlib.h>
 
 namespace crypto
 {
@@ -23,6 +24,9 @@ class crypto::padding::PKCS1v15Padding: public Padding
 	size_t block_size_;
 	uint8_t type_version_;
 public:
+	static const uint8_t PUBLIC_KEY_OPERATION = 2;
+	static const uint8_t PRIVATE_KEY_OPERATION = 1;
+
 	PKCS1v15Padding(size_t block_size, uint8_t type_version = 2);
 
 	/**

@@ -97,7 +97,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 		padding->Pad(padded);
 		delete padding;
 	}
-	string cipher;
+	string ctext;
 
 	switch (cipher_mode)
 	{
@@ -108,7 +108,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CBC_Mode<CryptoPP::Blowfish>::Encryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(cipher),
+				new CryptoPP::StringSink(ctext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
@@ -119,7 +119,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CFB_Mode<CryptoPP::Blowfish>::Encryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(cipher),
+				new CryptoPP::StringSink(ctext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
@@ -130,7 +130,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CTR_Mode<CryptoPP::Blowfish>::Encryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(cipher),
+				new CryptoPP::StringSink(ctext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
@@ -141,7 +141,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::ECB_Mode<CryptoPP::Blowfish>::Encryption(key.data(), key.size()),
-				new CryptoPP::StringSink(cipher),
+				new CryptoPP::StringSink(ctext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
@@ -152,7 +152,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::OFB_Mode<CryptoPP::Blowfish>::Encryption(key.data(), key.size(), iv.data()),
-				new CryptoPP::StringSink(cipher),
+				new CryptoPP::StringSink(ctext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
 		);
@@ -160,10 +160,10 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 	default:
 		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::encrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {padding_scheme}.");
 	}
-	return vector<byte>(cipher.begin(), cipher.end());
+	return vector<byte>(ctext.begin(), ctext.end());
 }
 
-vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
+vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<byte>& key, CipherMode cipher_mode, PaddingScheme padding_scheme, const vector<byte>& iv)
 {
 	if (!CheckKey(key))
 	{
@@ -181,7 +181,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<
 	case CBC:
 	case CTS:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CBC_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size(), iv.data()),
@@ -192,7 +192,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<
 		break;
 	case CFB:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CFB_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size(), iv.data()),
@@ -203,7 +203,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<
 		break;
 	case CTR:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CTR_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size(), iv.data()),
@@ -214,7 +214,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<
 		break;
 	case ECB:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::ECB_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size()),
@@ -225,7 +225,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<
 		break;
 	case OFB:
 		CryptoPP::StringSource(
-			string(cipher.begin(), cipher.end()),
+			string(ctext.begin(), ctext.end()),
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::OFB_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size(), iv.data()),
@@ -238,13 +238,13 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& cipher, const vector<
 		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {cipher_mode}.");
 	}
 
-	vector<byte> message(plain.begin(), plain.end());
+	vector<byte> ptext(plain.begin(), plain.end());
 
 	if (padding_scheme != NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Unpad(message);
+		padding->Unpad(ptext);
 		delete padding;
 	}
-	return message;
+	return ptext;
 }

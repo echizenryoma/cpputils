@@ -14,7 +14,7 @@
 using BIO_ptr = std::unique_ptr<BIO, decltype(&BIO_free)>;
 using EVP_KEY_ptr = std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)>;
 
-Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size)
+Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size, KeyType key_type, const vector<byte>& label)
 {
 	Padding* padding;
 	switch (padding_scheme)
@@ -22,26 +22,36 @@ Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t ke
 	case NoPadding:
 		padding = new padding::NoPadding(key_size);
 		break;
-	case PKCS5Padding:
-		padding = new padding::PKCS1v15Padding(key_size, 2);
+	case PKCS1Padding:
+		switch (key_type)
+		{
+		case PublicKey:
+			padding = new padding::PKCS1v15Padding(key_size, padding::PKCS1v15Padding::PUBLIC_KEY_OPERATION);
+			break;
+		case PrivateKey:
+			padding = new padding::PKCS1v15Padding(key_size, padding::PKCS1v15Padding::PRIVATE_KEY_OPERATION);
+			break;
+		default:
+			throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t, KeyType, const vector<byte>&): {key_type} is not support.");
+		}
 		break;
 	case OAEPwithSHA1andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA1);
+		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA1, label);
 		break;
 	case OAEPwithSHA224andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA224);
+		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA224, label);
 		break;
 	case OAEPwithSHA256andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA256);
+		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA256, label);
 		break;
 	case OAEPwithSHA384andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA384);
+		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA384, label);
 		break;
 	case OAEPwithSHA512andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA512);
+		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA512, label);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t): {padding_scheme} is not support.");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t, KeyType, const vector<byte>&): {padding_scheme} is not support.");
 	}
 	return padding;
 }
@@ -56,7 +66,7 @@ int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size
 	case NoPadding:
 		max_msg_size = key_size;
 		break;
-	case PKCS5Padding:
+	case PKCS1Padding:
 		padding = new padding::PKCS1v15Padding(key_size);
 		max_msg_size = padding->GetPadLength(0);
 		delete padding;
@@ -78,7 +88,7 @@ int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size
 
 bool crypto::Rsa::CheckMessageSize(PaddingScheme padding_scheme, size_t key_size, size_t msg_size)
 {
-	return msg_size > static_cast<size_t>(GetMaxMessageSize(padding_scheme, key_size));
+	return msg_size <= static_cast<size_t>(GetMaxMessageSize(padding_scheme, key_size));
 }
 
 
@@ -127,7 +137,7 @@ RSA_ptr crypto::Rsa::key(const string& pem_key_str, KeyType key_type)
 	}
 }
 
-vector<byte> crypto::Rsa::encrypt(const vector<byte>& msg, RSA* key, PaddingScheme padding_scheme, KeyType key_type)
+vector<byte> crypto::Rsa::encrypt(const vector<byte>& ptext, RSA* key, KeyType key_type, PaddingScheme padding_scheme, const vector<byte>& label)
 {
 	if (RSA_check_key(key) < 0)
 	{
@@ -135,12 +145,12 @@ vector<byte> crypto::Rsa::encrypt(const vector<byte>& msg, RSA* key, PaddingSche
 	}
 
 	size_t key_size = RSA_size(key);
-	if (!CheckMessageSize(padding_scheme, key_size, msg.size()))
+	if (!CheckMessageSize(padding_scheme, key_size, ptext.size()))
 	{
 		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, RSA*, PaddingScheme, KeyType): {msg} is too long.");
 	}
 
-	vector<byte> padded = msg;
+	vector<byte> padded = ptext;
 	Padding* padding = GetPaadingFunction(padding_scheme, key_size);
 	padding->Pad(padded);
 	delete padding;
@@ -166,7 +176,7 @@ vector<byte> crypto::Rsa::encrypt(const vector<byte>& msg, RSA* key, PaddingSche
 	return ctext;
 }
 
-vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, RSA* key, PaddingScheme padding_scheme, KeyType key_type)
+vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, RSA* key, KeyType key_type, PaddingScheme padding_scheme, const vector<byte>& label)
 {
 	if (RSA_check_key(key) < 0)
 	{
@@ -174,20 +184,15 @@ vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, RSA* key, PaddingSc
 	}
 	size_t key_size = RSA_size(key);
 
-	if (!CheckMessageSize(padding_scheme, key_size, ctext.size()))
-	{
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::decrypt(const vector<byte>&, RSA*, PaddingScheme, KeyType): {ctext} is too long.");
-	}
-
 	vector<byte> ptext(key_size);
 	int ptext_size;
 	switch (key_type)
 	{
 	case PublicKey:
-		ptext_size = RSA_public_encrypt(ctext.size(), ctext.data(), ptext.data(), key, RSA_NO_PADDING);
+		ptext_size = RSA_public_decrypt(ctext.size(), ctext.data(), ptext.data(), key, RSA_NO_PADDING);
 		break;
 	case PrivateKey:
-		ptext_size = RSA_private_encrypt(ctext.size(), ctext.data(), ptext.data(), key, RSA_NO_PADDING);
+		ptext_size = RSA_private_decrypt(ctext.size(), ctext.data(), ptext.data(), key, RSA_NO_PADDING);
 		break;
 	default:
 		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, RSA*, PaddingScheme, KeyType): {key_type} is not support.");
@@ -196,11 +201,11 @@ vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, RSA* key, PaddingSc
 	{
 		throw std::runtime_error("[runtime_error] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, RSA*, PaddingScheme, KeyType):" + string(ERR_error_string(ERR_get_error(), nullptr)));
 	}
+	ptext.resize(ptext_size);
 
 	vector<byte> msg = ptext;
 	Padding* padding = GetPaadingFunction(padding_scheme, key_size);
-	padding->Pad(msg);
+	padding->Unpad(msg);
 	delete padding;
-
 	return msg;
 }

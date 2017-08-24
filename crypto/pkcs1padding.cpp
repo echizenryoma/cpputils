@@ -20,7 +20,7 @@ void crypto::padding::PKCS1v15Padding::Pad(vector<byte>& in_out) const
 	int rc;
 	switch (type_version_)
 	{
-	case 1:
+	case PUBLIC_KEY_OPERATION:
 		rc = RSA_padding_add_PKCS1_type_1(
 			out.data(), out.size(),
 			in.data(), in.size()
@@ -30,7 +30,7 @@ void crypto::padding::PKCS1v15Padding::Pad(vector<byte>& in_out) const
 			throw std::runtime_error("[runtime_error] <pkcs1padding.cpp> crypto::padding::PKCS1v15Padding::Pad(vector<byte>&) const: {RSA_padding_add_PKCS1_type_1} fail.");
 		}
 		break;
-	case 2: 
+	case PRIVATE_KEY_OPERATION:
 		rc = RSA_padding_add_PKCS1_type_2(
 			out.data(), out.size(),
 			in.data(), in.size()
@@ -54,10 +54,10 @@ int crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
 	int out_size;
 	switch (type_version_)
 	{
-	case 1:
+	case PRIVATE_KEY_OPERATION:
 		out_size = RSA_padding_check_PKCS1_type_1(
-			in.data(), in.size(),
 			out.data(), out.size(),
+			in.data(), in.size(),			
 			block_size_
 		);
 		if (out_size == -1)
@@ -65,7 +65,7 @@ int crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
 			throw std::runtime_error("[runtime_error] <pkcs1padding.cpp> crypto::padding::PKCS1v15Padding::Pad(vector<byte>&) const: {RSA_padding_add_PKCS1_type_1} fail.");
 		}
 		break;
-	case 2:
+	case PUBLIC_KEY_OPERATION:
 		out_size = RSA_padding_check_PKCS1_type_2(
 			out.data(), out.size(),
 			in.data(), in.size(),
