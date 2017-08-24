@@ -7,100 +7,12 @@
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
-#include "pkcs5padding.h"
 #include "nopadding.h"
-#include "pkcs7padding.h"
 #include "oaepping.h"
+#include "pkcs1padding.h"
 
 using BIO_ptr = std::unique_ptr<BIO, decltype(&BIO_free)>;
 using EVP_KEY_ptr = std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)>;
-
-//vector<byte> crypto::Rsa::PEM2DER(const string& pem_key_str, bool private_key)
-//{
-//	vector<byte> der;
-//
-//	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.c_str(), pem_key_str.size()), BIO_free);
-//	if (bio.get() == nullptr)
-//	{
-//		throw std::bad_alloc();
-//	}
-//
-//	if (private_key)
-//	{
-//		EVP_KEY_ptr key(PEM_read_bio_PrivateKey(bio.get(), nullptr, nullptr, nullptr), EVP_PKEY_free);
-//		if (key.get() == nullptr)
-//		{
-//			throw std::runtime_error("[invalid_argument] <rsa.cpp> crypto::Rsa::PEM2DER(const string&, bool): {PEM_read_bio_PrivateKey} failed.");
-//		}
-//
-//		RSA_ptr rsa(EVP_PKEY_get1_RSA(key.get()), RSA_free);
-//		if (rsa.get() == nullptr)
-//		{
-//			throw std::runtime_error("[invalid_argument] <rsa.cpp> crypto::Rsa::PEM2DER(const string&, bool): {EVP_PKEY_get1_RSA} failed.");
-//		}
-//
-//		BIO_ptr der_bio(BIO_new(BIO_s_mem()), BIO_free);
-//		if (der_bio.get() == nullptr)
-//		{
-//			throw std::bad_alloc();
-//		}
-//
-//		int rc = i2d_RSAPrivateKey_bio(der_bio.get(), rsa.get());
-//		if (rc != 1)
-//		{
-//			throw std::runtime_error("[invalid_argument] <rsa.cpp> crypto::Rsa::PEM2DER(const string&, bool): {i2d_RSAPrivateKey_bio} failed.");
-//		}
-//
-//		BUF_MEM* buf_mem;
-//		BIO_flush(der_bio.get());
-//		BIO_get_mem_ptr(der_bio.get(), &buf_mem);
-//		BIO_set_close(der_bio.get(), BIO_NOCLOSE);
-//		if (buf_mem == nullptr)
-//		{
-//			throw std::bad_alloc();
-//		}
-//		der = vector<byte>(buf_mem->data, buf_mem->data + buf_mem->length);
-//		BUF_MEM_free(buf_mem);
-//	}
-//	else
-//	{
-//		EVP_KEY_ptr key(PEM_read_bio_PUBKEY(bio.get(), nullptr, nullptr, nullptr), EVP_PKEY_free);
-//		if (key.get() == nullptr)
-//		{
-//			throw std::runtime_error("[invalid_argument] <rsa.cpp> crypto::Rsa::PEM2DER(const string&, bool): {PEM_read_bio_PrivateKey} failed.");
-//		}
-//
-//		RSA_ptr rsa(EVP_PKEY_get1_RSA(key.get()), RSA_free);
-//		if (rsa.get() == nullptr)
-//		{
-//			throw std::runtime_error("[invalid_argument] <rsa.cpp> crypto::Rsa::PEM2DER(const string&, bool): {EVP_PKEY_get1_RSA} failed.");
-//		}
-//
-//		BIO_ptr der_bio(BIO_new(BIO_s_mem()), BIO_free);
-//		if (der_bio.get() == nullptr)
-//		{
-//			throw std::bad_alloc();
-//		}
-//
-//		int rc = i2d_RSAPublicKey_bio(der_bio.get(), rsa.get());
-//		if (rc != 1)
-//		{
-//			throw std::runtime_error("[invalid_argument] <rsa.cpp> crypto::Rsa::PEM2DER(const string&, bool): {i2d_RSAPublicKey_bio} failed.");
-//		}
-//
-//		BIO_flush(der_bio.get());
-//		BUF_MEM* buf_mem;
-//		BIO_get_mem_ptr(der_bio.get(), &buf_mem);
-//		BIO_set_close(der_bio.get(), BIO_NOCLOSE);
-//		if (buf_mem == nullptr)
-//		{
-//			throw std::bad_alloc();
-//		}
-//		der = vector<byte>(buf_mem->data, buf_mem->data + buf_mem->length);
-//		BUF_MEM_free(buf_mem);
-//	}
-//	return der;
-//}
 
 Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size)
 {
@@ -111,10 +23,7 @@ Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t ke
 		padding = new padding::NoPadding(key_size);
 		break;
 	case PKCS5Padding:
-		padding = new padding::PKCS5Padding(key_size);
-		break;
-	case PKCS7Padding:
-		padding = new padding::PKCS7Padding(key_size);
+		padding = new padding::PKCS1v15Padding(key_size, 2);
 		break;
 	case OAEPwithSHA1andMGF1Padding:
 		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA1);
@@ -132,7 +41,7 @@ Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t ke
 		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA512);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t): {padding_scheme} is not support.");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t): {padding_scheme} is not support.");
 	}
 	return padding;
 }
@@ -147,10 +56,6 @@ int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size
 	case NoPadding:
 		max_msg_size = key_size;
 		break;
-	case PKCS5Padding:
-	case PKCS7Padding:
-		max_msg_size = key_size - 1;
-		break;
 	case OAEPwithSHA1andMGF1Padding:
 	case OAEPwithSHA224andMGF1Padding:
 	case OAEPwithSHA256andMGF1Padding:
@@ -161,7 +66,7 @@ int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size
 		delete padding;
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Rsa::GetMaxMessageSize(PaddingScheme, size_t): {padding_scheme} is not support.");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetMaxMessageSize(PaddingScheme, size_t): {padding_scheme} is not support.");
 	}
 	return max_msg_size;
 }
@@ -294,31 +199,3 @@ vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, RSA* key, PaddingSc
 
 	return msg;
 }
-
-//CryptoPP::RSA::PublicKey crypto::Rsa::pubkey(const string& key_str)
-//{
-//	vector<byte> key_der = PEM2DER(key_str, false);
-//
-//	CryptoPP::StringSource key_source(string(key_der.begin(), key_der.end()), true);
-//	CryptoPP::ByteQueue key_bytes;
-//	key_source.TransferTo(key_bytes);
-//	key_bytes.MessageEnd();
-//
-//	CryptoPP::RSA::PublicKey public_key;
-//	public_key.BERDecodePublicKey(key_bytes, false, static_cast<size_t>(key_bytes.MaxRetrievable()));
-//	return public_key;
-//}
-//
-//CryptoPP::RSA::PrivateKey crypto::Rsa::privkey(const string& key_str)
-//{
-//	vector<byte> key_der = PEM2DER(key_str, true);
-//
-//	CryptoPP::StringSource key_source(string(key_der.begin(), key_der.end()), true);
-//	CryptoPP::ByteQueue key_bytes;
-//	key_source.TransferTo(key_bytes);
-//	key_bytes.MessageEnd();
-//
-//	CryptoPP::RSA::PrivateKey private_key;
-//	private_key.BERDecodePrivateKey(key_bytes, false, static_cast<size_t>(key_bytes.MaxRetrievable()));
-//	return private_key;
-//}

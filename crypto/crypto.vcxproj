@@ -29,6 +29,7 @@
     <ClCompile Include="iso10126padding.cpp" />
     <ClCompile Include="nopadding.cpp" />
     <ClCompile Include="oaepping.cpp" />
+    <ClCompile Include="pkcs1padding.cpp" />
     <ClCompile Include="pkcs5padding.cpp" />
     <ClCompile Include="rc4.cpp" />
     <ClCompile Include="rsa.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="iso10126padding.h" />
     <ClInclude Include="nopadding.h" />
     <ClInclude Include="oaepping.h" />
+    <ClInclude Include="pkcs1padding.h" />
     <ClInclude Include="pkcs5padding.h" />
     <ClInclude Include="pkcs7padding.h" />
     <ClInclude Include="rc4.h" />

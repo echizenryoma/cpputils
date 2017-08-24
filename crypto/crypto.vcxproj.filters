@@ -63,6 +63,9 @@
     <ClCompile Include="hmac.cpp">
       <Filter>src\mac</Filter>
     </ClCompile>
+    <ClCompile Include="pkcs1padding.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aes.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="hmac.h">
       <Filter>src\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs1padding.h">
+      <Filter>src\padding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
