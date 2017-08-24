@@ -28,7 +28,7 @@ public:
 	 * interface.
 	 * \param in the input buffer with the data to pad
 	 */
-	virtual void Pad(vector<byte> &in) = 0;
+	virtual void Pad(vector<byte> &in) const = 0;
 	
 	/**
 	 * \brief Returns the index where padding starts.
@@ -38,12 +38,12 @@ public:
 	 * \return the index where the padding starts, or -1 if the input is
 	 * not properly padded
 	 */
-	virtual int Unpad(vector<byte> &in) = 0;
+	virtual int Unpad(vector<byte> &in) const = 0;
 	
 	/**
 	 * \brief Determines how long the padding will be for a given input length.
 	 * \param len the length of the data to pad
 	 * \return the length of the padding
 	 */
-	virtual int GetPadLength(size_t len) = 0;
+	virtual int GetPadLength(size_t len) const = 0;
 };

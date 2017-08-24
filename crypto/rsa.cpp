@@ -139,9 +139,9 @@ Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t ke
 
 int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size)
 {
-	int max_msg_size = 0;
+	int max_msg_size;
 
-	Padding* padding = nullptr;
+	Padding* padding;
 	switch (padding_scheme)
 	{
 	case NoPadding:

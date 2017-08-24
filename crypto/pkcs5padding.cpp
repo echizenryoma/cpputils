@@ -10,8 +10,10 @@ crypto::padding::PKCS5Padding::PKCS5Padding(size_t block_size)
 	block_size_ = block_size;
 }
 
-void crypto::padding::PKCS5Padding::Pad(vector<byte>& in)
+void crypto::padding::PKCS5Padding::Pad(vector<byte>& in_out) const
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
 	if (in.empty())
 	{
 		return;
@@ -19,11 +21,14 @@ void crypto::padding::PKCS5Padding::Pad(vector<byte>& in)
 	// the number of padding bytes to add
 	size_t len = GetPadLength(in.size());
 	byte paddingOctet = static_cast<byte>(len & 0xff);
-	in.insert(in.end(), len, paddingOctet);
+	out.insert(out.end(), len, paddingOctet);
 }
 
-int crypto::padding::PKCS5Padding::Unpad(vector<byte>& in)
+int crypto::padding::PKCS5Padding::Unpad(vector<byte>& in_out) const
 {
+	vector<byte> &in = in_out;
+	vector<byte> &out = in_out;
+
 	if (in.empty())
 	{
 		return 0;
@@ -43,11 +48,11 @@ int crypto::padding::PKCS5Padding::Unpad(vector<byte>& in)
 			return -1;
 		}
 	}	
-	in.resize(start);
+	out.resize(start);
 	return start;
 }
 
-int crypto::padding::PKCS5Padding::GetPadLength(size_t len)
+int crypto::padding::PKCS5Padding::GetPadLength(size_t len) const
 {
 	return block_size_ - len % block_size_;
 }

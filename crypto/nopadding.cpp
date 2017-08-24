@@ -10,7 +10,7 @@ crypto::padding::NoPadding::NoPadding(size_t block_size)
 	block_size_ = block_size;
 }
 
-void crypto::padding::NoPadding::Pad(vector<byte>& in_out)
+void crypto::padding::NoPadding::Pad(vector<byte>& in_out) const
 {
 	vector<byte> &in = in_out;
 	vector<byte> &out = in_out;
@@ -31,7 +31,7 @@ void crypto::padding::NoPadding::Pad(vector<byte>& in_out)
 	}
 }
 
-int crypto::padding::NoPadding::Unpad(vector<byte>& in_out)
+int crypto::padding::NoPadding::Unpad(vector<byte>& in_out) const
 {
 	vector<byte> &in = in_out;
 	vector<byte> &out = in_out;
@@ -62,7 +62,7 @@ int crypto::padding::NoPadding::Unpad(vector<byte>& in_out)
 	return start;
 }
 
-int crypto::padding::NoPadding::GetPadLength(size_t len)
+int crypto::padding::NoPadding::GetPadLength(size_t len) const
 {
 	return (len / block_size_ + 1) * block_size_ - len;
 }

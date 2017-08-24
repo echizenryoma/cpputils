@@ -13,7 +13,7 @@ crypto::padding::ISO10126Padding::ISO10126Padding(size_t block_size)
 	block_size_ = block_size;
 }
 
-void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out)
+void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out) const
 {
 	vector<byte> &in = in_out;
 	vector<byte> &out = in_out;
@@ -36,7 +36,7 @@ void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out)
 	out.insert(out.end(), padding.begin(), padding.end());
 }
 
-int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out)
+int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out) const
 {
 	vector<byte> &in = in_out;
 	vector<byte> &out = in_out;
@@ -58,7 +58,7 @@ int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out)
 	return start;
 }
 
-int crypto::padding::ISO10126Padding::GetPadLength(size_t len)
+int crypto::padding::ISO10126Padding::GetPadLength(size_t len) const
 {
 	return block_size_ - len % block_size_;
 }
