@@ -46,7 +46,7 @@ void crypto::padding::OAEPwithHashandMGF1Padding::Pad(vector<byte>& in_out)
 	vector<byte>& in = in_out;
 	vector<byte>& out = in_out;
 
-	if (in.size() >= GetPadLength(0))
+	if (in.size() >= static_cast<size_t>(GetPadLength(0)))
 	{
 		throw std::invalid_argument("[invalid_argument] <oaeppadding.cpp> crypto::padding::OAEPwithHashandMGF1Padding::Pad(vector<byte>& in_out): {in.size()} is too long.");
 	}

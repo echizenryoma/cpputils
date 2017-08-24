@@ -4,36 +4,21 @@
     <Filter Include="src">
       <UniqueIdentifier>{81df32ce-ac5e-49b8-95ea-9f65a7956097}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\padding">
+      <UniqueIdentifier>{04a6228b-694c-4994-b5f5-5c8076a45831}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\encode">
+      <UniqueIdentifier>{fe12e92b-ea1c-488c-a5b7-845d26748fb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\hash">
+      <UniqueIdentifier>{4e783095-0d2d-4622-bd7e-f1de1c8fbda8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mac">
+      <UniqueIdentifier>{77de4a6b-5d4d-4e15-9a79-9415a06d41a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="hash.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="hmac.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="hex.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="base64.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="aes.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="padding.h">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="pkcs5padding.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="iso10126padding.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="nopadding.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="zeropadding.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="des.cpp">
@@ -45,42 +30,42 @@
     <ClCompile Include="blowfish.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="oaepping.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="rsa.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="zeropadding.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="pkcs5padding.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="padding.h">
+      <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="oaepping.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="nopadding.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="iso10126padding.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="base64.cpp">
+      <Filter>src\encode</Filter>
+    </ClCompile>
+    <ClCompile Include="hex.cpp">
+      <Filter>src\encode</Filter>
+    </ClCompile>
+    <ClCompile Include="hash.cpp">
+      <Filter>src\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="hmac.cpp">
+      <Filter>src\mac</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hash.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="hmac.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="hex.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="base64.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="aes.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="pkcs5padding.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="iso10126padding.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="nopadding.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="pkcs7padding.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="zeropadding.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="des.h">
@@ -98,11 +83,38 @@
     <ClInclude Include="type.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="oaepping.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="rsa.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="zeropadding.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs7padding.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="pkcs5padding.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="oaepping.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="nopadding.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="iso10126padding.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>src\encode</Filter>
+    </ClInclude>
+    <ClInclude Include="hex.h">
+      <Filter>src\encode</Filter>
+    </ClInclude>
+    <ClInclude Include="hash.h">
+      <Filter>src\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="hmac.h">
+      <Filter>src\mac</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
