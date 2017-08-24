@@ -70,9 +70,9 @@ int crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out) con
 	vector<byte>& in = in_out;
 	vector<byte>& out = in_out;
 
-	if (in.size() < 1)
+	if (in.size() != block_size_)
 	{
-		throw std::invalid_argument("[invalid_argument] <oaeppadding.cpp> crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out): {in.size()} is too short.");
+		throw std::invalid_argument("[invalid_argument] <oaeppadding.cpp> crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out): {in.size()}");
 	}
 
 	in.erase(in.begin());
