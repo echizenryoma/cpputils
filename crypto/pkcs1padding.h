@@ -6,7 +6,6 @@
 #pragma once
 
 #include "padding.h"
-#include <cryptopp/cryptlib.h>
 
 namespace crypto
 {

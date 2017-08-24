@@ -12,6 +12,11 @@ namespace crypto
 {
 	namespace padding
 	{
+		/**
+		* \brief This class implements encryption and decryption using PKCS#1 v2.2 OAEP Padding.
+		* \sa <A HREF="https://tools.ietf.org/html/rfc8017">RFC 8017 - PKCS #1: RSA Cryptography Specifications Version 2.2</A>
+		* for additional details.
+		*/
 		class OAEPwithHashandMGF1Padding;
 	}
 }
@@ -45,6 +50,27 @@ public:
 	* \param in_out the input buffer with the data to pad
 	* \exception length_error if <code>in_out</code> is too small to hold
 	* the padding bytes
+	* 
+	* __________________________________________________________________
+	*
+	*                        +----------+---------+-------+
+	*                   DB = |  lHash   |    PS   |   M   |
+	*                        +----------+---------+-------+
+	*                                       |
+	*             +----------+              V
+	*             |   seed   |--> MGF ---> xor
+	*             +----------+              |
+	*                   |                   |
+	*          +--+     V                   |
+	*          |00|    xor <----- MGF <-----|
+	*          +--+     |                   |
+	*            |      |                   |
+	*            V      V                   V
+	*          +--+----------+----------------------------+
+	*    EM =  |00|maskedSeed|          maskedDB          |
+	*          +--+----------+----------------------------+
+	* __________________________________________________________________
+	* 
 	*/
 	void Pad(vector<byte>& in_out) const override;
 
