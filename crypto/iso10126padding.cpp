@@ -54,7 +54,7 @@ int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out) const
 	}
 
 	size_t start = in.size() - padValue;
-	in.resize(start);
+	out.resize(start);
 	return start;
 }
 
