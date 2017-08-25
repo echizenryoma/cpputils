@@ -34,6 +34,7 @@
     <ClCompile Include="pkcs5padding.cpp" />
     <ClCompile Include="rc4.cpp" />
     <ClCompile Include="rsa.cpp" />
+    <ClCompile Include="x932padding.cpp" />
     <ClCompile Include="zeropadding.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +57,7 @@
     <ClInclude Include="rc4.h" />
     <ClInclude Include="rsa.h" />
     <ClInclude Include="type.h" />
+    <ClInclude Include="x932padding.h" />
     <ClInclude Include="zeropadding.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

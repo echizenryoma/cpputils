@@ -2,6 +2,7 @@
 * Copyright (c) 2012, 2017, Echizen Ryoma. All rights reserved.
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
+
 #pragma once
 
 #include "padding.h"
@@ -10,21 +11,25 @@ namespace crypto
 {
 	namespace padding
 	{
+
 		/**
-		* \brief This class implements padding as specified in_out the PKCS#5 standard.
-		* \sa <A HREF="https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/com/sun/crypto/provider/PKCS1Padding.java">jdk8u-jdk/PKCS1Padding.java</A>
-		* for additional details.
-		*/
-		class PKCS5Padding;
+		 * \brief ANSI X.923 padding works by appending N-1 bytes with the
+		 * value of 0 and a last byte with the value of chr(N), where N is
+		 * the number of bytes required to make the final block of data the
+		 * same size as the block size.
+		 * 
+		 * EB = D || 00 || C
+		 */
+		class X932Padding;
 	}
 }
 
 
-class crypto::padding::PKCS5Padding: public Padding
+class crypto::padding::X932Padding : public Padding
 {
 	size_t block_size_;
 public:
-	explicit PKCS5Padding(size_t block_size);
+	explicit X932Padding(size_t block_size);
 
 	/**
 	* \brief Adds the given number of padding bytes to the data input.

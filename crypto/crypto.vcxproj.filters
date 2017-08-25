@@ -69,6 +69,9 @@
     <ClCompile Include="pbkdf2.cpp">
       <Filter>src\mac</Filter>
     </ClCompile>
+    <ClCompile Include="x932padding.cpp">
+      <Filter>src\padding</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aes.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="pbkdf2.h">
       <Filter>src\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="x932padding.h">
+      <Filter>src\padding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
