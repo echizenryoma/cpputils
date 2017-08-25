@@ -22,7 +22,6 @@ class crypto::Des
 public:
 	enum PaddingScheme
 	{
-		ZeroPadding = 0,
 		NoPadding = 1,
 		PKCS5Padding = 5,
 		PKCS7Padding = 7,
@@ -58,12 +57,14 @@ private:
 	static vector<byte> Encrypt_CBC(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_CFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_CTR(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Encrypt_CTS(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_ECB(const vector<byte>& padded, const vector<byte>& key);
 	static vector<byte> Encrypt_OFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 
 	static vector<byte> Decrypt_CBC(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_CFB(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_CTR(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Decrypt_CTS(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_ECB(const vector<byte>& ctext, const vector<byte>& key);
 	static vector<byte> Decrypt_OFB(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 public:

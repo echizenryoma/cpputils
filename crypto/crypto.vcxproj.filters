@@ -86,9 +86,6 @@
     <ClInclude Include="blowfish.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="arc4.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="type.h">
       <Filter>src</Filter>
     </ClInclude>

@@ -49,9 +49,6 @@ Padding* crypto::Aes::GetPaadingFunction(PaddingScheme padding_scheme)
 	Padding* padding;
 	switch (padding_scheme)
 	{
-	case ZeroPadding:
-		padding = new padding::ZeroPadding(CryptoPP::AES::BLOCKSIZE);
-		break;
 	case PKCS5Padding:
 		padding = new padding::PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
 		break;
@@ -121,7 +118,6 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 	switch (cipher_mode)
 	{
 	case CBC:
-	case CTS:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -149,6 +145,17 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CTR_Mode<CryptoPP::AES>::Encryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(cipher),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case CTS:
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::AES>::Encryption(key.data(), key.size(), iv.data()),
 				new CryptoPP::StringSink(cipher),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)
@@ -210,7 +217,6 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 	switch (cipher_mode)
 	{
 	case CBC:
-	case CTS:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -238,6 +244,17 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(ptext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case CTS:
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
 				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)

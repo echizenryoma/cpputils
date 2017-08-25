@@ -39,7 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aes.h" />
-    <ClInclude Include="arc4.h" />
     <ClInclude Include="base64.h" />
     <ClInclude Include="blowfish.h" />
     <ClInclude Include="des.h" />

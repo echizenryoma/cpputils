@@ -158,27 +158,21 @@ TEST(Aes, AES_CTR_ISO10126Padding)
 	EXPECT_EQ("joLPIWteFG354eZXhT7uDRzxk0FXCB0UwW6PuVp4xOI=", Base64::encode(ptext));
 }
 
-TEST(Aes, AES_CTS_ZeroPadding)
+TEST(Aes, AES_CTS_NoPadding)
 {
 	vector<byte> ptext;
 	vector<byte> ctext;
 
-	ptext = Base64::decode("GcRqZtvZqfz0nww=");
-	ctext = Aes::encrypt(ptext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::ZeroPadding);
-	EXPECT_EQ("tINbgNUv4Mp9Mo9k2wMjhQ==", Base64::encode(ctext));
-	ptext = Aes::decrypt(ctext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::ZeroPadding);
-	EXPECT_EQ("GcRqZtvZqfz0nww=", Base64::encode(ptext));
-
 	ptext = Base64::decode("tQJT13nQjQeKScukjRt11lT3DjY=");
-	ctext = Aes::encrypt(ptext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::ZeroPadding);
-	EXPECT_EQ("PSUzyhLaY18amGtyoIm9qGKeqPEtgtMSDfEqKCqoxFs=", Base64::encode(ctext));
-	ptext = Aes::decrypt(ctext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::ZeroPadding);
+	ctext = Aes::encrypt(ptext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::NoPadding);
+	EXPECT_EQ("Yp6o8S2C0xIN8SooKqjEWz0lM8o=", Base64::encode(ctext));
+	ptext = Aes::decrypt(ctext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::NoPadding);
 	EXPECT_EQ("tQJT13nQjQeKScukjRt11lT3DjY=", Base64::encode(ptext));
 
 	ptext = Base64::decode("joLPIWteFG354eZXhT7uDRzxk0FXCB0UwW6PuVp4xOI=");
-	ctext = Aes::encrypt(ptext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::ZeroPadding);
-	EXPECT_EQ("raQhAYQHP/MQyew2DfEIZa9kOncLtCktq+uFjNnccj4iqduHOZrVyT9LQ1RfFm5T", Base64::encode(ctext));
-	ptext = Aes::decrypt(ctext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::ZeroPadding);
+	ctext = Aes::encrypt(ptext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::NoPadding);
+	EXPECT_EQ("r2Q6dwu0KS2r64WM2dxyPq2kIQGEBz/zEMnsNg3xCGU=", Base64::encode(ctext));
+	ptext = Aes::decrypt(ctext, AES_128_KEY, Aes::CipherMode::CTS, Aes::PaddingScheme::NoPadding);
 	EXPECT_EQ("joLPIWteFG354eZXhT7uDRzxk0FXCB0UwW6PuVp4xOI=", Base64::encode(ptext));
 }
 

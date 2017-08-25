@@ -43,9 +43,6 @@ Padding* crypto::Des::GetPaadingFunction(PaddingScheme padding_scheme)
 	Padding* padding;
 	switch (padding_scheme)
 	{
-	case ZeroPadding:
-		padding = new padding::ZeroPadding(CryptoPP::DES::BLOCKSIZE);
-		break;
 	case PKCS5Padding:
 		padding = new padding::PKCS5Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
@@ -189,6 +186,50 @@ vector<byte> crypto::Des::Encrypt_CTR(const vector<byte>& padded, const vector<b
 		break;
 	default:
 		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CTR(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+	}
+	return vector<byte>(ctext.begin(), ctext.end());
+}
+
+vector<byte> crypto::Des::Encrypt_CTS(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
+{
+	string ctext;
+	switch (key.size())
+	{
+	case DES:
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::DES>::Encryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case DESede2:
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::DES_EDE2>::Encryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case DESede3:
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::DES_EDE3>::Encryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	default:
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CTS(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(ctext.begin(), ctext.end());
 }
@@ -413,6 +454,50 @@ vector<byte> crypto::Des::Decrypt_CTR(const vector<byte>& ctext, const vector<by
 	return vector<byte>(plain.begin(), plain.end());
 }
 
+vector<byte> crypto::Des::Decrypt_CTS(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv)
+{
+	string plain;
+	switch (key.size())
+	{
+	case DES:
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::DES>::Decryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case DESede2:
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::DES_EDE2>::Decryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case DESede3:
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CBC_CTS_Mode<CryptoPP::DES_EDE3>::Decryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	default:
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CTS(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+	}
+	return vector<byte>(plain.begin(), plain.end());
+}
+
 vector<byte> crypto::Des::Decrypt_ECB(const vector<byte>& ctext, const vector<byte>& key)
 {
 	string plain;
@@ -538,7 +623,6 @@ vector<byte> crypto::Des::encrypt(const vector<byte>& ptext, const vector<byte>&
 	switch (cipher_mode)
 	{
 	case CBC:
-	case CTS:
 		ctext = Encrypt_CBC(padded, key, iv);
 		break;
 	case CFB:
@@ -546,6 +630,9 @@ vector<byte> crypto::Des::encrypt(const vector<byte>& ptext, const vector<byte>&
 		break;
 	case CTR:
 		ctext = Encrypt_CTR(padded, key, iv);
+		break;
+	case CTS:
+		ctext = Encrypt_CTS(padded, key, iv);
 		break;
 	case ECB:
 		ctext = Encrypt_ECB(padded, key);
@@ -571,30 +658,32 @@ vector<byte> crypto::Des::decrypt(const vector<byte>& ctext, const vector<byte>&
 		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::decrypt(const vector<byte>&, const vector<byte>& key, CipherMode, PaddingScheme, const vector<byte>&): {iv.size()}.");
 	}
 
-	vector<byte> plain;
+	vector<byte> ptext;
 	switch (cipher_mode)
 	{
 	case CBC:
-	case CTS:
-		plain = Decrypt_CBC(ctext, key, iv);
+		ptext = Decrypt_CBC(ctext, key, iv);
 		break;
 	case CFB:
-		plain = Decrypt_CFB(ctext, key, iv);
+		ptext = Decrypt_CFB(ctext, key, iv);
 		break;
 	case CTR:
-		plain = Decrypt_CTR(ctext, key, iv);
+		ptext = Decrypt_CTR(ctext, key, iv);
+		break;
+	case CTS:
+		ptext = Encrypt_CTS(ctext, key, iv);
 		break;
 	case ECB:
-		plain = Decrypt_ECB(ctext, key);
+		ptext = Decrypt_ECB(ctext, key);
 		break;
 	case OFB:
-		plain = Decrypt_OFB(ctext, key, iv);
+		ptext = Decrypt_OFB(ctext, key, iv);
 		break;
 	default:
 		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, const CIPHER_MODE&, const PADDING_SCHEME&, const vector<byte>&): {cipher_mode}.");
 	}
 
-	vector<byte> message(plain.begin(), plain.end());
+	vector<byte> message(ptext.begin(), ptext.end());
 
 	if (padding_scheme != NoPadding)
 	{

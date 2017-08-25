@@ -10,6 +10,7 @@
 namespace crypto
 {
 	class RC4;
+	typedef RC4 ARC4;
 }
 
 class crypto::RC4

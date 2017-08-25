@@ -19,7 +19,6 @@ class crypto::Aes
 public:
 	enum PaddingScheme
 	{
-		ZeroPadding = 0,
 		NoPadding = 1,
 		PKCS5Padding = 5,
 		PKCS7Padding = 7,
