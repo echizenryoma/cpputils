@@ -10,11 +10,11 @@
     <Filter Include="src\encode">
       <UniqueIdentifier>{fe12e92b-ea1c-488c-a5b7-845d26748fb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\hash">
-      <UniqueIdentifier>{4e783095-0d2d-4622-bd7e-f1de1c8fbda8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\mac">
       <UniqueIdentifier>{77de4a6b-5d4d-4e15-9a79-9415a06d41a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\digest">
+      <UniqueIdentifier>{4e783095-0d2d-4622-bd7e-f1de1c8fbda8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,13 +58,16 @@
       <Filter>src\encode</Filter>
     </ClCompile>
     <ClCompile Include="hash.cpp">
-      <Filter>src\hash</Filter>
+      <Filter>src\digest</Filter>
     </ClCompile>
     <ClCompile Include="hmac.cpp">
       <Filter>src\mac</Filter>
     </ClCompile>
     <ClCompile Include="pkcs1padding.cpp">
       <Filter>src\padding</Filter>
+    </ClCompile>
+    <ClCompile Include="pbkdf2.cpp">
+      <Filter>src\mac</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,13 +117,16 @@
       <Filter>src\encode</Filter>
     </ClInclude>
     <ClInclude Include="hash.h">
-      <Filter>src\hash</Filter>
+      <Filter>src\digest</Filter>
     </ClInclude>
     <ClInclude Include="hmac.h">
       <Filter>src\mac</Filter>
     </ClInclude>
     <ClInclude Include="pkcs1padding.h">
       <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="pbkdf2.h">
+      <Filter>src\mac</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

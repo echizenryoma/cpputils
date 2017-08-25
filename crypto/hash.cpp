@@ -11,48 +11,8 @@
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/filters.h>
-#include <cryptopp/base64.h>
-#include <cryptopp/hex.h>
 
-CryptoPP::SimpleProxyFilter* crypto::message::digest::Hash::getFilter(EncodeScheme encode_scheme, CryptoPP::BufferedTransformation* const attachment)
-{
-	CryptoPP::SimpleProxyFilter* filter;
-	switch (encode_scheme)
-	{
-	case Base64:
-		filter = new CryptoPP::Base64Encoder(attachment, false);
-		break;
-	case Base64_NewLine_64:
-		filter = new CryptoPP::Base64Encoder(attachment, true, 64);
-		break;
-	case Base64_NewLine_72:
-		filter = new CryptoPP::Base64Encoder(attachment, true, 72);
-		break;
-	case Base64_NewLine_76:
-		filter = new CryptoPP::Base64Encoder(attachment, true, 76);
-		break;
-	case Base64Url:
-		filter = new CryptoPP::Base64URLEncoder(attachment, false);
-		break;
-	case Hex:
-	case Hex_Uppercase:
-		filter = new CryptoPP::HexEncoder(attachment);
-		break;
-	case Hex_Lowercase:
-		filter = new CryptoPP::HexEncoder(attachment, false);
-		break;
-	default:
-		throw std::invalid_argument("[invalid_argument] <hash.cpp> crypto::message::digest::Hash::getFilter(EncodeScheme, CryptoPP::BufferedTransformation* const): {encode_scheme}.");
-	}
-
-	if (filter == nullptr)
-	{
-		throw std::bad_typeid();
-	}
-	return filter;
-}
-
-CryptoPP::HashTransformation* crypto::message::digest::Hash::getHashTransformation(HashScheme hash_scheme)
+CryptoPP::HashTransformation* crypto::message::digest::Hash::GetHashFunction(HashScheme hash_scheme)
 {
 	CryptoPP::HashTransformation* hash;
 	switch (hash_scheme)
@@ -82,7 +42,7 @@ CryptoPP::HashTransformation* crypto::message::digest::Hash::getHashTransformati
 		hash = new CryptoPP::SHA512();
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <hash.cpp> crypto::message::digest::Hash::getHashTransformation(HashScheme): {hash_scheme}.");
+		throw std::invalid_argument("[invalid_argument] <hash.cpp> crypto::message::digest::Hash::GetHashFunction(HashScheme): {hash_scheme}.");
 	}
 
 	if (hash == nullptr)
@@ -101,25 +61,9 @@ vector<byte> crypto::message::digest::Hash::digest(const string& msg, HashScheme
 {
 	string digest;
 
-	CryptoPP::HashTransformation* hash = getHashTransformation(hash_scheme);
+	CryptoPP::HashTransformation* hash = GetHashFunction(hash_scheme);
 	CryptoPP::StringSource(msg, true, new CryptoPP::HashFilter(*hash, new CryptoPP::StringSink(digest)));
 
 	delete hash;
 	return vector<byte>(digest.begin(), digest.end());
-}
-
-string crypto::message::digest::Hash::digest(const vector<byte>& msg, HashScheme hash_scheme, EncodeScheme encode_scheme)
-{
-	return digest(string(msg.begin(), msg.end()), hash_scheme, encode_scheme);
-}
-
-string crypto::message::digest::Hash::digest(const string& message, HashScheme algorithm, EncodeScheme encode_scheme)
-{
-	string digest;
-
-	CryptoPP::HashTransformation* hash = getHashTransformation(algorithm);
-	CryptoPP::StringSource(message, true, new CryptoPP::HashFilter(*hash, getFilter(encode_scheme, new CryptoPP::StringSink(digest))));
-
-	delete hash;
-	return digest;
 }

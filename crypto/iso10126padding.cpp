@@ -4,7 +4,6 @@
 */
 
 #include "iso10126padding.h"
-#include <cryptopp/osrng.h>
 #include <random>
 #include <algorithm>
 
