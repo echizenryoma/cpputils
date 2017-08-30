@@ -49,16 +49,9 @@ using crypto::message::digest::Hash;
   "\x6a\x0f\x85\xe6\xa9\x1d\x39\x6f\x5b\x5c\xbe\x57\x7f\x9b\x38\x80" \
   "\x7c\x7d\x52\x3d\x6d\x79\x2f\x6e\xbc\x24\xa4\xec\xf2\xb3\xa4\x27" \
   "\xcd\xbb\xfb"
-#define TEST7_224 \
-  "\xf0\x70\x06\xf2\x5a\x0b\xea\x68\xcd\x76\xa2\x95\x87\xc2\x8d"
+
 #define TEST8_224 \
   "\x18\x80\x40\x05\xdd\x4f\xbd\x15\x56\x29\x9d\x6f\x9d\x93\xdf\x62"
-#define TEST9_224 \
-  "\xa2\xbe\x6e\x46\x32\x81\x09\x02\x94\xd9\xce\x94\x82\x65\x69\x42" \
-  "\x3a\x3a\x30\x5e\xd5\xe2\x11\x6c\xd4\xa4\xc9\x87\xfc\x06\x57\x00" \
-  "\x64\x91\xb1\x49\xcc\xd4\xb5\x11\x30\xac\x62\xb1\x9d\xc2\x48\xc7" \
-  "\x44\x54\x3d\x20\xcd\x39\x52\xdc\xed\x1f\x06\xcc\x3b\x18\xb9\x1f" \
-  "\x3f\x55\x63\x3e\xcc\x30\x85\xf4\x90\x70\x60\xd2"
 #define TEST10_224 \
   "\x55\xb2\x10\x07\x9c\x61\xb5\x3a\xdd\x52\x06\x22\xd1\xac\x97\xd5" \
   "\xcd\xbe\x8c\xb3\x3a\xa0\xae\x34\x45\x17\xbe\xe4\xd7\xba\x09\xab" \
@@ -71,16 +64,9 @@ using crypto::message::digest::Hash;
   "\xaf\x0d\xc1\xae\x78\x57\x36\x91\x4a\xb7\xda\xa2\x64\xbc\x07\x9d" \
   "\x26\x9f\x2c\x0d\x7e\xdd\xd8\x10\xa4\x26\x14\x5a\x07\x76\xf6\x7c" \
   "\x87\x82\x73"
-#define TEST7_256 \
-  "\xbe\x27\x46\xc6\xdb\x52\x76\x5f\xdb\x2f\x88\x70\x0f\x9a\x73"
+
 #define TEST8_256 \
   "\xe3\xd7\x25\x70\xdc\xdd\x78\x7c\xe3\x88\x7a\xb2\xcd\x68\x46\x52"
-#define TEST9_256 \
-  "\x3e\x74\x03\x71\xc8\x10\xc2\xb9\x9f\xc0\x4e\x80\x49\x07\xef\x7c" \
-  "\xf2\x6b\xe2\x8b\x57\xcb\x58\xa3\xe2\xf3\xc0\x07\x16\x6e\x49\xc1" \
-  "\x2e\x9b\xa3\x4c\x01\x04\x06\x91\x29\xea\x76\x15\x64\x25\x45\x70" \
-  "\x3a\x2b\xd9\x01\xe1\x6e\xb0\xe0\x5d\xeb\xa0\x14\xeb\xff\x64\x06" \
-  "\xa0\x7d\x54\x36\x4e\xff\x74\x2d\xa7\x79\xb0\xb3"
 #define TEST10_256 \
   "\x83\x26\x75\x4e\x22\x77\x37\x2f\x4f\xc1\x2b\x20\x52\x7a\xfe\xf0" \
   "\x4d\x8a\x05\x69\x71\xb1\x1a\xd5\x71\x23\xa7\xc1\x37\x76\x00\x00" \
@@ -93,20 +79,9 @@ using crypto::message::digest::Hash;
   "\xa9\x7d\x13\x8f\x12\x92\x28\x96\x6f\x6c\x0a\xdc\x10\x6a\xad\x5a" \
   "\x9f\xdd\x30\x82\x57\x69\xb2\xc6\x71\xaf\x67\x59\xdf\x28\xeb\x39" \
   "\x3d\x54\xd6"
-#define TEST7_384 \
-  "\x8b\xc5\x00\xc7\x7c\xee\xd9\x87\x9d\xa9\x89\x10\x7c\xe0\xaa"
+
 #define TEST8_384 \
   "\xa4\x1c\x49\x77\x79\xc0\x37\x5f\xf1\x0a\x7f\x4e\x08\x59\x17\x39"
-#define TEST9_384 \
-  "\x68\xf5\x01\x79\x2d\xea\x97\x96\x76\x70\x22\xd9\x3d\xa7\x16\x79" \
-  "\x30\x99\x20\xfa\x10\x12\xae\xa3\x57\xb2\xb1\x33\x1d\x40\xa1\xd0" \
-  "\x3c\x41\xc2\x40\xb3\xc9\xa7\x5b\x48\x92\xf4\xc0\x72\x4b\x68\xc8" \
-  "\x75\x32\x1a\xb8\xcf\xe5\x02\x3b\xd3\x75\xbc\x0f\x94\xbd\x89\xfe" \
-  "\x04\xf2\x97\x10\x5d\x7b\x82\xff\xc0\x02\x1a\xeb\x1c\xcb\x67\x4f" \
-  "\x52\x44\xea\x34\x97\xde\x26\xa4\x19\x1c\x5f\x62\xe5\xe9\xa2\xd8" \
-  "\x08\x2f\x05\x51\xf4\xa5\x30\x68\x26\xe9\x1c\xc0\x06\xce\x1b\xf6" \
-  "\x0f\xf7\x19\xd4\x2f\xa5\x21\xc8\x71\xcd\x23\x94\xd9\x6e\xf4\x46" \
- "\x8f\x21\x96\x6b\x41\xf2\xba\x80\xc2\x6e\x83\xa9"
 #define TEST10_384 \
   "\x39\x96\x69\xe2\x8f\x6b\x9c\x6d\xbc\xbb\x69\x12\xec\x10\xff\xcf" \
   "\x74\x79\x03\x49\xb7\xdc\x8f\xbe\x4a\x8e\x7b\x3b\x56\x21\xdb\x0f" \
@@ -123,6 +98,7 @@ using crypto::message::digest::Hash;
   "\x76\x71\x1c\xf3\xdb\x0a\x34\x40\x72\x0e\x16\x15\xc1\xf2\x2f\xbc" \
   "\x3c\x72\x1d\xe5\x21\xe1\xb9\x9b\xa1\xbd\x55\x77\x40\x86\x42\x14" \
   "\x7e\xd0\x96"
+
 #define TEST8_512 \
   "\x8d\x4e\x3c\x0e\x38\x89\x19\x14\x91\x81\x6e\x9d\x98\xbf\xf0\xa0"
 #define TEST10_512 \
@@ -146,50 +122,149 @@ using crypto::message::digest::Hash;
 
 TEST(Hash, MD2)
 {
-	vector<byte> digest;
+	/**
+	* \sa <A HREF="https://tools.ietf.org/html/rfc1320">A.5 Test suite</A>
+	* for additional details.
+	*/
+	vector<test> HASH_TESTS{
+		/* 1 */{
+			"", 0, 1,
+			"8350E5A3E24C153DF2275C9F80692773"
+		},
+		/* 2 */{
+			"a", 1, 1,
+			"32EC01EC4A6DAC72C0AB96FB34C0B5D1"
+		},
+		/* 3 */{
+			"abc", 3, 1,
+			"DA853B0D3F88D99B30283A69E6DED6BB"
+		},
+		/* 4 */{
+			"message digest", 14, 1,
+			"AB4F496BFB2A530B219FF33031FE06B0"
+		},
+		/* 5 */{
+			"abcdefghijklmnopqrstuvwxyz", 26, 1,
+			"4E8DDFF3650292AB5A4108C3AA47940B"
+		},
+		/* 6 */{
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 62, 1,
+			"DA33DEF2A42DF13975352846C30338CD"
+		},
+		/* 7 */{
+			"12345678901234567890123456789012345678901234567890123456789012345678901234567890", 80, 1,
+			"D5976F79D83D3A0DC9806C3C66F3EFD8"
+		},
+	};
 
-	digest = Hash::digest("!Q}F$WCk", Hash::HashScheme::MD2);
-EXPECT_EQ(Hex::encode(digest), "517EAE3B5E7EC1CE00147119F0117D78");
-
-	digest = Hash::digest("NOsGn:LuP#y%]Bd5[|tf_(lg^ia\"oJwU", Hash::HashScheme::MD2);
-EXPECT_EQ(Hex::encode(digest), "AE3DD2166F5962BD719F9C4B45E0437A");
-
-	digest = Hash::digest(
-		"uh/MD7VuiDcl#SKIk>+QLiZ='p|_RuOjE,d<%29KiQ4}h8A#hprv`5Y!yU7Sy;;07NSGgu{!~5_!hA4[t8]UdN|e+jOSA9H(TH#S,94D-D_D)d<9lgae#EC6-wd9n,",
-		Hash::HashScheme::MD2);
-EXPECT_EQ(Hex::encode(digest), "FBFD337A52CA5910C6B2A88EF5CCCFDB");
+	for (test t : HASH_TESTS)
+	{
+		string msg;
+		const string test_str(t.test_array, t.test_array + t.test_array_size);
+		for (int i = 0; i < t.repeat_count; ++i)
+		{
+			msg += test_str;
+		}
+		EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD2)), t.result_array);
+	}
 }
 
 TEST(Hash, MD4)
 {
-	vector<byte> digest;
+	/**
+	* \sa <A HREF="https://tools.ietf.org/html/rfc1320">A.5 Test suite</A>
+	* for additional details.
+	*/
+	vector<test> HASH_TESTS{
+		/* 1 */{
+			"", 0, 1,
+			"31D6CFE0D16AE931B73C59D7E0C089C0"
+		},
+		/* 2 */{
+			"a", 1, 1,
+			"BDE52CB31DE33E46245E05FBDBD6FB24"
+		},
+		/* 3 */{
+			"abc", 3, 1,
+			"A448017AAF21D8525FC10AE87AA6729D"
+		},
+		/* 4 */{
+			"message digest", 14, 1,
+			"D9130A8164549FE818874806E1C7014B"
+		},
+		/* 5 */{
+			"abcdefghijklmnopqrstuvwxyz", 26, 1,
+			"D79E1C308AA5BBCDEEA8ED63DF412DA9"
+		},
+		/* 6 */{
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 62, 1,
+			"043F8582F241DB351CE627E153E7F0E4"
+		},
+		/* 7 */{
+			"12345678901234567890123456789012345678901234567890123456789012345678901234567890", 80, 1,
+			"E33B4DDC9C38F2199C3E7B164FCC0536"
+		},
+	};
 
-	digest = Hash::digest("!Q}F$WCk", Hash::HashScheme::MD4);
-EXPECT_EQ(Hex::encode(digest), "C1FF900C3BE8D2066F71C543AE44DC1E");
-
-	digest = Hash::digest("NOsGn:LuP#y%]Bd5[|tf_(lg^ia\"oJwU", Hash::HashScheme::MD4);
-EXPECT_EQ(Hex::encode(digest), "78D237930CF6960D75744E421CA9CDBF");
-
-	digest = Hash::digest(
-		"uh/MD7VuiDcl#SKIk>+QLiZ='p|_RuOjE,d<%29KiQ4}h8A#hprv`5Y!yU7Sy;;07NSGgu{!~5_!hA4[t8]UdN|e+jOSA9H(TH#S,94D-D_D)d<9lgae#EC6-wd9n,",
-		Hash::HashScheme::MD4);
-EXPECT_EQ(Hex::encode(digest), "5B455C7B2BBF40DCB2863396742B7EEC");
+	for (test t : HASH_TESTS)
+	{
+		string msg;
+		const string test_str(t.test_array, t.test_array + t.test_array_size);
+		for (int i = 0; i < t.repeat_count; ++i)
+		{
+			msg += test_str;
+		}
+		EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD4)), t.result_array);
+	}
 }
 
 TEST(Hash, MD5)
 {
-	vector<byte> digest;
+	/**
+	* \sa <A HREF="https://tools.ietf.org/html/rfc1321">A.5 Test suite</A>
+	* for additional details.
+	*/
+	vector<test> HASH_TESTS{
+		/* 1 */{
+			"", 0, 1,
+			"D41D8CD98F00B204E9800998ECF8427E"
+		},
+		/* 2 */{
+			"a", 1, 1,
+			"0CC175B9C0F1B6A831C399E269772661"
+		},
+		/* 3 */{
+			"abc", 3, 1,
+			"900150983CD24FB0D6963F7D28E17F72"
+		},
+		/* 4 */{
+			"message digest", 14, 1,
+			"F96B697D7CB7938D525A2F31AAF161D0"
+		},
+		/* 5 */{
+			"abcdefghijklmnopqrstuvwxyz", 26, 1,
+			"C3FCD3D76192E4007DFB496CCA67E13B"
+		},
+		/* 6 */{
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 62, 1,
+			"D174AB98D277D9F5A5611C2C9F419D9F"
+		},
+		/* 7 */{
+			"12345678901234567890123456789012345678901234567890123456789012345678901234567890", 80, 1,
+			"57EDF4A22BE3C955AC49DA2E2107B67A"
+		},
+	};
 
-	digest = Hash::digest("!Q}F$WCk", Hash::HashScheme::MD5);
-EXPECT_EQ(Hex::encode(digest), "6EA2A9C8803CED9AD898FFD09D73CB00");
-
-	digest = Hash::digest("NOsGn:LuP#y%]Bd5[|tf_(lg^ia\"oJwU", Hash::HashScheme::MD5);
-EXPECT_EQ(Hex::encode(digest), "21EEF939E014E7DA40AC31CF7B8663D4");
-
-	digest = Hash::digest(
-		"uh/MD7VuiDcl#SKIk>+QLiZ='p|_RuOjE,d<%29KiQ4}h8A#hprv`5Y!yU7Sy;;07NSGgu{!~5_!hA4[t8]UdN|e+jOSA9H(TH#S,94D-D_D)d<9lgae#EC6-wd9n,",
-		Hash::HashScheme::MD5);
-EXPECT_EQ(Hex::encode(digest), "1484821D36ACBC33F6640573FACDDF23");
+	for (test t : HASH_TESTS)
+	{
+		string msg;
+		const string test_str(t.test_array, t.test_array + t.test_array_size);
+		for (int i = 0; i < t.repeat_count; ++i)
+		{
+			msg += test_str;
+		}
+	EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD5)), t.result_array);
+	}
 }
 
 TEST(Hash, SHA1)
@@ -200,43 +275,35 @@ TEST(Hash, SHA1)
 	*/
 	vector<test> HASH_TESTS{
 		/* 1 */{
-			TEST1, length(TEST1),
-			1,
+			TEST1, length(TEST1), 1,
 			"A9993E364706816ABA3E25717850C26C9CD0D89D"
 		},
 		/* 2 */{
-			TEST2_1, length(TEST2_1),
-			1,
+			TEST2_1, length(TEST2_1), 1,
 			"84983E441C3BD26EBAAE4AA1F95129E5E54670F1"
 		},
 		/* 3 */{
-			TEST3, length(TEST3),
-			1000000,
+			TEST3, length(TEST3), 1000000,
 			"34AA973CD4C4DAA4F61EEB2BDBAD27316534016F"
 		},
 		/* 4 */{
-			TEST4, length(TEST4),
-			10,
+			TEST4, length(TEST4), 10,
 			"DEA356A2CDDD90C7A7ECEDC5EBB563934F460452"
 		},
 		/* 5 */{
-			"", 0,
-			0,
+			"", 0, 0,
 			"DA39A3EE5E6B4B0D3255BFEF95601890AFD80709"
 		},
 		/* 6 */{
-			"\x5e", 1,
-			1,
+			"\x5e", 1, 1,
 			"5E6F80A34A9798CAFC6A5DB96CC57BA4C4DB59C2"
 		},
 		/* 8 */{
-			TEST8_1, length(TEST8_1),
-			1,
+			TEST8_1, length(TEST8_1), 1,
 			"82ABFF6605DBE1C17DEF12A394FA22A82B544A35"
 		},
 		/* 10 */{
-			TEST10_1, length(TEST10_1),
-			1,
+			TEST10_1, length(TEST10_1), 1,
 			"CB0082C8F197D260991BA6A460E76E202BAD27B3"
 		}
 	};
