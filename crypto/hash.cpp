@@ -10,6 +10,7 @@
 #include <cryptopp/md4.h>
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/sha3.h>
 #include <cryptopp/filters.h>
 
 CryptoPP::HashTransformation* crypto::message::digest::Hash::GetHashFunction(HashScheme hash_scheme)
@@ -40,6 +41,18 @@ CryptoPP::HashTransformation* crypto::message::digest::Hash::GetHashFunction(Has
 		break;
 	case SHA512:
 		hash = new CryptoPP::SHA512();
+		break;
+	case SHA3_224: 
+		hash = new CryptoPP::SHA3_224();
+		break;
+	case SHA3_256: 
+		hash = new CryptoPP::SHA3_256();
+		break;
+	case SHA3_384: 
+		hash = new CryptoPP::SHA3_384();
+		break;
+	case SHA3_512: 
+		hash = new CryptoPP::SHA3_512();
 		break;
 	default:
 		throw std::invalid_argument("[invalid_argument] <hash.cpp> crypto::message::digest::Hash::GetHashFunction(HashScheme): {hash_scheme}.");
