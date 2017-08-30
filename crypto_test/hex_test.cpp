@@ -3,16 +3,72 @@
 #include "../crypto/hex.h"
 using crypto::encode::Hex;
 
+/**
+* \sa <A HREF="https://tools.ietf.org/html/rfc4648#section-10">10. Test Vectors</A>
+* for additional details.
+*/
+vector<test> HEX_TESTS{
+	{
+		"", 0,
+		1,
+		""
+	},
+	{
+		"f", 1,
+		1,
+		"66"
+	},
+	{
+		"fo", 2,
+		1,
+		"666F"
+	},
+	{
+		"foo", 3,
+		1,
+		"666F6F"
+	},
+	{
+		"foob", 4,
+		1,
+		"666F6F62"
+	},
+	{
+		"fooba", 5,
+		1,
+		"666F6F6261"
+	},
+	{
+		"foobar", 6,
+		1,
+		"666F6F626172"
+	},
+};
+
 TEST(Hex, encode)
 {
-	EXPECT_EQ("21517D462457436B", Hex::encode("!Q}F$WCk"));
-	EXPECT_EQ("4E4F73476E3A4C75502379255D4264355B7C74665F286C675E6961226F4A7755", Hex::encode("NOsGn:LuP#y%]Bd5[|tf_(lg^ia\"oJwU"));
-	EXPECT_EQ("75682F4D443756756944636C23534B496B3E2B514C695A3D27707C5F52754F6A452C643C2532394B6951347D68384123687072766035592179553753793B3B30374E534767757B217E355F216841345B74385D55644E7C652B6A4F5341394828544823532C3934442D445F4429643C396C676165234543362D7764396E2C", Hex::encode("uh/MD7VuiDcl#SKIk>+QLiZ='p|_RuOjE,d<%29KiQ4}h8A#hprv`5Y!yU7Sy;;07NSGgu{!~5_!hA4[t8]UdN|e+jOSA9H(TH#S,94D-D_D)d<9lgae#EC6-wd9n,"));
+	for (test t : HEX_TESTS)
+	{
+		string msg;
+		const string test_str(t.test_array, t.test_array + t.test_array_size);
+		for (int i = 0; i < t.repeat_count; ++i)
+		{
+			msg += test_str;
+		}
+		EXPECT_EQ(Hex::encode(msg), t.result_array);
+	}
 }
 
 TEST(Hex, decode)
 {
-	EXPECT_EQ("!Q}F$WCk",bytes2str(Hex::decode("21517D462457436B")) );
-	EXPECT_EQ("NOsGn:LuP#y%]Bd5[|tf_(lg^ia\"oJwU", bytes2str(Hex::decode("4E4F73476E3A4C75502379255D4264355B7C74665F286C675E6961226F4A7755")));
-	EXPECT_EQ("uh/MD7VuiDcl#SKIk>+QLiZ='p|_RuOjE,d<%29KiQ4}h8A#hprv`5Y!yU7Sy;;07NSGgu{!~5_!hA4[t8]UdN|e+jOSA9H(TH#S,94D-D_D)d<9lgae#EC6-wd9n,", bytes2str(Hex::decode("75682F4D443756756944636C23534B496B3E2B514C695A3D27707C5F52754F6A452C643C2532394B6951347D68384123687072766035592179553753793B3B30374E534767757B217E355F216841345B74385D55644E7C652B6A4F5341394828544823532C3934442D445F4429643C396C676165234543362D7764396E2C")));
+	for (test t : HEX_TESTS)
+	{
+		string msg;
+		const string test_str(t.test_array, t.test_array + t.test_array_size);
+		for (int i = 0; i < t.repeat_count; ++i)
+		{
+			msg += test_str;
+		}
+		EXPECT_EQ(bytes2str(Hex::decode(t.result_array)), msg);
+	}
 }
