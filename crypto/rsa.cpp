@@ -20,40 +20,30 @@ Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t ke
 	switch (padding_scheme)
 	{
 	case NoPadding:
-		padding = new padding::NoPadding(key_size);
-		break;
+		return new padding::NoPadding(key_size);
 	case PKCS1Padding:
 		switch (key_type)
 		{
 		case PublicKey:
-			padding = new padding::PKCS1v15Padding(key_size, padding::PKCS1v15Padding::PUBLIC_KEY_OPERATION);
-			break;
+			return new padding::PKCS1v15Padding(key_size, padding::PKCS1v15Padding::PUBLIC_KEY_OPERATION);
 		case PrivateKey:
-			padding = new padding::PKCS1v15Padding(key_size, padding::PKCS1v15Padding::PRIVATE_KEY_OPERATION);
-			break;
+			return new padding::PKCS1v15Padding(key_size, padding::PKCS1v15Padding::PRIVATE_KEY_OPERATION);
 		default:
 			throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t, KeyType, const vector<byte>&): {key_type} is not support.");
 		}
-		break;
 	case OAEPwithSHA1andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA1, label);
-		break;
+		return new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA1, label);
 	case OAEPwithSHA224andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA224, label);
-		break;
+		return new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA224, label);
 	case OAEPwithSHA256andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA256, label);
-		break;
+		return new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA256, label);
 	case OAEPwithSHA384andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA384, label);
-		break;
+		return new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA384, label);
 	case OAEPwithSHA512andMGF1Padding:
-		padding = new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA512, label);
-		break;
+		return new padding::OAEPwithHashandMGF1Padding(key_size, padding::OAEPwithHashandMGF1Padding::SHA512, label);
 	default:
 		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::GetPaadingFunction(PaddingScheme, size_t, KeyType, const vector<byte>&): {padding_scheme} is not support.");
 	}
-	return padding;
 }
 
 int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size)

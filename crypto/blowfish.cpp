@@ -6,7 +6,6 @@
 #include "blowfish.h"
 #include "pkcs7padding.h"
 #include "iso10126padding.h"
-#include "zeropadding.h"
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
 
@@ -32,22 +31,17 @@ bool crypto::Blowfish::CheckIVSize(size_t iv_size)
 
 Padding* crypto::Blowfish::GetPaadingFunction(PaddingScheme padding_scheme)
 {
-	Padding* padding;
 	switch (padding_scheme)
 	{
 	case PKCS5Padding:
-		padding = new padding::PKCS5Padding(CryptoPP::Blowfish::BLOCKSIZE);
-		break;
+		return new padding::PKCS5Padding(CryptoPP::Blowfish::BLOCKSIZE);
 	case PKCS7Padding:
-		padding = new padding::PKCS7Padding(CryptoPP::Blowfish::BLOCKSIZE);
-		break;
+		return new padding::PKCS7Padding(CryptoPP::Blowfish::BLOCKSIZE);
 	case ISO10126Padding:
-		padding = new padding::ISO10126Padding(CryptoPP::Blowfish::BLOCKSIZE);
-		break;
+		return new padding::ISO10126Padding(CryptoPP::Blowfish::BLOCKSIZE);
 	default:
 		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
-	return padding;
 }
 
 vector<byte> crypto::Blowfish::random_key(size_t key_size)

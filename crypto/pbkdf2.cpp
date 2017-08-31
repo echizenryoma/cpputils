@@ -9,6 +9,7 @@
 #include <cryptopp/md4.h>
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/sha3.h>
 
 CryptoPP::PasswordBasedKeyDerivationFunction* crypto::mac::PBKDF2::GetPBEwithHmacFunction(HmacScheme hmac_scheme)
 {
@@ -30,6 +31,14 @@ CryptoPP::PasswordBasedKeyDerivationFunction* crypto::mac::PBKDF2::GetPBEwithHma
 		return new CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA384>();
 	case HmacSHA512:
 		return new CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA512>();
+	case HmacSHA3_224:
+		return new CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA3_224>();
+	case HmacSHA3_256:
+		return new CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA3_256>();
+	case HmacSHA3_384:
+		return new CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA3_384>();
+	case HmacSHA3_512:
+		return new CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA3_512>();
 	default:
 		throw std::invalid_argument("[invalid_argument] <pdkdf2.cpp> crypto::mac::PBKDF2::GetPBEwithHmacFunction(HmacScheme hmac_scheme): {hmac_scheme} is not support.");
 	}

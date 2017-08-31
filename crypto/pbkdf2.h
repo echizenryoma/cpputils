@@ -27,12 +27,16 @@ public:
 		HmacMD4 = 4,
 		HmacMD5 = 5,
 
-		HmacSHA = 1,
 		HmacSHA1 = 1,
 		HmacSHA224 = 224,
 		HmacSHA256 = 256,
 		HmacSHA384 = 384,
-		HmacSHA512 = 512
+		HmacSHA512 = 512,
+
+		HmacSHA3_224 = 3224,
+		HmacSHA3_256 = 3256,
+		HmacSHA3_384 = 3384,
+		HmacSHA3_512 = 3512,
 	};
 
 private:

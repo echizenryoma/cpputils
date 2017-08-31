@@ -12,6 +12,7 @@
 #include <cryptopp/md4.h>
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/sha3.h>
 
 CryptoPP::HMAC_Base* crypto::mac::Hmac::GetHmacFunction(HashScheme hash_scheme)
 {
@@ -33,11 +34,18 @@ CryptoPP::HMAC_Base* crypto::mac::Hmac::GetHmacFunction(HashScheme hash_scheme)
 		return new CryptoPP::HMAC<CryptoPP::SHA384>();
 	case SHA512:
 		return new CryptoPP::HMAC<CryptoPP::SHA512>();
+	case SHA3_224:
+		return new CryptoPP::HMAC<CryptoPP::SHA3_224>();
+	case SHA3_256:
+		return new CryptoPP::HMAC<CryptoPP::SHA3_256>();
+	case SHA3_384:
+		return new CryptoPP::HMAC<CryptoPP::SHA3_384>();
+	case SHA3_512:
+		return new CryptoPP::HMAC<CryptoPP::SHA3_512>();
 	default:
 		throw std::invalid_argument("[invalid_argument] <hmac.cpp> crypto::mac::Hmac::GetHmacFunction(HashScheme): {hash_scheme}  is not support.");
 	}
 }
-
 
 vector<byte> crypto::mac::Hmac::mac(const vector<byte>& msg, const vector<byte>& key, HashScheme hash_scheme)
 {

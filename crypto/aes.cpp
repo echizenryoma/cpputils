@@ -10,7 +10,6 @@ using crypto::padding::Padding;
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
 #include "pkcs5padding.h"
-#include "zeropadding.h"
 #include <cryptopp/aes.h>
 #include <cryptopp/gcm.h>
 #include <cryptopp/modes.h>
@@ -46,22 +45,17 @@ bool crypto::Aes::CheckIVSize(size_t iv_size)
 
 Padding* crypto::Aes::GetPaadingFunction(PaddingScheme padding_scheme)
 {
-	Padding* padding;
 	switch (padding_scheme)
 	{
 	case PKCS5Padding:
-		padding = new padding::PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
-		break;
+		return new padding::PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
 	case PKCS7Padding:
-		padding = new padding::PKCS7Padding(CryptoPP::AES::BLOCKSIZE);
-		break;
+		return new padding::PKCS7Padding(CryptoPP::AES::BLOCKSIZE);
 	case ISO10126Padding:
-		padding = new padding::ISO10126Padding(CryptoPP::AES::BLOCKSIZE);
-		break;
+		return new padding::ISO10126Padding(CryptoPP::AES::BLOCKSIZE);
 	default:
 		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
-	return padding;
 }
 
 vector<byte> crypto::Aes::random_key(KeySize key_size)
