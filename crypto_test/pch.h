@@ -11,6 +11,8 @@
 using std::string;
 using std::vector;
 
+#define length(x) (sizeof(x)-1)
+
 string bytes2str(const vector<byte>& bytes);
 
 struct test

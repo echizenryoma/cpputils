@@ -6,13 +6,18 @@ using crypto::encode::Hex;
 #include "../crypto/hash.h"
 using crypto::message::digest::Hash;
 
-/**
-* \sa <A HREF="https://tools.ietf.org/html/rfc4634#section-8.4">8.4.  The Test Driver</A>
-* for additional details.
-*/
 /*
 *  Define patterns for testing
 */
+#define TEST1_MD ""
+#define TEST2_MD "a"
+#define TEST3_MD "abc"
+#define TEST4_MD "message digest"
+#define TEST5_MD "abcdefghijklmnopqrstuvwxyz"
+#define TEST6_MD "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+#define TEST7_MD "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+
+
 #define TEST1    "abc"
 #define TEST2_1  \
         "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
@@ -118,7 +123,6 @@ using crypto::message::digest::Hash;
   "\xa2\xf3\xc0\xc7\x58\xe5\xf5\x51\x86\x3a\x96\xc9\x49\xad\x47\xd7" \
   "\xfb\x40\xd2"
 
-#define length(x) (sizeof(x)-1)
 
 TEST(Hash, MD2)
 {
@@ -128,31 +132,31 @@ TEST(Hash, MD2)
 	*/
 	vector<test> HASH_TESTS{
 		/* 1 */{
-			"", 0, 1,
+			TEST1_MD, length(TEST1_MD), 0,
 			"8350E5A3E24C153DF2275C9F80692773"
 		},
 		/* 2 */{
-			"a", 1, 1,
+			TEST2_MD, length(TEST2_MD), 1,
 			"32EC01EC4A6DAC72C0AB96FB34C0B5D1"
 		},
 		/* 3 */{
-			"abc", 3, 1,
+			TEST3_MD, length(TEST3_MD), 1,
 			"DA853B0D3F88D99B30283A69E6DED6BB"
 		},
 		/* 4 */{
-			"message digest", 14, 1,
+			TEST4_MD, length(TEST4_MD), 1,
 			"AB4F496BFB2A530B219FF33031FE06B0"
 		},
 		/* 5 */{
-			"abcdefghijklmnopqrstuvwxyz", 26, 1,
+			TEST5_MD, length(TEST5_MD), 1,
 			"4E8DDFF3650292AB5A4108C3AA47940B"
 		},
 		/* 6 */{
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 62, 1,
+			TEST6_MD, length(TEST6_MD), 1,
 			"DA33DEF2A42DF13975352846C30338CD"
 		},
 		/* 7 */{
-			"12345678901234567890123456789012345678901234567890123456789012345678901234567890", 80, 1,
+			TEST7_MD, length(TEST7_MD), 1,
 			"D5976F79D83D3A0DC9806C3C66F3EFD8"
 		},
 	};
@@ -165,7 +169,7 @@ TEST(Hash, MD2)
 		{
 			msg += test_str;
 		}
-		EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD2)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD2)), t.result_array);
 	}
 }
 
@@ -177,31 +181,31 @@ TEST(Hash, MD4)
 	*/
 	vector<test> HASH_TESTS{
 		/* 1 */{
-			"", 0, 1,
+			TEST1_MD, length(TEST1_MD), 0,
 			"31D6CFE0D16AE931B73C59D7E0C089C0"
 		},
 		/* 2 */{
-			"a", 1, 1,
+			TEST2_MD, length(TEST2_MD), 1,
 			"BDE52CB31DE33E46245E05FBDBD6FB24"
 		},
 		/* 3 */{
-			"abc", 3, 1,
+			TEST3_MD, length(TEST3_MD), 1,
 			"A448017AAF21D8525FC10AE87AA6729D"
 		},
 		/* 4 */{
-			"message digest", 14, 1,
+			TEST4_MD, length(TEST4_MD), 1,
 			"D9130A8164549FE818874806E1C7014B"
 		},
 		/* 5 */{
-			"abcdefghijklmnopqrstuvwxyz", 26, 1,
+			TEST5_MD, length(TEST5_MD), 1,
 			"D79E1C308AA5BBCDEEA8ED63DF412DA9"
 		},
 		/* 6 */{
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 62, 1,
+			TEST6_MD, length(TEST6_MD), 1,
 			"043F8582F241DB351CE627E153E7F0E4"
 		},
 		/* 7 */{
-			"12345678901234567890123456789012345678901234567890123456789012345678901234567890", 80, 1,
+			TEST7_MD, length(TEST7_MD), 1,
 			"E33B4DDC9C38F2199C3E7B164FCC0536"
 		},
 	};
@@ -214,7 +218,7 @@ TEST(Hash, MD4)
 		{
 			msg += test_str;
 		}
-		EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD4)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hash::digest(msg, Hash::HashScheme::MD4)), t.result_array);
 	}
 }
 
@@ -226,31 +230,31 @@ TEST(Hash, MD5)
 	*/
 	vector<test> HASH_TESTS{
 		/* 1 */{
-			"", 0, 1,
+			TEST1_MD, length(TEST1_MD), 0,
 			"D41D8CD98F00B204E9800998ECF8427E"
 		},
 		/* 2 */{
-			"a", 1, 1,
+			TEST2_MD, length(TEST2_MD), 1,
 			"0CC175B9C0F1B6A831C399E269772661"
 		},
 		/* 3 */{
-			"abc", 3, 1,
+			TEST3_MD, length(TEST3_MD), 1,
 			"900150983CD24FB0D6963F7D28E17F72"
 		},
 		/* 4 */{
-			"message digest", 14, 1,
+			TEST4_MD, length(TEST4_MD), 1,
 			"F96B697D7CB7938D525A2F31AAF161D0"
 		},
 		/* 5 */{
-			"abcdefghijklmnopqrstuvwxyz", 26, 1,
+			TEST5_MD, length(TEST5_MD), 1,
 			"C3FCD3D76192E4007DFB496CCA67E13B"
 		},
 		/* 6 */{
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 62, 1,
+			TEST6_MD, length(TEST6_MD), 1,
 			"D174AB98D277D9F5A5611C2C9F419D9F"
 		},
 		/* 7 */{
-			"12345678901234567890123456789012345678901234567890123456789012345678901234567890", 80, 1,
+			TEST7_MD, length(TEST7_MD), 1,
 			"57EDF4A22BE3C955AC49DA2E2107B67A"
 		},
 	};

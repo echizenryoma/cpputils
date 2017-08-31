@@ -16,7 +16,6 @@ using EVP_KEY_ptr = std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)>;
 
 Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size, KeyType key_type, const vector<byte>& label)
 {
-	Padding* padding;
 	switch (padding_scheme)
 	{
 	case NoPadding:
