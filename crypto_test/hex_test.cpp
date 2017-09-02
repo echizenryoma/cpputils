@@ -8,37 +8,37 @@ using crypto::encode::Hex;
 * for additional details.
 */
 vector<test> HEX_TESTS{
-	{
+	/* 1 */{
 		"", 0,
 		1,
 		""
 	},
-	{
+	/* 2 */{
 		"f", 1,
 		1,
 		"66"
 	},
-	{
+	/* 3 */{
 		"fo", 2,
 		1,
 		"666F"
 	},
-	{
+	/* 4 */{
 		"foo", 3,
 		1,
 		"666F6F"
 	},
-	{
+	/* 5 */{
 		"foob", 4,
 		1,
 		"666F6F62"
 	},
-	{
+	/* 6 */{
 		"fooba", 5,
 		1,
 		"666F6F6261"
 	},
-	{
+	/* 7 */{
 		"foobar", 6,
 		1,
 		"666F6F626172"
@@ -55,7 +55,7 @@ TEST(Hex, encode)
 		{
 			msg += test_str;
 		}
-		EXPECT_EQ(Hex::encode(msg), t.result_array);
+	EXPECT_EQ(Hex::encode(msg), t.result_array);
 	}
 }
 
@@ -69,6 +69,6 @@ TEST(Hex, decode)
 		{
 			msg += test_str;
 		}
-		EXPECT_EQ(bytes2str(Hex::decode(t.result_array)), msg);
+	EXPECT_EQ(bytes2str(Hex::decode(t.result_array)), msg);
 	}
 }
