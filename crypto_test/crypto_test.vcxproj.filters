@@ -19,9 +19,6 @@
     <ClCompile Include="des_test.cpp">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="rc_test.cpp">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="blowfish_test.cpp">
       <Filter>test</Filter>
     </ClCompile>
@@ -30,6 +27,9 @@
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="pbewithhmac_test.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="rc4_test.cpp">
       <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>

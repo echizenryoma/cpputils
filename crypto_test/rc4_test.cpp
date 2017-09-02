@@ -6,7 +6,7 @@ using crypto::RC4;
 #include "../crypto/base64.h"
 using crypto::encode::Base64;
 
-TEST(RC4, RC4_ECB_NoPadding)
+TEST(RC4, RC4)
 {
 	vector<byte> key = Base64::decode("2FI6QTt6bO/Uzs7jwsfNyQ==");
 
