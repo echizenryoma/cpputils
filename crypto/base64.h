@@ -5,10 +5,7 @@
 
 #pragma once
 
-#include <vector>
-#include <cryptopp/config.h>
-using std::vector;
-using std::string;
+#include "type.h"
 
 namespace crypto
 {
