@@ -12,7 +12,7 @@ namespace crypto
 	{
 		/**
 		* \brief This class implements padding as specified in_out the PKCS#5 standard.
-		* \sa <A HREF="https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/com/sun/crypto/provider/PKCS1Padding.java">jdk8u-jdk/PKCS1Padding.java</A>
+		* \sa <A HREF="https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/com/sun/crypto/provider/PKCS5Padding.java">jdk8u-jdk/PKCS5Padding.java</A>
 		* for additional details.
 		*/
 		class PKCS5Padding;

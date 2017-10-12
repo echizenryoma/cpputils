@@ -39,9 +39,6 @@
     <ClCompile Include="pkcs5padding.cpp">
       <Filter>src\padding</Filter>
     </ClCompile>
-    <ClCompile Include="padding.h">
-      <Filter>src\padding</Filter>
-    </ClCompile>
     <ClCompile Include="oaepping.cpp">
       <Filter>src\padding</Filter>
     </ClCompile>
@@ -133,5 +130,8 @@
       <Filter>src\padding</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="padding.h">
+      <Filter>src\padding</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

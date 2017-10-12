@@ -46,7 +46,7 @@
     <ClInclude Include="hash.h" />
     <ClInclude Include="hex.h" />
     <ClInclude Include="hmac.h" />
-    <ClCompile Include="padding.h" />
+    <ClInclude Include="padding.h" />
     <ClInclude Include="iso10126padding.h" />
     <ClInclude Include="nopadding.h" />
     <ClInclude Include="oaepping.h" />

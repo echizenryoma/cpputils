@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "pch.h"
 #include "type.h"
 
 namespace crypto
