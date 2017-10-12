@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
 #include "pkcs1padding.h"
 #include <openssl/pem.h>
 

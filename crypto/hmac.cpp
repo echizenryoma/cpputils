@@ -5,6 +5,7 @@
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
+#include "pch.h"
 #include "hmac.h"
 #include <cryptopp/filters.h>
 #include <cryptopp/hmac.h>

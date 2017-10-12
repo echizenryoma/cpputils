@@ -5,6 +5,7 @@
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
+#include "pch.h"
 #include "hash.h"
 #include <cryptopp/md2.h>
 #include <cryptopp/md4.h>

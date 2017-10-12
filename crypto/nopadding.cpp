@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
 #include "nopadding.h"
 
 crypto::padding::NoPadding::NoPadding(size_t block_size)

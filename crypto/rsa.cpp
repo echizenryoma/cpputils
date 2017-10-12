@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
 #include "rsa.h"
 #include <openssl/x509.h>
 #include <openssl/pem.h>

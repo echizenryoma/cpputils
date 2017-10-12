@@ -4,6 +4,7 @@
 */
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
+#include "pch.h"
 #include "oaepping.h"
 #include <cryptopp/rsa.h>
 #include <cryptopp/osrng.h>

@@ -7,14 +7,14 @@
     <Filter Include="src\padding">
       <UniqueIdentifier>{04a6228b-694c-4994-b5f5-5c8076a45831}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\encode">
-      <UniqueIdentifier>{fe12e92b-ea1c-488c-a5b7-845d26748fb6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\mac">
       <UniqueIdentifier>{77de4a6b-5d4d-4e15-9a79-9415a06d41a0}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\digest">
       <UniqueIdentifier>{4e783095-0d2d-4622-bd7e-f1de1c8fbda8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\encoding">
+      <UniqueIdentifier>{fe12e92b-ea1c-488c-a5b7-845d26748fb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,10 +52,10 @@
       <Filter>src\padding</Filter>
     </ClCompile>
     <ClCompile Include="base64.cpp">
-      <Filter>src\encode</Filter>
+      <Filter>src\encoding</Filter>
     </ClCompile>
     <ClCompile Include="hex.cpp">
-      <Filter>src\encode</Filter>
+      <Filter>src\encoding</Filter>
     </ClCompile>
     <ClCompile Include="hash.cpp">
       <Filter>src\digest</Filter>
@@ -72,6 +72,7 @@
     <ClCompile Include="x932padding.cpp">
       <Filter>src\padding</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aes.h">
@@ -111,10 +112,10 @@
       <Filter>src\padding</Filter>
     </ClInclude>
     <ClInclude Include="base64.h">
-      <Filter>src\encode</Filter>
+      <Filter>src\encoding</Filter>
     </ClInclude>
     <ClInclude Include="hex.h">
-      <Filter>src\encode</Filter>
+      <Filter>src\encoding</Filter>
     </ClInclude>
     <ClInclude Include="hash.h">
       <Filter>src\digest</Filter>
@@ -131,5 +132,6 @@
     <ClInclude Include="x932padding.h">
       <Filter>src\padding</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
 </Project>

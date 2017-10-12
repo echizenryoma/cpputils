@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
 #include "x932padding.h"
 
 crypto::padding::X932Padding::X932Padding(size_t block_size)

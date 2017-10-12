@@ -3,6 +3,8 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
+
 #include "padding.h"
 using crypto::padding::Padding;
 

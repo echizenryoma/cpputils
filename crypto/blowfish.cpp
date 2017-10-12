@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
 #include "blowfish.h"
 #include "pkcs7padding.h"
 #include "iso10126padding.h"
