@@ -4,11 +4,13 @@
 */
 
 #include "pch.h"
-#include "blowfish.h"
+
 #include "pkcs7padding.h"
 #include "iso10126padding.h"
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
+
+#include "blowfish.h"
 
 bool crypto::Blowfish::CheckKey(const vector<byte>& key)
 {

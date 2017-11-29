@@ -6,9 +6,11 @@
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
 #include "pch.h"
-#include "rc4.h"
+
 #include <cryptopp/arc4.h>
 #include <cryptopp/osrng.h>
+
+#include "rc4.h"
 
 bool crypto::RC4::CheckKey(const vector<byte>& key)
 {

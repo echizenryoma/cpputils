@@ -5,7 +5,7 @@
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
 #include "pch.h"
-#include "oaepping.h"
+
 #include <cryptopp/rsa.h>
 #include <cryptopp/osrng.h>
 #include <cryptopp/md2.h>
@@ -13,6 +13,8 @@
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/sha3.h>
+
+#include "oaepping.h"
 
 CryptoPP::OAEP_Base* crypto::padding::OAEPwithHashandMGF1Padding::GetOAEPFunction() const
 {

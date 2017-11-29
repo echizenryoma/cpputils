@@ -7,7 +7,6 @@
 
 #include "padding.h"
 
-
 namespace crypto
 {
 	namespace padding

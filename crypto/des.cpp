@@ -4,11 +4,13 @@
 */
 
 #include "pch.h"
-#include "des.h"
+
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
+
+#include "des.h"
 
 bool crypto::Des::CheckKey(const vector<byte>& key)
 {

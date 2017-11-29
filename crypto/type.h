@@ -9,4 +9,6 @@
 using std::vector;
 using std::string;
 
+using std::size_t;
+
 typedef unsigned char byte;
