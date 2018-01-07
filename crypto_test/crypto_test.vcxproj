@@ -37,6 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base64_test.hpp" />
+    <ClCompile Include="hex_test.hpp" />
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\crypto\crypto.vcxproj">

@@ -5,19 +5,14 @@
 
 #pragma once
 
+#define _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
+
 #include <string>
 using namespace std;
 
 #include <gtest/gtest.h>
 
 #include "../crypto/type.h"
-
-#define length(x) (sizeof(x)-1)
-
-string bytes2str(const vector<byte>& bytes)
-{
-	return string(bytes.begin(), bytes.end());
-}
 
 struct test_case
 {
@@ -26,3 +21,5 @@ struct test_case
 	long repeat_count;
 	string result_array;
 };
+
+string bytes2str(const vector<byte>&);

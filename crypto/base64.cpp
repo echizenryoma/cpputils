@@ -26,7 +26,7 @@ string crypto::encode::Base64::encode(const string& msg)
 	if (BIO_write(bio_mem, msg.data(), static_cast<int64_t>(msg.size())) < 0 || BIO_flush(bio_mem) < 0)
 	{
 		BIO_free_all(bio_mem);
-		throw runtime_error("[runtime_error] <base64.cpp> encode::Base64::encode(const string&): " + string(ERR_error_string(ERR_get_error(), nullptr)));
+		throw runtime_error("[runtime_error] <base64.cpp> crypto::encode::Base64::encode(const string&): " + string(ERR_error_string(ERR_get_error(), nullptr)));
 	}
 
 	BUF_MEM* buf_mem;
@@ -51,7 +51,7 @@ vector<byte> crypto::encode::Base64::decode(const string& base64_str)
 	bio_mem = BIO_push(bio_base64, bio_mem);
 	BIO_set_flags(bio_mem, BIO_FLAGS_BASE64_NO_NL);
 
-	vector<byte> msg(base64_str.length() * 3 / 4);
+	vector<byte> msg(base64_str.length() * 3 / 4, 0);
 	const int msg_length = BIO_read(bio_mem, msg.data(), msg.size());	
 	if (BIO_read(bio_mem, msg.data(), msg.size()) < 0)
 	{

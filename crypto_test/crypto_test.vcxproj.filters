@@ -12,5 +12,9 @@
     <ClCompile Include="base64_test.hpp">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="hex_test.hpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
 </Project>

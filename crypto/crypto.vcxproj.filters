@@ -4,24 +4,33 @@
     <Filter Include="src">
       <UniqueIdentifier>{c388de32-cc73-4bc3-b319-5a7c175116bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\encoding">
+      <UniqueIdentifier>{3e678b37-b99c-4ded-bc06-fd621fad54bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="base64.cpp">
-      <Filter>src</Filter>
+      <Filter>src\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="hex.cpp">
+      <Filter>src\encoding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="base64.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="type.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>src\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="hex.h">
+      <Filter>src\encoding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
