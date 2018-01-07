@@ -4,9 +4,6 @@
 */
 
 #include "pch.h"
-
-#include <openssl/pem.h>
-
 #include "pkcs1padding.h"
 
 crypto::padding::PKCS1v15Padding::PKCS1v15Padding(size_t block_size, uint8_t type_version)

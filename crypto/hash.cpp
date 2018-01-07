@@ -3,16 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
-
 #include "pch.h"
-
-#include <cryptopp/md2.h>
-#include <cryptopp/md4.h>
-#include <cryptopp/md5.h>
-#include <cryptopp/sha.h>
-#include <cryptopp/sha3.h>
-#include <cryptopp/filters.h>
 
 #include "hash.h"
 

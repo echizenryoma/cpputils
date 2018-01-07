@@ -11,10 +11,6 @@ using crypto::padding::Padding;
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
 #include "pkcs5padding.h"
-#include <cryptopp/aes.h>
-#include <cryptopp/gcm.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/osrng.h>
 
 #include "aes.h"
 

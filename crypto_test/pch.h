@@ -5,11 +5,13 @@
 
 #pragma once
 
+#define _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
+
 #include <gtest/gtest.h>
-#include <cryptopp/config.h>
 #include <string>
-using std::string;
-using std::vector;
+using namespace std;
+
+#include "../crypto/type.h"
 
 #define length(x) (sizeof(x)-1)
 

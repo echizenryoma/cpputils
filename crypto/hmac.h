@@ -6,6 +6,7 @@
 #pragma once
 
 #include "type.h"
+
 #include <cryptopp/hmac.h>
 
 namespace crypto

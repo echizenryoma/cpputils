@@ -7,8 +7,6 @@
 
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
-#include <cryptopp/osrng.h>
-#include <cryptopp/modes.h>
 
 #include "des.h"
 

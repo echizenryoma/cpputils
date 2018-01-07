@@ -7,8 +7,6 @@
 
 #include "pkcs7padding.h"
 #include "iso10126padding.h"
-#include <cryptopp/osrng.h>
-#include <cryptopp/modes.h>
 
 #include "blowfish.h"
 

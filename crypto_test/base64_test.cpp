@@ -42,6 +42,56 @@ vector<test> BASE64_TESTS{
 		1,
 		"Zm9vYmFy"
 	},
+	/* 8 */{
+		"Send reinforcements", 19,
+		1,
+		"U2VuZCByZWluZm9yY2VtZW50cw=="
+	},
+	/* 9 */{
+		"Now is the time for all good coders\nto learn Ruby", 49,
+		1,
+		"Tm93IGlzIHRoZSB0aW1lIGZvciBhbGwgZ29vZCBjb2RlcnMKdG8gbGVhcm4gUnVieQ=="
+	},
+	/* 10 */{
+		"This is line one\nThis is line two\nThis is line three\nAnd so on...\n", 66,
+		1,
+		"VGhpcyBpcyBsaW5lIG9uZQpUaGlzIGlzIGxpbmUgdHdvClRoaXMgaXMgbGluZSB0aHJlZQpBbmQgc28gb24uLi4K"
+	},
+	/* 11 */{
+		"\0", 1,
+		1,
+		"AA=="
+	},
+	/* 12 */{
+		"\0\0", 2,
+		1,
+		"AAA="
+	},
+	/* 13 */{
+		"\0\0\0", 3,
+		1,
+		"AAAA"
+	},
+	/* 13 */{
+		"\377", 1,
+		1,
+		"/w=="
+	},
+	/* 14 */{
+		"\377\377", 2,
+		1,
+		"//8="
+	},
+	/* 15 */{
+		"\377\377\377", 3,
+		1,
+		"////"
+	},
+	/* 16 */{
+		"\xff\xef", 2,
+		1,
+		"/+8="
+	},
 };
 
 TEST(Base64, encode)

@@ -5,9 +5,6 @@
 
 #include "pch.h"
 
-#include <openssl/x509.h>
-#include <openssl/pem.h>
-#include <openssl/err.h>
 #include "nopadding.h"
 #include "oaepping.h"
 #include "pkcs1padding.h"

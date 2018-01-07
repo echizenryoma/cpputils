@@ -4,9 +4,6 @@
 */
 
 #include "pch.h"
-
-#include <cryptopp/hex.h>
-
 #include "hex.h"
 
 string crypto::encode::Hex::encode(const vector<byte>& msg, const bool& uppercase)

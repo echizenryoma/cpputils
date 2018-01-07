@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "type.h"
-
 #include <cryptopp/cryptlib.h>
+
+#include "type.h"
 
 namespace crypto
 {

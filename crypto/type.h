@@ -5,10 +5,12 @@
 
 #pragma once
 
-#include <vector>
-using std::vector;
+#include <string>
 using std::string;
 
-using std::size_t;
+#include <vector>
+using std::vector;
 
+#if _HAS_STD_BYTE == 0
 typedef unsigned char byte;
+#endif
