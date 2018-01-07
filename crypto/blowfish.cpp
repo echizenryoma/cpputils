@@ -3,11 +3,14 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#include "blowfish.h"
+#include "pch.h"
+
 #include "pkcs7padding.h"
 #include "iso10126padding.h"
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
+
+#include "blowfish.h"
 
 bool crypto::Blowfish::CheckKey(const vector<byte>& key)
 {

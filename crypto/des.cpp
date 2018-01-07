@@ -3,12 +3,14 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#include "des.h"
+#include "pch.h"
+
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
-#include "zeropadding.h"
 #include <cryptopp/osrng.h>
 #include <cryptopp/modes.h>
+
+#include "des.h"
 
 bool crypto::Des::CheckKey(const vector<byte>& key)
 {

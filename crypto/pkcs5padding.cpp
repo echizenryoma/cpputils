@@ -3,6 +3,7 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
+#include "pch.h"
 #include "pkcs5padding.h"
 
 crypto::padding::PKCS5Padding::PKCS5Padding(size_t block_size)

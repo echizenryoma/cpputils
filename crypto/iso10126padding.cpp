@@ -3,9 +3,12 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#include "iso10126padding.h"
+#include "pch.h"
+
 #include <random>
 #include <algorithm>
+
+#include "iso10126padding.h"
 
 crypto::padding::ISO10126Padding::ISO10126Padding(size_t block_size)
 {

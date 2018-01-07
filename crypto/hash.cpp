@@ -5,13 +5,16 @@
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
-#include "hash.h"
+#include "pch.h"
+
 #include <cryptopp/md2.h>
 #include <cryptopp/md4.h>
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/sha3.h>
 #include <cryptopp/filters.h>
+
+#include "hash.h"
 
 CryptoPP::HashTransformation* crypto::message::digest::Hash::GetHashFunction(HashScheme hash_scheme)
 {

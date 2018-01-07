@@ -6,8 +6,8 @@
 #pragma once
 
 #include "type.h"
-#include <cryptopp/filters.h>
 
+#include <cryptopp/cryptlib.h>
 
 namespace crypto
 {

@@ -5,7 +5,8 @@
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
-#include "hmac.h"
+#include "pch.h"
+
 #include <cryptopp/filters.h>
 #include <cryptopp/hmac.h>
 #include <cryptopp/md2.h>
@@ -13,6 +14,8 @@
 #include <cryptopp/md5.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/sha3.h>
+
+#include "hmac.h"
 
 CryptoPP::HMAC_Base* crypto::mac::Hmac::GetHmacFunction(HashScheme hash_scheme)
 {

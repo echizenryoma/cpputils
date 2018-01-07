@@ -3,8 +3,11 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#include "base64.h"
+#include "pch.h"
+
 #include <cryptopp/base64.h>
+
+#include "base64.h"
 
 string crypto::encode::Base64::encode(const vector<byte>& msg, EncodeScheme encode_sheme, bool new_line, int per_line_length)
 {

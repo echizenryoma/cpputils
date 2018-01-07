@@ -3,12 +3,5 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#pragma once
-
-#include <vector>
-using std::vector;
-using std::string;
-
-using std::size_t;
-
-typedef unsigned char byte;
+#include "pch.h"
+#include "padding.h"
