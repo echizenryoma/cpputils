@@ -7,6 +7,9 @@
     <Filter Include="src\encoding">
       <UniqueIdentifier>{3e678b37-b99c-4ded-bc06-fd621fad54bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\digest">
+      <UniqueIdentifier>{17c521fb-5c62-4f0a-aeca-5b9fe147d403}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -17,6 +20,9 @@
     </ClCompile>
     <ClCompile Include="hex.cpp">
       <Filter>src\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="hash.cpp">
+      <Filter>src\digest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +37,9 @@
     </ClInclude>
     <ClInclude Include="hex.h">
       <Filter>src\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="hash.h">
+      <Filter>src\digest</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

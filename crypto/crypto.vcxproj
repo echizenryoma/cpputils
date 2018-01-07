@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base64.cpp" />
+    <ClCompile Include="hash.cpp" />
     <ClCompile Include="hex.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base64.h" />
+    <ClInclude Include="hash.h" />
     <ClInclude Include="hex.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="type.h" />
