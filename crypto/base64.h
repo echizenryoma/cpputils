@@ -24,8 +24,8 @@ public:
 		URL_Safe = 6920
 	};
 
-	static string encode(const vector<byte>& message, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
-	static string encode(const string& message, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
+	static string encode(const vector<byte>& msg, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
+	static string encode(const string& msg, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
 
-	static vector<byte> decode(const string& encoded, EncodeScheme encode_sheme = Standard);
+	static vector<byte> decode(const string& base64_str, EncodeScheme encode_mode = Standard);
 };
