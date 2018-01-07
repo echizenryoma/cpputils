@@ -22,7 +22,7 @@ void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out) const
 	}
 	// the number of padding bytes to add
 	size_t len = GetPadLength(in.size());
-	byte paddingOctet = static_cast<byte>(len & 0xff);
+	const byte padding_octet = static_cast<byte>(len & 0xff);
 	vector<byte> padding(len);
 
 	static std::random_device rd;
@@ -30,7 +30,7 @@ void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out) const
 	std::uniform_int_distribution<unsigned int> dist(0, 0xff);
 	std::generate(padding.begin(), padding.end() - 1, [&]() { return static_cast<byte>(dist(mte)); });
 
-	padding.back() = paddingOctet;
+	padding.back() = padding_octet;
 	out.insert(out.end(), padding.begin(), padding.end());
 }
 
@@ -44,8 +44,8 @@ int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out) const
 		return 0;
 	}
 
-	byte lastByte = in.back();
-	size_t padValue = lastByte & 0x0ff;
+	const byte last_byte = in.back();
+	size_t padValue = last_byte & 0x0ff;
 	if (padValue < 0x01 || padValue > block_size_)
 	{
 		return -1;

@@ -35,8 +35,8 @@ int crypto::padding::X932Padding::Unpad(vector<byte>& in_out) const
 		return 0;
 	}
 
-	byte lastByte = in.back();
-	size_t padValue = lastByte & 0x0ff;
+	const byte last_byte = in.back();
+	size_t padValue = last_byte & 0x0ff;
 	if (padValue > block_size_)
 	{
 		return -1;

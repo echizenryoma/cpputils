@@ -25,10 +25,10 @@ void crypto::padding::NoPadding::Pad(vector<byte>& in_out) const
 	if (len > 0)
 	{
 		size_t start = in.size() + len - block_size_;
-		vector<byte> lastBlock(in.begin() + start, in.end());
-		lastBlock.insert(lastBlock.begin(), len, 0);
+		vector<byte> last_block(in.begin() + start, in.end());
+		last_block.insert(last_block.begin(), len, 0);
 		in.resize(start);
-		out.insert(out.begin() + start, lastBlock.begin(), lastBlock.end());
+		out.insert(out.begin() + start, last_block.begin(), last_block.end());
 	}
 }
 
@@ -43,21 +43,21 @@ int crypto::padding::NoPadding::Unpad(vector<byte>& in_out) const
 	}
 
 	size_t start = in.size() - block_size_;
-	vector<byte> lastBlock(in.begin() + start, in.end());
+	vector<byte> last_block(in.begin() + start, in.end());
 
-	if (lastBlock.front() == 0)
+	if (last_block.front() == 0)
 	{
-		vector<byte>::iterator it = lastBlock.begin();
-		while (it != lastBlock.end() && *it == 0)
+		vector<byte>::iterator it = last_block.begin();
+		while (it != last_block.end() && *it == 0)
 		{
 			++it;
 		}
-		if (it == lastBlock.end())
+		if (it == last_block.end())
 		{
 			return -1;
 		}
 		out.resize(start);
-		out.insert(out.end(), it, lastBlock.end());
+		out.insert(out.end(), it, last_block.end());
 	}
 	start = out.size();
 	return start;

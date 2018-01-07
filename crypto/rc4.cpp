@@ -3,8 +3,6 @@
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
 
-#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
-
 #include "pch.h"
 
 #include "rc4.h"
