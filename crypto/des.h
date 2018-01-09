@@ -68,6 +68,8 @@ private:
 	static vector<byte> Decrypt_ECB(const vector<byte>& ctext, const vector<byte>& key);
 	static vector<byte> Decrypt_OFB(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 public:
+	static vector<byte> random_key(CipherScheme cipher_scheme);
+
 	static vector<byte> random_iv();
 	static vector<byte> default_iv();
 

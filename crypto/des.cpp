@@ -586,6 +586,22 @@ vector<byte> crypto::Des::Decrypt_OFB(const vector<byte>& ctext, const vector<by
 	return vector<byte>(plain.begin(), plain.end());
 }
 
+vector<byte> crypto::Des::random_key(CipherScheme cipher_scheme)
+{
+	switch (cipher_scheme)
+	{
+	case CipherScheme::DES:
+	case CipherScheme::DESede2:
+	case CipherScheme::DESede3:
+		break;
+	default:
+		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Des::random_key(CipherScheme): {cipher_scheme}.");
+	}
+	vector<byte> key(static_cast<size_t>(cipher_scheme));
+	CryptoPP::OS_GenerateRandomBlock(true, key.data(), key.size());
+	return key;
+}
+
 vector<byte> crypto::Des::random_iv()
 {
 	vector<byte> iv(CryptoPP::DES::BLOCKSIZE);

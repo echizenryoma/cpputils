@@ -6,7 +6,6 @@
 #include "pch.h"
 
 #include "padding.h"
-#include "nopadding.h"
 using crypto::padding::Padding;
 
 #include "iso10126padding.h"
