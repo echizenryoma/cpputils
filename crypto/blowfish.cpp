@@ -34,11 +34,11 @@ Padding* crypto::Blowfish::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	switch (padding_scheme)
 	{
-	case PKCS5Padding:
+	case PaddingScheme::PKCS5Padding:
 		return new padding::PKCS5Padding(CryptoPP::Blowfish::BLOCKSIZE);
-	case PKCS7Padding:
+	case PaddingScheme::PKCS7Padding:
 		return new padding::PKCS7Padding(CryptoPP::Blowfish::BLOCKSIZE);
-	case ISO10126Padding:
+	case PaddingScheme::ISO10126Padding:
 		return new padding::ISO10126Padding(CryptoPP::Blowfish::BLOCKSIZE);
 	default:
 		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
@@ -83,7 +83,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 
 	vector<byte> padded = ptext;
 
-	if (padding_scheme != NoPadding)
+	if (padding_scheme != PaddingScheme::NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Pad(padded);
@@ -93,7 +93,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 
 	switch (cipher_mode)
 	{
-	case CBC:
+	case CipherMode::CBC:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -104,7 +104,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			)
 		);
 		break;
-	case CFB:
+	case CipherMode::CFB:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -115,7 +115,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			)
 		);
 		break;
-	case CTR:
+	case CipherMode::CTR:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -126,7 +126,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			)
 		);
 		break;
-	case CTS:
+	case CipherMode::CTS:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -137,7 +137,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			)
 		);
 		break;
-	case ECB:
+	case CipherMode::ECB:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -148,7 +148,7 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			)
 		);
 		break;
-	case OFB:
+	case CipherMode::OFB:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -180,7 +180,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 	string plain;
 	switch (cipher_mode)
 	{
-	case CBC:
+	case CipherMode::CBC:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -191,7 +191,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 			)
 		);
 		break;
-	case CFB:
+	case CipherMode::CFB:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -202,7 +202,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 			)
 		);
 		break;
-	case CTR:
+	case CipherMode::CTR:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -213,7 +213,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 			)
 		);
 		break;
-	case CTS:
+	case CipherMode::CTS:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -224,7 +224,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 			)
 		);
 		break;
-	case ECB:
+	case CipherMode::ECB:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -235,7 +235,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 			)
 		);
 		break;
-	case OFB:
+	case CipherMode::OFB:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -252,7 +252,7 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 
 	vector<byte> ptext(plain.begin(), plain.end());
 
-	if (padding_scheme != NoPadding)
+	if (padding_scheme != PaddingScheme::NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Unpad(ptext);

@@ -19,9 +19,9 @@ bool crypto::Des::CheckKeySize(size_t key_size)
 {
 	switch (key_size)
 	{
-	case DES:
-	case DESede2:
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DES):
+	case static_cast<size_t>(CipherScheme::DESede2):
+	case static_cast<size_t>(CipherScheme::DESede3):
 		return true;
 	default:
 		return false;
@@ -43,13 +43,13 @@ Padding* crypto::Des::GetPaadingFunction(PaddingScheme padding_scheme)
 	Padding* padding;
 	switch (padding_scheme)
 	{
-	case PKCS5Padding:
+	case PaddingScheme::PKCS5Padding:
 		padding = new padding::PKCS5Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
-	case PKCS7Padding:
+	case PaddingScheme::PKCS7Padding:
 		padding = new padding::PKCS7Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
-	case ISO10126Padding:
+	case PaddingScheme::ISO10126Padding:
 		padding = new padding::ISO10126Padding(CryptoPP::DES::BLOCKSIZE);
 		break;
 	default:
@@ -63,7 +63,7 @@ vector<byte> crypto::Des::Encrypt_CBC(const vector<byte>& padded, const vector<b
 	string ctext;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -74,7 +74,7 @@ vector<byte> crypto::Des::Encrypt_CBC(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -85,7 +85,7 @@ vector<byte> crypto::Des::Encrypt_CBC(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -96,7 +96,7 @@ vector<byte> crypto::Des::Encrypt_CBC(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	default: 
+	default:
 		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CBC(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
 	}
 	return vector<byte>(ctext.begin(), ctext.end());
@@ -107,7 +107,7 @@ vector<byte> crypto::Des::Encrypt_CFB(const vector<byte>& padded, const vector<b
 	string ctext;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -118,7 +118,7 @@ vector<byte> crypto::Des::Encrypt_CFB(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -129,7 +129,7 @@ vector<byte> crypto::Des::Encrypt_CFB(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -151,7 +151,7 @@ vector<byte> crypto::Des::Encrypt_CTR(const vector<byte>& padded, const vector<b
 	string ctext;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -162,7 +162,7 @@ vector<byte> crypto::Des::Encrypt_CTR(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -173,7 +173,7 @@ vector<byte> crypto::Des::Encrypt_CTR(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -195,7 +195,7 @@ vector<byte> crypto::Des::Encrypt_CTS(const vector<byte>& padded, const vector<b
 	string ctext;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -206,7 +206,7 @@ vector<byte> crypto::Des::Encrypt_CTS(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -217,7 +217,7 @@ vector<byte> crypto::Des::Encrypt_CTS(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -239,7 +239,7 @@ vector<byte> crypto::Des::Encrypt_ECB(const vector<byte>& padded, const vector<b
 	string ctext;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -250,7 +250,7 @@ vector<byte> crypto::Des::Encrypt_ECB(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -261,7 +261,7 @@ vector<byte> crypto::Des::Encrypt_ECB(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -283,7 +283,7 @@ vector<byte> crypto::Des::Encrypt_OFB(const vector<byte>& padded, const vector<b
 	string ctext;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -294,7 +294,7 @@ vector<byte> crypto::Des::Encrypt_OFB(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -305,7 +305,7 @@ vector<byte> crypto::Des::Encrypt_OFB(const vector<byte>& padded, const vector<b
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -327,7 +327,7 @@ vector<byte> crypto::Des::Decrypt_CBC(const vector<byte>& ctext, const vector<by
 	string plain;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -338,7 +338,7 @@ vector<byte> crypto::Des::Decrypt_CBC(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -349,7 +349,7 @@ vector<byte> crypto::Des::Decrypt_CBC(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -371,7 +371,7 @@ vector<byte> crypto::Des::Decrypt_CFB(const vector<byte>& ctext, const vector<by
 	string plain;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -382,7 +382,7 @@ vector<byte> crypto::Des::Decrypt_CFB(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -393,7 +393,7 @@ vector<byte> crypto::Des::Decrypt_CFB(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -415,7 +415,7 @@ vector<byte> crypto::Des::Decrypt_CTR(const vector<byte>& ctext, const vector<by
 	string plain;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -426,7 +426,7 @@ vector<byte> crypto::Des::Decrypt_CTR(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -437,7 +437,7 @@ vector<byte> crypto::Des::Decrypt_CTR(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -459,7 +459,7 @@ vector<byte> crypto::Des::Decrypt_CTS(const vector<byte>& ctext, const vector<by
 	string plain;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -470,7 +470,7 @@ vector<byte> crypto::Des::Decrypt_CTS(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -481,7 +481,7 @@ vector<byte> crypto::Des::Decrypt_CTS(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -503,7 +503,7 @@ vector<byte> crypto::Des::Decrypt_ECB(const vector<byte>& ctext, const vector<by
 	string plain;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -514,7 +514,7 @@ vector<byte> crypto::Des::Decrypt_ECB(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -525,7 +525,7 @@ vector<byte> crypto::Des::Decrypt_ECB(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -547,7 +547,7 @@ vector<byte> crypto::Des::Decrypt_OFB(const vector<byte>& ctext, const vector<by
 	string plain;
 	switch (key.size())
 	{
-	case DES:
+	case static_cast<size_t>(CipherScheme::DES):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -558,7 +558,7 @@ vector<byte> crypto::Des::Decrypt_OFB(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede2:
+	case static_cast<size_t>(CipherScheme::DESede2):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -569,7 +569,7 @@ vector<byte> crypto::Des::Decrypt_OFB(const vector<byte>& ctext, const vector<by
 			)
 		);
 		break;
-	case DESede3:
+	case static_cast<size_t>(CipherScheme::DESede3):
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -612,7 +612,7 @@ vector<byte> crypto::Des::encrypt(const vector<byte>& ptext, const vector<byte>&
 
 	vector<byte> padded = ptext;
 
-	if (padding_scheme != NoPadding)
+	if (padding_scheme != PaddingScheme::NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Pad(padded);
@@ -622,22 +622,22 @@ vector<byte> crypto::Des::encrypt(const vector<byte>& ptext, const vector<byte>&
 	vector<byte> ctext;
 	switch (cipher_mode)
 	{
-	case CBC:
+	case CipherMode::CBC:
 		ctext = Encrypt_CBC(padded, key, iv);
 		break;
-	case CFB:
+	case CipherMode::CFB:
 		ctext = Encrypt_CFB(padded, key, iv);
 		break;
-	case CTR:
+	case CipherMode::CTR:
 		ctext = Encrypt_CTR(padded, key, iv);
 		break;
-	case CTS:
+	case CipherMode::CTS:
 		ctext = Encrypt_CTS(padded, key, iv);
 		break;
-	case ECB:
+	case CipherMode::ECB:
 		ctext = Encrypt_ECB(padded, key);
 		break;
-	case OFB:
+	case CipherMode::OFB:
 		ctext = Encrypt_OFB(padded, key, iv);
 		break;
 	default:
@@ -661,31 +661,31 @@ vector<byte> crypto::Des::decrypt(const vector<byte>& ctext, const vector<byte>&
 	vector<byte> ptext;
 	switch (cipher_mode)
 	{
-	case CBC:
+	case CipherMode::CBC:
 		ptext = Decrypt_CBC(ctext, key, iv);
 		break;
-	case CFB:
+	case CipherMode::CFB:
 		ptext = Decrypt_CFB(ctext, key, iv);
 		break;
-	case CTR:
+	case CipherMode::CTR:
 		ptext = Decrypt_CTR(ctext, key, iv);
 		break;
-	case CTS:
+	case CipherMode::CTS:
 		ptext = Encrypt_CTS(ctext, key, iv);
 		break;
-	case ECB:
+	case CipherMode::ECB:
 		ptext = Decrypt_ECB(ctext, key);
 		break;
-	case OFB:
+	case CipherMode::OFB:
 		ptext = Decrypt_OFB(ctext, key, iv);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, const CIPHER_MODE&, const PADDING_SCHEME&, const vector<byte>&): {cipher_mode}.");
+		throw std::invalid_argument("[invalid_argument] <des.cpp> Des::decrypt(const vector<byte>&, const vector<byte>&, CipherMode, PaddingScheme, const vector<byte>&): {cipher_mode}.");
 	}
 
 	vector<byte> message(ptext.begin(), ptext.end());
 
-	if (padding_scheme != NoPadding)
+	if (padding_scheme != PaddingScheme::NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Unpad(message);

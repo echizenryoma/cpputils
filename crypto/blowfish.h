@@ -6,10 +6,11 @@
 #pragma once
 
 #include "type.h"
-#include <cryptopp/blowfish.h>
 
 #include "padding.h"
 using crypto::padding::Padding;
+
+#include <cryptopp/blowfish.h>
 
 namespace crypto
 {
@@ -19,7 +20,7 @@ namespace crypto
 class crypto::Blowfish
 {
 public:
-	enum PaddingScheme
+	enum class PaddingScheme
 	{
 		NoPadding = 1,
 		PKCS5Padding = 5,
@@ -27,7 +28,7 @@ public:
 		ISO10126Padding = 10126
 	};
 
-	enum CipherMode
+	enum class CipherMode
 	{
 		CBC,
 		CFB,

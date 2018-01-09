@@ -11,29 +11,29 @@ CryptoPP::HashTransformation* crypto::message::digest::Hash::GetHashFunction(Has
 {
 	switch (hash_scheme)
 	{
-	case MD2:
+	case HashScheme::MD2:
 		return new CryptoPP::Weak::MD2();
-	case MD4:
+	case HashScheme::MD4:
 		return new CryptoPP::Weak::MD4();
-	case MD5:
+	case HashScheme::MD5:
 		return new CryptoPP::Weak::MD5();
-	case SHA1:
+	case HashScheme::SHA1:
 		return new CryptoPP::SHA();
-	case SHA224:
+	case HashScheme::SHA224:
 		return new CryptoPP::SHA224();
-	case SHA256:
+	case HashScheme::SHA256:
 		return new CryptoPP::SHA256();
-	case SHA384:
+	case HashScheme::SHA384:
 		return new CryptoPP::SHA384();
-	case SHA512:
+	case HashScheme::SHA512:
 		return new CryptoPP::SHA512();
-	case SHA3_224:
+	case HashScheme::SHA3_224:
 		return new CryptoPP::SHA3_224();
-	case SHA3_256:
+	case HashScheme::SHA3_256:
 		return new CryptoPP::SHA3_256();
-	case SHA3_384:
+	case HashScheme::SHA3_384:
 		return new CryptoPP::SHA3_384();
-	case SHA3_512:
+	case HashScheme::SHA3_512:
 		return new CryptoPP::SHA3_512();
 	default:
 		throw std::invalid_argument("[invalid_argument] <hash.cpp> crypto::message::digest::Hash::GetHashFunction(HashScheme): {hash_scheme}.");

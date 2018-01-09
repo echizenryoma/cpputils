@@ -6,6 +6,7 @@
 #include "pch.h"
 
 #include "padding.h"
+#include "nopadding.h"
 using crypto::padding::Padding;
 
 #include "iso10126padding.h"
@@ -23,9 +24,9 @@ bool crypto::Aes::CheckKeySize(size_t key_size)
 {
 	switch (key_size)
 	{
-	case AES_128:
-	case AES_192:
-	case AES_256:
+	case static_cast<size_t>(KeySize::AES_128):
+	case static_cast<size_t>(KeySize::AES_192):
+	case static_cast<size_t>(KeySize::AES_256):
 		return true;
 	default:
 		return false;
@@ -46,11 +47,11 @@ Padding* crypto::Aes::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	switch (padding_scheme)
 	{
-	case PKCS5Padding:
+	case PaddingScheme::PKCS5Padding:
 		return new padding::PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
-	case PKCS7Padding:
+	case PaddingScheme::PKCS7Padding:
 		return new padding::PKCS7Padding(CryptoPP::AES::BLOCKSIZE);
-	case ISO10126Padding:
+	case PaddingScheme::ISO10126Padding:
 		return new padding::ISO10126Padding(CryptoPP::AES::BLOCKSIZE);
 	default:
 		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
@@ -61,14 +62,14 @@ vector<byte> crypto::Aes::random_key(KeySize key_size)
 {
 	switch (key_size)
 	{
-	case AES_128:
-	case AES_192:
-	case AES_256:
+	case KeySize::AES_128:
+	case KeySize::AES_192:
+	case KeySize::AES_256:
 		break;
 	default:
 		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::random_key(KeySize): {key_size}.");
 	}
-	vector<byte> key = vector<byte>(key_size);
+	vector<byte> key(static_cast<size_t>(key_size));
 	CryptoPP::OS_GenerateRandomBlock(true, key.data(), key.size());
 	return key;
 }
@@ -99,7 +100,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 
 	vector<byte> padded = ptext;
 
-	if (padding_scheme != NoPadding)
+	if (padding_scheme != PaddingScheme::NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Pad(padded);
@@ -110,7 +111,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 	string cipher;
 	switch (cipher_mode)
 	{
-	case CBC:
+	case CipherMode::CBC:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -121,7 +122,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
-	case CFB:
+	case CipherMode::CFB:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -132,7 +133,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
-	case CTR:
+	case CipherMode::CTR:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -143,7 +144,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
-	case CTS:
+	case CipherMode::CTS:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -154,7 +155,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
-	case ECB:
+	case CipherMode::ECB:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -165,7 +166,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
-	case OFB:
+	case CipherMode::OFB:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
 			true,
@@ -176,7 +177,7 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
-	case GCM:
+	case CipherMode::GCM:
 		gcm.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
@@ -209,7 +210,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 	CryptoPP::GCM<CryptoPP::AES>::Decryption gcm;
 	switch (cipher_mode)
 	{
-	case CBC:
+	case CipherMode::CBC:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -220,7 +221,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			)
 		);
 		break;
-	case CFB:
+	case CipherMode::CFB:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -231,7 +232,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			)
 		);
 		break;
-	case CTR:
+	case CipherMode::CTR:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -242,7 +243,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			)
 		);
 		break;
-	case CTS:
+	case CipherMode::CTS:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -253,7 +254,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			)
 		);
 		break;
-	case ECB:
+	case CipherMode::ECB:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -264,7 +265,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			)
 		);
 		break;
-	case OFB:
+	case CipherMode::OFB:
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
 			true,
@@ -275,7 +276,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			)
 		);
 		break;
-	case GCM:
+	case CipherMode::GCM:
 		gcm.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
 		CryptoPP::StringSource(
 			string(ctext.begin(), ctext.end()),
@@ -292,7 +293,7 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 
 	vector<byte> out(ptext.begin(), ptext.end());
 
-	if (padding_scheme != NoPadding)
+	if (padding_scheme != PaddingScheme::NoPadding)
 	{
 		Padding* padding = GetPaadingFunction(padding_scheme);
 		padding->Unpad(out);

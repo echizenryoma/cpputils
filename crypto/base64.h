@@ -18,14 +18,14 @@ namespace crypto
 class crypto::encode::Base64
 {
 public:
-	enum EncodeScheme
+	enum class EncodeScheme
 	{
 		Standard = 4648,
 		URL_Safe = 6920
 	};
 
-	static string encode(const vector<byte>& msg, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
-	static string encode(const string& msg, EncodeScheme encode_sheme = Standard, bool new_line = false, int per_line_length = 72);
+	static string encode(const vector<byte>& msg, EncodeScheme encode_sheme = EncodeScheme::Standard, bool new_line = false, int per_line_length = 72);
+	static string encode(const string& msg, EncodeScheme encode_sheme = EncodeScheme::Standard, bool new_line = false, int per_line_length = 72);
 
-	static vector<byte> decode(const string& base64_str, EncodeScheme encode_mode = Standard);
+	static vector<byte> decode(const string& base64_str, EncodeScheme encode_mode = EncodeScheme::Standard);
 };

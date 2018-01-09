@@ -6,25 +6,24 @@
 #include "pch.h"
 #include "nopadding.h"
 
-crypto::padding::NoPadding::NoPadding(size_t block_size)
+crypto::padding::NoPadding::NoPadding(const size_t block_size): block_size_(block_size)
 {
-	block_size_ = block_size;
 }
 
 void crypto::padding::NoPadding::Pad(vector<byte>& in_out) const
 {
-	vector<byte> &in = in_out;
-	vector<byte> &out = in_out;
+	vector<byte>& in = in_out;
+	vector<byte>& out = in_out;
 
 	if (in.empty())
 	{
 		return;
 	}
 	// the number of padding bytes to add
-	size_t len = GetPadLength(in.size());
+	const size_t len = GetPadLength(in.size());
 	if (len > 0)
 	{
-		size_t start = in.size() + len - block_size_;
+		const size_t start = in.size() + len - block_size_;
 		vector<byte> last_block(in.begin() + start, in.end());
 		last_block.insert(last_block.begin(), len, 0);
 		in.resize(start);
@@ -34,8 +33,8 @@ void crypto::padding::NoPadding::Pad(vector<byte>& in_out) const
 
 int crypto::padding::NoPadding::Unpad(vector<byte>& in_out) const
 {
-	vector<byte> &in = in_out;
-	vector<byte> &out = in_out;
+	vector<byte>& in = in_out;
+	vector<byte>& out = in_out;
 
 	if (in.empty())
 	{

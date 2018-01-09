@@ -6,10 +6,8 @@
 #include "pch.h"
 #include "pkcs1padding.h"
 
-crypto::padding::PKCS1v15Padding::PKCS1v15Padding(size_t block_size, uint8_t type_version)
+crypto::padding::PKCS1v15Padding::PKCS1v15Padding(size_t block_size, uint8_t type_version): block_size_(block_size), type_version_(type_version)
 {
-	block_size_ = block_size;
-	type_version_ = type_version;
 }
 
 void crypto::padding::PKCS1v15Padding::Pad(vector<byte>& in_out) const

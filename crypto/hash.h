@@ -5,9 +5,8 @@
 
 #pragma once
 
-#include <cryptopp/cryptlib.h>
-
 #include "type.h"
+#include <cryptopp/cryptlib.h>
 
 namespace crypto
 {
@@ -23,7 +22,7 @@ namespace crypto
 class crypto::message::digest::Hash
 {
 public:
-	enum HashScheme
+	enum class HashScheme
 	{
 		MD2 = 12,
 		MD4 = 14,

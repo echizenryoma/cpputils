@@ -6,22 +6,21 @@
 #include "pch.h"
 #include "iso10126padding.h"
 
-crypto::padding::ISO10126Padding::ISO10126Padding(size_t block_size)
+crypto::padding::ISO10126Padding::ISO10126Padding(const size_t block_size): block_size_(block_size)
 {
-	block_size_ = block_size;
 }
 
 void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out) const
 {
-	vector<byte> &in = in_out;
-	vector<byte> &out = in_out;
+	vector<byte>& in = in_out;
+	vector<byte>& out = in_out;
 
 	if (in.empty())
 	{
 		return;
 	}
 	// the number of padding bytes to add
-	size_t len = GetPadLength(in.size());
+	const size_t len = GetPadLength(in.size());
 	const byte padding_octet = static_cast<byte>(len & 0xff);
 	vector<byte> padding(len);
 
@@ -36,8 +35,8 @@ void crypto::padding::ISO10126Padding::Pad(vector<byte>& in_out) const
 
 int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out) const
 {
-	vector<byte> &in = in_out;
-	vector<byte> &out = in_out;
+	vector<byte>& in = in_out;
+	vector<byte>& out = in_out;
 
 	if (in.empty())
 	{
@@ -45,18 +44,18 @@ int crypto::padding::ISO10126Padding::Unpad(vector<byte>& in_out) const
 	}
 
 	const byte last_byte = in.back();
-	size_t padValue = last_byte & 0x0ff;
-	if (padValue < 0x01 || padValue > block_size_)
+	const size_t pad_value = last_byte & 0x0ff;
+	if (pad_value < 0x01 || pad_value > block_size_)
 	{
 		return -1;
 	}
 
-	size_t start = in.size() - padValue;
+	const size_t start = in.size() - pad_value;
 	out.resize(start);
 	return start;
 }
 
-int crypto::padding::ISO10126Padding::GetPadLength(size_t len) const
+int crypto::padding::ISO10126Padding::GetPadLength(const size_t len) const
 {
 	return block_size_ - len % block_size_;
 }

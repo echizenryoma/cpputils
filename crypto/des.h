@@ -6,11 +6,11 @@
 #pragma once
 
 #include "type.h"
-#include <cryptopp/des.h>
-#include <cryptopp/filters.h>
 
 #include "padding.h"
 using crypto::padding::Padding;
+
+#include <cryptopp/des.h>
 
 namespace crypto
 {
@@ -20,7 +20,7 @@ namespace crypto
 class crypto::Des
 {
 public:
-	enum PaddingScheme
+	enum class PaddingScheme
 	{
 		NoPadding = 1,
 		PKCS5Padding = 5,
@@ -28,7 +28,7 @@ public:
 		ISO10126Padding = 10126
 	};
 
-	enum CipherMode
+	enum class CipherMode
 	{
 		CBC,
 		CFB,
@@ -38,7 +38,7 @@ public:
 		OFB,
 	};
 
-	enum CipherScheme
+	enum class CipherScheme
 	{
 		DES = CryptoPP::DES::KEYLENGTH,
 		DESede2 = CryptoPP::DES_EDE2::KEYLENGTH,

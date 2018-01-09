@@ -20,7 +20,7 @@ namespace crypto
 class crypto::mac::Hmac
 {
 public:
-	enum HashScheme
+	enum class HashScheme
 	{
 		MD2 = 12,
 		MD4 = 14,

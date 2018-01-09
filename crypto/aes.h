@@ -6,6 +6,7 @@
 #pragma once
 
 #include "type.h"
+
 #include "padding.h"
 using crypto::padding::Padding;
 
@@ -17,7 +18,7 @@ namespace crypto
 class crypto::Aes
 {
 public:
-	enum PaddingScheme
+	enum class PaddingScheme
 	{
 		NoPadding = 1,
 		PKCS5Padding = 5,
@@ -25,7 +26,7 @@ public:
 		ISO10126Padding = 10126
 	};
 
-	enum CipherMode
+	enum class CipherMode
 	{
 		CBC,
 		CFB,
@@ -36,7 +37,7 @@ public:
 		GCM
 	};
 
-	enum KeySize
+	enum class KeySize
 	{
 		AES_128 = 128 / 8,
 		AES_192 = 192 / 8,
@@ -52,7 +53,7 @@ private:
 
 	static Padding* GetPaadingFunction(PaddingScheme padding_scheme);
 public:
-	static vector<byte> random_key(KeySize key_size = AES_128);
+	static vector<byte> random_key(KeySize key_size = KeySize::AES_128);
 
 	static vector<byte> random_iv();
 	static vector<byte> default_iv();

@@ -6,9 +6,8 @@
 #include "pch.h"
 #include "zeropadding.h"
 
-crypto::padding::ZeroPadding::ZeroPadding(size_t block_size)
+crypto::padding::ZeroPadding::ZeroPadding(const size_t block_size): block_size_(block_size)
 {
-	block_size_ = block_size;
 }
 
 void crypto::padding::ZeroPadding::Pad(vector<byte>& in_out) const
@@ -21,7 +20,7 @@ void crypto::padding::ZeroPadding::Pad(vector<byte>& in_out) const
 		return;
 	}
 	// the number of padding bytes to add
-	size_t len = GetPadLength(in.size());
+	const size_t len = GetPadLength(in.size());
 	out.insert(out.end(), len, 0);
 }
 

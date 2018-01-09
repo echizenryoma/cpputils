@@ -134,7 +134,7 @@ TEST(HMAC, MD5)
 	{
 		string msg(t.test_array, t.test_array + t.test_array_size);
 		string key(t.key_array, t.key_array + t.key_array_size);
-	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::MD5)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::HashScheme::MD5)), t.result_array);
 	}
 }
 
@@ -186,7 +186,7 @@ TEST(HMAC, SHA1)
 	{
 		string msg(t.test_array, t.test_array + t.test_array_size);
 		string key(t.key_array, t.key_array + t.key_array_size);
-	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::SHA1)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::HashScheme::SHA1)), t.result_array);
 	}
 }
 
@@ -238,7 +238,7 @@ TEST(HMAC, SHA224)
 	{
 		string msg(t.test_array, t.test_array + t.test_array_size);
 		string key(t.key_array, t.key_array + t.key_array_size);
-	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::SHA224)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::HashScheme::SHA224)), t.result_array);
 	}
 }
 
@@ -297,7 +297,7 @@ TEST(HMAC, SHA256)
 	{
 		string msg(t.test_array, t.test_array + t.test_array_size);
 		string key(t.key_array, t.key_array + t.key_array_size);
-	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::SHA256)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::HashScheme::SHA256)), t.result_array);
 	}
 }
 
@@ -356,7 +356,7 @@ TEST(HMAC, SHA384)
 	{
 		string msg(t.test_array, t.test_array + t.test_array_size);
 		string key(t.key_array, t.key_array + t.key_array_size);
-	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::SHA384)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::HashScheme::SHA384)), t.result_array);
 	}
 }
 
@@ -422,6 +422,6 @@ TEST(HMAC, SHA512)
 	{
 		string msg(t.test_array, t.test_array + t.test_array_size);
 		string key(t.key_array, t.key_array + t.key_array_size);
-	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::SHA512)), t.result_array);
+	EXPECT_EQ(Hex::encode(Hmac::mac(msg, vector<byte>(key.begin(), key.end()), Hmac::HashScheme::SHA512)), t.result_array);
 	}
 }

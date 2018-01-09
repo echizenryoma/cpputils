@@ -12,10 +12,10 @@ string crypto::encode::Base64::encode(const vector<byte>& msg, EncodeScheme enco
 	CryptoPP::SimpleProxyFilter* filter;
 	switch (encode_sheme)
 	{
-	case Standard:
+	case EncodeScheme::Standard:
 		filter = new CryptoPP::Base64Encoder(new CryptoPP::StringSink(encoded), new_line, per_line_length);
 		break;
-	case URL_Safe:
+	case EncodeScheme::URL_Safe:
 		filter = new CryptoPP::Base64URLEncoder(new CryptoPP::StringSink(encoded), new_line, per_line_length);
 		break;
 	default:
@@ -42,10 +42,10 @@ vector<byte> crypto::encode::Base64::decode(const string& base64_str, EncodeSche
 	CryptoPP::BaseN_Decoder* filter;
 	switch (encode_mode)
 	{
-	case Standard:
+	case EncodeScheme::Standard:
 		filter = new CryptoPP::Base64Decoder(new CryptoPP::StringSink(decoded));
 		break;
-	case URL_Safe:
+	case EncodeScheme::URL_Safe:
 		filter = new CryptoPP::Base64URLDecoder(new CryptoPP::StringSink(decoded));
 		break;
 	default:

@@ -40,7 +40,7 @@ CryptoPP::OAEP_Base* crypto::padding::OAEPwithHashandMGF1Padding::GetOAEPFunctio
 	}
 }
 
-crypto::padding::OAEPwithHashandMGF1Padding::OAEPwithHashandMGF1Padding(size_t block_size, HashScheme hash_scheme, const vector<byte>& label)
+crypto::padding::OAEPwithHashandMGF1Padding::OAEPwithHashandMGF1Padding(const size_t block_size, const HashScheme hash_scheme, const vector<byte>& label)
 {
 	block_size_ = block_size;
 	hash_scheme_ = hash_scheme;
@@ -98,7 +98,7 @@ int crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out) con
 	return result.messageLength;
 }
 
-int crypto::padding::OAEPwithHashandMGF1Padding::GetPadLength(size_t len) const
+int crypto::padding::OAEPwithHashandMGF1Padding::GetPadLength(const size_t len) const
 {
 	CryptoPP::OAEP_Base* oaep = GetOAEPFunction();
 	const int padding_size = oaep->MaxUnpaddedLength(block_size_ * 8) - len;
