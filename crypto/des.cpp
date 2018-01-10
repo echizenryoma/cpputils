@@ -146,6 +146,50 @@ vector<byte> crypto::Des::Encrypt_CFB(const vector<byte>& padded, const vector<b
 	return vector<byte>(ctext.begin(), ctext.end());
 }
 
+vector<byte> crypto::Des::Encrypt_CFB8(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
+{
+	string ctext;
+	switch (key.size())
+	{
+	case static_cast<size_t>(CipherScheme::DES):
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::DES>::Encryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case static_cast<size_t>(CipherScheme::DESede2):
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::DES_EDE2>::Encryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case static_cast<size_t>(CipherScheme::DESede3):
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::DES_EDE3>::Encryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	default:
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Encrypt_CFB8(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+	}
+	return vector<byte>(ctext.begin(), ctext.end());
+}
+
 vector<byte> crypto::Des::Encrypt_CTR(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv)
 {
 	string ctext;
@@ -405,7 +449,51 @@ vector<byte> crypto::Des::Decrypt_CFB(const vector<byte>& ctext, const vector<by
 		);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");;
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CFB(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");
+	}
+	return vector<byte>(plain.begin(), plain.end());
+}
+
+vector<byte> crypto::Des::Decrypt_CFB8(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv)
+{
+	string plain;
+	switch (key.size())
+	{
+	case static_cast<size_t>(CipherScheme::DES):
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::DES>::Decryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case static_cast<size_t>(CipherScheme::DESede2):
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::DES_EDE2>::Decryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case static_cast<size_t>(CipherScheme::DESede3):
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::DES_EDE3>::Decryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	default:
+		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::Decrypt_CFB8(const vector<byte>&, const vector<byte>& key, const vector<byte>&): {key.size()}.");
 	}
 	return vector<byte>(plain.begin(), plain.end());
 }

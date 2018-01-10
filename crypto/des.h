@@ -32,6 +32,7 @@ public:
 	{
 		CBC,
 		CFB,
+		CFB8,
 		CTR,
 		CTS,
 		ECB,
@@ -56,6 +57,7 @@ private:
 
 	static vector<byte> Encrypt_CBC(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_CFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Encrypt_CFB8(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_CTR(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_CTS(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_ECB(const vector<byte>& padded, const vector<byte>& key);
@@ -63,6 +65,7 @@ private:
 
 	static vector<byte> Decrypt_CBC(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_CFB(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
+	static vector<byte> Decrypt_CFB8(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_CTR(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_CTS(const vector<byte>& ctext, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Decrypt_ECB(const vector<byte>& ctext, const vector<byte>& key);

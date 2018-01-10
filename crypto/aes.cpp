@@ -132,6 +132,17 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 			)
 		);
 		break;
+	case CipherMode::CFB8:
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::AES>::Encryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(cipher),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
 	case CipherMode::CTR:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
@@ -226,6 +237,17 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(ptext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case CipherMode::CFB8:
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption(key.data(), key.size(), iv.data(), 1),
 				new CryptoPP::StringSink(ptext),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)

@@ -115,6 +115,17 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 			)
 		);
 		break;
+	case CipherMode::CFB8:
+		CryptoPP::StringSource(
+			string(padded.begin(), padded.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::Blowfish>::Encryption(key.data(), key.size(), iv.data(), 1),
+				new CryptoPP::StringSink(ctext),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
 	case CipherMode::CTR:
 		CryptoPP::StringSource(
 			string(padded.begin(), padded.end()),
@@ -197,6 +208,17 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 			true,
 			new CryptoPP::StreamTransformationFilter(
 				CryptoPP::CFB_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size(), iv.data()),
+				new CryptoPP::StringSink(plain),
+				CryptoPP::StreamTransformationFilter::NO_PADDING
+			)
+		);
+		break;
+	case CipherMode::CFB8:
+		CryptoPP::StringSource(
+			string(ctext.begin(), ctext.end()),
+			true,
+			new CryptoPP::StreamTransformationFilter(
+				CryptoPP::CFB_Mode<CryptoPP::Blowfish>::Decryption(key.data(), key.size(), iv.data(), 1),
 				new CryptoPP::StringSink(plain),
 				CryptoPP::StreamTransformationFilter::NO_PADDING
 			)

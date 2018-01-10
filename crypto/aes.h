@@ -30,6 +30,7 @@ public:
 	{
 		CBC,
 		CFB,
+		CFB8,
 		CTR,
 		CTS,
 		ECB,
