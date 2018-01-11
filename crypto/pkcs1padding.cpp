@@ -44,7 +44,7 @@ void crypto::padding::PKCS1v15Padding::Pad(vector<byte>& in_out) const
 	in_out = out;	
 }
 
-int crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
+size_t crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
 {
 	vector<byte>& in = in_out;
 	vector<byte> out(block_size_);
@@ -82,7 +82,7 @@ int crypto::padding::PKCS1v15Padding::Unpad(vector<byte>& in_out) const
 	return out_size;
 }
 
-int crypto::padding::PKCS1v15Padding::GetPadLength(size_t len) const
+size_t crypto::padding::PKCS1v15Padding::GetPadLength(size_t len) const
 {
 	return block_size_ - 11 - len;
 }

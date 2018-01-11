@@ -62,12 +62,12 @@ public:
 	* \return the index where the padding starts, or -1 if the input is
 	* not properly padded
 	*/
-	int Unpad(vector<byte>& in_out) const override;
+	size_t Unpad(vector<byte>& in_out) const override;
 
 	/**
 	* \brief Determines how long the padding will be for a given input length.
 	* \param len the length of the data to pad
 	* \return the length of the padding
 	*/
-	int GetPadLength(size_t len) const override;
+	size_t GetPadLength(size_t len) const override;
 };
