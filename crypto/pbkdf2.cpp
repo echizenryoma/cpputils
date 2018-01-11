@@ -73,7 +73,7 @@ size_t crypto::mac::PBKDF2::GetHmacSize(HmacScheme hmac_scheme)
 	}
 }
 
-vector<byte> crypto::mac::PBKDF2::derived(const vector<byte>& pwd, const vector<byte>& salt, size_t iterations, HmacScheme hmac_scheme, size_t derived_size)
+vector<byte> crypto::mac::PBKDF2::derived(const vector<byte>& pwd, const vector<byte>& salt, uint32_t iterations, HmacScheme hmac_scheme, size_t derived_size)
 {
 	if (derived_size == 0)
 	{

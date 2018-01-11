@@ -20,7 +20,7 @@ namespace crypto
 
 class crypto::padding::PKCS1v15Padding: public Padding
 {
-	size_t block_size_;
+	int block_size_;
 	uint8_t type_version_;
 public:
 	static const uint8_t PUBLIC_KEY_OPERATION = 2;

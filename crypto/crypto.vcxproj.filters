@@ -13,26 +13,14 @@
     <Filter Include="src\digest">
       <UniqueIdentifier>{4e783095-0d2d-4622-bd7e-f1de1c8fbda8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\encoding">
+    <Filter Include="src\encryption">
+      <UniqueIdentifier>{e426cf50-6aad-4e53-acaf-80869f2283ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\encode">
       <UniqueIdentifier>{fe12e92b-ea1c-488c-a5b7-845d26748fb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="aes.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="des.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="rc4.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="blowfish.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="rsa.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="zeropadding.cpp">
       <Filter>src\padding</Filter>
     </ClCompile>
@@ -49,10 +37,10 @@
       <Filter>src\padding</Filter>
     </ClCompile>
     <ClCompile Include="base64.cpp">
-      <Filter>src\encoding</Filter>
+      <Filter>src\encode</Filter>
     </ClCompile>
     <ClCompile Include="hex.cpp">
-      <Filter>src\encoding</Filter>
+      <Filter>src\encode</Filter>
     </ClCompile>
     <ClCompile Include="hash.cpp">
       <Filter>src\digest</Filter>
@@ -69,24 +57,24 @@
     <ClCompile Include="x932padding.cpp">
       <Filter>src\padding</Filter>
     </ClCompile>
+    <ClCompile Include="aes.cpp">
+      <Filter>src\encryption</Filter>
+    </ClCompile>
+    <ClCompile Include="blowfish.cpp">
+      <Filter>src\encryption</Filter>
+    </ClCompile>
+    <ClCompile Include="des.cpp">
+      <Filter>src\encryption</Filter>
+    </ClCompile>
+    <ClCompile Include="rc4.cpp">
+      <Filter>src\encryption</Filter>
+    </ClCompile>
+    <ClCompile Include="rsa.cpp">
+      <Filter>src\encryption</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aes.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="des.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="rc4.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="blowfish.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="type.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="rsa.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="zeropadding.h">
@@ -108,10 +96,10 @@
       <Filter>src\padding</Filter>
     </ClInclude>
     <ClInclude Include="base64.h">
-      <Filter>src\encoding</Filter>
+      <Filter>src\encode</Filter>
     </ClInclude>
     <ClInclude Include="hex.h">
-      <Filter>src\encoding</Filter>
+      <Filter>src\encode</Filter>
     </ClInclude>
     <ClInclude Include="hash.h">
       <Filter>src\digest</Filter>
@@ -131,6 +119,21 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="padding.h">
       <Filter>src\padding</Filter>
+    </ClInclude>
+    <ClInclude Include="aes.h">
+      <Filter>src\encryption</Filter>
+    </ClInclude>
+    <ClInclude Include="blowfish.h">
+      <Filter>src\encryption</Filter>
+    </ClInclude>
+    <ClInclude Include="des.h">
+      <Filter>src\encryption</Filter>
+    </ClInclude>
+    <ClInclude Include="rc4.h">
+      <Filter>src\encryption</Filter>
+    </ClInclude>
+    <ClInclude Include="rsa.h">
+      <Filter>src\encryption</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

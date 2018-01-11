@@ -16,7 +16,7 @@ TEST(PBEwithHmac, HmacSHA1)
 {
 	string P;
 	string S;
-	size_t c;
+	uint32_t c;
 	size_t dkLen;
 	vector<byte> DK;
 

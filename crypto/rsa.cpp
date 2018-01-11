@@ -45,10 +45,9 @@ Padding* crypto::Rsa::GetPaadingFunction(PaddingScheme padding_scheme, size_t ke
 	}
 }
 
-int crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size)
+size_t crypto::Rsa::GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size)
 {
-	int max_msg_size;
-
+	size_t max_msg_size;
 	Padding* padding;
 	switch (padding_scheme)
 	{
@@ -83,7 +82,12 @@ bool crypto::Rsa::CheckMessageSize(PaddingScheme padding_scheme, size_t key_size
 
 RSA_ptr crypto::Rsa::pubkey(const string& pem_key_str)
 {
-	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.c_str(), pem_key_str.size()), BIO_free);
+	if (pem_key_str.size() > std::numeric_limits<int>::max())
+	{
+		throw std::length_error("[length_error] <rsa.cpp> crypto::Rsa::pubkey(const string&): {pem_key_str} is too long.");
+	}
+
+	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.data(), static_cast<int>(pem_key_str.size())), BIO_free);
 	if (bio.get() == nullptr)
 	{
 		throw std::bad_alloc();
@@ -99,7 +103,12 @@ RSA_ptr crypto::Rsa::pubkey(const string& pem_key_str)
 
 RSA_ptr crypto::Rsa::privkey(const string& pem_key_str)
 {
-	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.c_str(), pem_key_str.size()), BIO_free);
+	if (pem_key_str.size() > std::numeric_limits<int>::max())
+	{
+		throw std::length_error("[length_error] <rsa.cpp> crypto::Rsa::privkey(const string&): {pem_key_str} is too long.");
+	}
+
+	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.data(), static_cast<int>(pem_key_str.size())), BIO_free);
 	if (bio.get() == nullptr)
 	{
 		throw std::bad_alloc();
@@ -130,13 +139,13 @@ vector<byte> crypto::Rsa::encrypt(const vector<byte>& ptext, const RSA_ptr& key,
 {
 	if (RSA_check_key(key.get()) < 0)
 	{
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType): {key_type}");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type}");
 	}
 
 	size_t key_size = RSA_size(key.get());
 	if (!CheckMessageSize(padding_scheme, key_size, ptext.size()))
 	{
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType): {msg} is too long.");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type}: {msg} is too long.");
 	}
 
 	vector<byte> padded = ptext;
@@ -149,17 +158,17 @@ vector<byte> crypto::Rsa::encrypt(const vector<byte>& ptext, const RSA_ptr& key,
 	switch (key_type)
 	{
 	case KeyType::PublicKey:
-		ctext_size = RSA_public_encrypt(padded.size(), padded.data(), ctext.data(), key.get(), RSA_NO_PADDING);
+		ctext_size = RSA_public_encrypt(static_cast<int>(padded.size()), padded.data(), ctext.data(), key.get(), RSA_NO_PADDING);
 		break;
 	case KeyType::PrivateKey:
-		ctext_size = RSA_private_encrypt(padded.size(), padded.data(), ctext.data(), key.get(), RSA_NO_PADDING);
+		ctext_size = RSA_private_encrypt(static_cast<int>(padded.size()), padded.data(), ctext.data(), key.get(), RSA_NO_PADDING);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType): {key_type}");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type}");
 	}
 	if (ctext_size < 0)
 	{
-		throw std::runtime_error("[runtime_error] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType):" + string(ERR_error_string(ERR_get_error(), nullptr)));
+		throw std::runtime_error("[runtime_error] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&):" + string(ERR_error_string(ERR_get_error(), nullptr)));
 	}
 	ctext.resize(ctext_size);
 	return ctext;
@@ -169,7 +178,7 @@ vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, const RSA_ptr& key,
 {
 	if (RSA_check_key(key.get()) < 0)
 	{
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::decrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType): {key_type} is not support.");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::decrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type} is not support.");
 	}
 	size_t key_size = RSA_size(key.get());
 
@@ -178,19 +187,19 @@ vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, const RSA_ptr& key,
 	switch (key_type)
 	{
 	case KeyType::PublicKey:
-		ptext_size = RSA_public_decrypt(ctext.size(), ctext.data(), ptext.data(), key.get(), RSA_NO_PADDING);
+		ptext_size = RSA_public_decrypt(static_cast<int>(ctext.size()), ctext.data(), ptext.data(), key.get(), RSA_NO_PADDING);
 		break;
 	case KeyType::PrivateKey:
-		ptext_size = RSA_private_decrypt(ctext.size(), ctext.data(), ptext.data(), key.get(), RSA_NO_PADDING);
+		ptext_size = RSA_private_decrypt(static_cast<int>(ctext.size()), ctext.data(), ptext.data(), key.get(), RSA_NO_PADDING);
 		break;
 	default:
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType): {key_type}");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::decrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type}");
 	}
 	if (ptext_size < 0)
 	{
-		throw std::runtime_error("[runtime_error] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, PaddingScheme, KeyType):" + string(ERR_error_string(ERR_get_error(), nullptr)));
+		throw std::runtime_error("[runtime_error] <rsa.cpp> crypto::Rsa::decrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&):" + string(ERR_error_string(ERR_get_error(), nullptr)));
 	}
-	ptext.resize(ptext_size);
+	ptext.resize(static_cast<size_t>(ptext_size));
 
 	vector<byte> msg = ptext;
 	Padding* padding = GetPaadingFunction(padding_scheme, key_size);

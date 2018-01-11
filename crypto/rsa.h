@@ -41,7 +41,7 @@ public:
 	};
 
 private:
-	static int GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size);
+	static size_t GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size);
 	static bool CheckMessageSize(PaddingScheme padding_scheme, size_t key_size, size_t msg_size);
 
 	static Padding* GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size, KeyType key_type = KeyType::PublicKey, const vector<byte>& label = {});
