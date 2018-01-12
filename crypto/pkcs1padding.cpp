@@ -8,7 +8,7 @@
 
 crypto::padding::PKCS1v15Padding::PKCS1v15Padding(size_t block_size, uint8_t type_version): type_version_(type_version)
 {
-	if (block_size > std::numeric_limits<int>::max())
+	if (block_size > INT_MAX)
 	{
 		throw std::length_error("[length_error] <rsa.cpp> crypto::padding::PKCS1v15Padding::PKCS1v15Padding(size_t, uint8_t): {block_size} is too big.");
 	}

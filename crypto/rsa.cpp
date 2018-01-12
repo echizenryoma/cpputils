@@ -82,7 +82,7 @@ bool crypto::Rsa::CheckMessageSize(PaddingScheme padding_scheme, size_t key_size
 
 RSA_ptr crypto::Rsa::pubkey(const string& pem_key_str)
 {
-	if (pem_key_str.size() > std::numeric_limits<int>::max())
+	if (pem_key_str.size() > INT_MAX)
 	{
 		throw std::length_error("[length_error] <rsa.cpp> crypto::Rsa::pubkey(const string&): {pem_key_str} is too long.");
 	}
@@ -103,7 +103,7 @@ RSA_ptr crypto::Rsa::pubkey(const string& pem_key_str)
 
 RSA_ptr crypto::Rsa::privkey(const string& pem_key_str)
 {
-	if (pem_key_str.size() > std::numeric_limits<int>::max())
+	if (pem_key_str.size() > INT_MAX)
 	{
 		throw std::length_error("[length_error] <rsa.cpp> crypto::Rsa::privkey(const string&): {pem_key_str} is too long.");
 	}
