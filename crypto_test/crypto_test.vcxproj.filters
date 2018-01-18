@@ -6,7 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="aes_test.cpp">
       <Filter>test</Filter>
     </ClCompile>
@@ -37,6 +36,7 @@
     <ClCompile Include="rsa_test.cpp">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
