@@ -38,19 +38,19 @@ bool crypto::Des::CheckIVSize(size_t iv_size)
 	return iv_size == CryptoPP::DES::BLOCKSIZE;
 }
 
-Padding* crypto::Des::GetPaadingFunction(PaddingScheme padding_scheme)
+PaddingPtr crypto::Des::GetPaadingFunction(PaddingScheme padding_scheme)
 {
-	Padding* padding;
+	PaddingPtr padding;
 	switch (padding_scheme)
 	{
 	case PaddingScheme::PKCS5Padding:
-		padding = new padding::PKCS5Padding(CryptoPP::DES::BLOCKSIZE);
+		padding = PaddingPtr(std::make_unique<padding::PKCS5Padding>(CryptoPP::DES::BLOCKSIZE));
 		break;
 	case PaddingScheme::PKCS7Padding:
-		padding = new padding::PKCS7Padding(CryptoPP::DES::BLOCKSIZE);
+		padding = PaddingPtr(std::make_unique<padding::PKCS7Padding>(CryptoPP::DES::BLOCKSIZE));
 		break;
 	case PaddingScheme::ISO10126Padding:
-		padding = new padding::ISO10126Padding(CryptoPP::DES::BLOCKSIZE);
+		padding = PaddingPtr(std::make_unique<padding::ISO10126Padding>(CryptoPP::DES::BLOCKSIZE));
 		break;
 	default:
 		throw std::invalid_argument("[invalid_argument] <des.cpp> crypto::Des::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
@@ -718,9 +718,8 @@ vector<byte> crypto::Des::encrypt(const vector<byte>& ptext, const vector<byte>&
 
 	if (padding_scheme != PaddingScheme::NoPadding)
 	{
-		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Pad(padded);
-		delete padding;
+		PaddingPtr padding = GetPaadingFunction(padding_scheme);
+		padding.get()->Pad(padded);
 	}
 
 	vector<byte> ctext;
@@ -791,9 +790,8 @@ vector<byte> crypto::Des::decrypt(const vector<byte>& ctext, const vector<byte>&
 
 	if (padding_scheme != PaddingScheme::NoPadding)
 	{
-		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Unpad(message);
-		delete padding;
+		PaddingPtr padding = GetPaadingFunction(padding_scheme);
+		padding.get()->Unpad(message);
 	}
 	return message;
 }

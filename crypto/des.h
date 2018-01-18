@@ -9,6 +9,7 @@
 
 #include "padding.h"
 using crypto::padding::Padding;
+using crypto::padding::PaddingPtr;
 
 #include <cryptopp/des.h>
 
@@ -53,7 +54,7 @@ private:
 	static bool CheckIV(const vector<byte>& iv);
 	static bool CheckIVSize(size_t iv_size);
 
-	static Padding* GetPaadingFunction(PaddingScheme padding_scheme);
+	static PaddingPtr GetPaadingFunction(PaddingScheme padding_scheme);
 
 	static vector<byte> Encrypt_CBC(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);
 	static vector<byte> Encrypt_CFB(const vector<byte>& padded, const vector<byte>& key, const vector<byte>& iv);

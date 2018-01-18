@@ -6,6 +6,7 @@
 #pragma once
 
 #include "type.h"
+#include <memory>
 #include <cryptopp/pwdbased.h>
 
 namespace crypto
@@ -15,6 +16,8 @@ namespace crypto
 		class PBKDF2;
 
 		typedef PBKDF2 PBEwithHmac;
+
+		using PasswordBasedKeyDerivationFunctionPtr = std::unique_ptr<CryptoPP::PasswordBasedKeyDerivationFunction>;
 	}
 }
 
@@ -40,7 +43,7 @@ public:
 	};
 
 private:
-	static CryptoPP::PasswordBasedKeyDerivationFunction* GetPBEwithHmacFunction(HmacScheme hmac_scheme);
+	static PasswordBasedKeyDerivationFunctionPtr GetPBEwithHmacFunction(HmacScheme hmac_scheme);
 	static size_t GetHmacSize(HmacScheme hmac_scheme);
 public:
 	static vector<byte> derived(const vector<byte>& pwd, const vector<byte>& salt, uint32_t iterations, HmacScheme hmac_scheme = HmacScheme::HmacSHA1, size_t derived_size = 0);

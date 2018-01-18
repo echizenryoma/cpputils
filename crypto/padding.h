@@ -7,11 +7,14 @@
 
 #include "type.h"
 
+#include <memory>
+
 namespace crypto
 {
 	namespace padding
 	{
 		class Padding;
+		using PaddingPtr = std::unique_ptr<Padding>;
 	}
 }
 

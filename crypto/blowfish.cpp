@@ -30,16 +30,16 @@ bool crypto::Blowfish::CheckIVSize(size_t iv_size)
 	return iv_size == CryptoPP::Blowfish::BLOCKSIZE;
 }
 
-Padding* crypto::Blowfish::GetPaadingFunction(PaddingScheme padding_scheme)
+PaddingPtr crypto::Blowfish::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	switch (padding_scheme)
 	{
 	case PaddingScheme::PKCS5Padding:
-		return new padding::PKCS5Padding(CryptoPP::Blowfish::BLOCKSIZE);
+		return PaddingPtr(std::make_unique<padding::PKCS5Padding>(CryptoPP::Blowfish::BLOCKSIZE));
 	case PaddingScheme::PKCS7Padding:
-		return new padding::PKCS7Padding(CryptoPP::Blowfish::BLOCKSIZE);
+		return PaddingPtr(std::make_unique<padding::PKCS7Padding>(CryptoPP::Blowfish::BLOCKSIZE));
 	case PaddingScheme::ISO10126Padding:
-		return new padding::ISO10126Padding(CryptoPP::Blowfish::BLOCKSIZE);
+		return PaddingPtr(std::make_unique<padding::ISO10126Padding>(CryptoPP::Blowfish::BLOCKSIZE));
 	default:
 		throw std::invalid_argument("[invalid_argument] <blowfish.cpp> crypto::Blowfish::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
@@ -85,9 +85,8 @@ vector<byte> crypto::Blowfish::encrypt(const vector<byte>& ptext, const vector<b
 
 	if (padding_scheme != PaddingScheme::NoPadding)
 	{
-		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Pad(padded);
-		delete padding;
+		PaddingPtr padding = GetPaadingFunction(padding_scheme);
+		padding.get()->Pad(padded);
 	}
 	string ctext;
 
@@ -276,9 +275,8 @@ vector<byte> crypto::Blowfish::decrypt(const vector<byte>& ctext, const vector<b
 
 	if (padding_scheme != PaddingScheme::NoPadding)
 	{
-		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Unpad(ptext);
-		delete padding;
+		PaddingPtr padding = GetPaadingFunction(padding_scheme);
+		padding.get()->Unpad(ptext);
 	}
 	return ptext;
 }

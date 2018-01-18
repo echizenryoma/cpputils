@@ -9,8 +9,7 @@
 
 #include "padding.h"
 using crypto::padding::Padding;
-
-#include <cryptopp/blowfish.h>
+using crypto::padding::PaddingPtr;
 
 namespace crypto
 {
@@ -46,9 +45,9 @@ private:
 	static bool CheckIV(const vector<byte>& iv);
 	static bool CheckIVSize(size_t iv_size);
 
-	static Padding* GetPaadingFunction(PaddingScheme padding_scheme);
+	static PaddingPtr GetPaadingFunction(PaddingScheme padding_scheme);
 public:
-	static vector<byte> random_key(size_t key_size = CryptoPP::Blowfish::DEFAULT_KEYLENGTH);
+	static vector<byte> random_key(size_t key_size);
 
 	static vector<byte> random_iv();
 	static vector<byte> default_iv();

@@ -9,10 +9,11 @@
 
 #include "padding.h"
 using crypto::padding::Padding;
+using crypto::padding::PaddingPtr;
 
 namespace crypto
 {
-	class Aes;
+	class Aes;	
 }
 
 class crypto::Aes
@@ -52,7 +53,7 @@ private:
 	static bool CheckIV(const vector<byte>& iv);
 	static bool CheckIVSize(size_t iv_size);
 
-	static Padding* GetPaadingFunction(PaddingScheme padding_scheme);
+	static PaddingPtr GetPaadingFunction(PaddingScheme padding_scheme);
 public:
 	static vector<byte> random_key(KeySize key_size = KeySize::AES_128);
 

@@ -6,7 +6,7 @@
 #pragma once
 
 #include "type.h"
-
+#include <memory>
 #include <cryptopp/hmac.h>
 
 namespace crypto
@@ -14,6 +14,7 @@ namespace crypto
 	namespace mac
 	{
 		class Hmac;
+		using HMAC_BasePtr = std::unique_ptr<CryptoPP::HMAC_Base>;
 	}
 }
 
@@ -40,7 +41,7 @@ public:
 	};
 
 private:
-	static CryptoPP::HMAC_Base* GetHmacFunction(HashScheme hash_scheme);
+	static HMAC_BasePtr GetHmacFunction(HashScheme hash_scheme);
 public:
 	static vector<byte> mac(const vector<byte>& msg, const vector<byte>& key, HashScheme hash_scheme);
 	static vector<byte> mac(const string& msg, const vector<byte>& key, HashScheme hash_scheme);

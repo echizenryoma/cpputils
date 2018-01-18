@@ -15,6 +15,7 @@
 #include <cryptopp/aes.h>
 #include <cryptopp/arc4.h>
 #include <cryptopp/base64.h>
+#include <cryptopp/blowfish.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/gcm.h>
 #include <cryptopp/hex.h>

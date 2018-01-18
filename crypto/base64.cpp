@@ -26,7 +26,6 @@ string crypto::encode::Base64::encode(const vector<byte>& msg, EncodeScheme enco
 	{
 		throw std::bad_typeid();
 	}
-
 	CryptoPP::StringSource(msg.data(), msg.size(), true, filter);
 	return encoded;
 }
@@ -56,7 +55,6 @@ vector<byte> crypto::encode::Base64::decode(const string& base64_str, EncodeSche
 	{
 		throw std::bad_typeid();
 	}
-
 	CryptoPP::StringSource(base64_str, true, filter);
 	return vector<byte>(decoded.begin(), decoded.end());
 }

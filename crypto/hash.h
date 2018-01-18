@@ -6,6 +6,7 @@
 #pragma once
 
 #include "type.h"
+#include <memory>
 #include <cryptopp/cryptlib.h>
 
 namespace crypto
@@ -15,6 +16,7 @@ namespace crypto
 		namespace digest
 		{
 			class Hash;
+			using HashTransformationPtr = std::unique_ptr<CryptoPP::HashTransformation>;
 		}
 	}
 }
@@ -42,7 +44,7 @@ public:
 	};
 
 private:
-	static CryptoPP::HashTransformation* GetHashFunction(HashScheme hash_scheme);
+	static HashTransformationPtr GetHashFunction(HashScheme hash_scheme);
 public:
 	static vector<byte> digest(const vector<byte>& msg, HashScheme hash_scheme);
 	static vector<byte> digest(const string& msg, HashScheme hash_scheme);

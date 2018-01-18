@@ -6,11 +6,13 @@
 #pragma once
 
 #include "type.h"
-#include "padding.h"
-#include <openssl/pem.h>
-#include <memory>
-using crypto::padding::Padding;
 
+#include "padding.h"
+using crypto::padding::Padding;
+using crypto::padding::PaddingPtr;
+
+#include <memory>
+#include <openssl/pem.h>
 using RSA_ptr = std::unique_ptr<RSA, decltype(&RSA_free)>;
 
 namespace crypto
@@ -44,7 +46,7 @@ private:
 	static size_t GetMaxMessageSize(PaddingScheme padding_scheme, size_t key_size);
 	static bool CheckMessageSize(PaddingScheme padding_scheme, size_t key_size, size_t msg_size);
 
-	static Padding* GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size, KeyType key_type = KeyType::PublicKey, const vector<byte>& label = {});
+	static PaddingPtr GetPaadingFunction(PaddingScheme padding_scheme, size_t key_size, KeyType key_type = KeyType::PublicKey, const vector<byte>& label = {});
 public:
 	static RSA_ptr pubkey(const string& pem_key_str);
 	static RSA_ptr privkey(const string& pem_key_str);

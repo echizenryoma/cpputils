@@ -5,9 +5,6 @@
 
 #include "pch.h"
 
-#include "padding.h"
-using crypto::padding::Padding;
-
 #include "iso10126padding.h"
 #include "pkcs7padding.h"
 #include "pkcs5padding.h"
@@ -42,16 +39,16 @@ bool crypto::Aes::CheckIVSize(size_t iv_size)
 	return iv_size == CryptoPP::AES::BLOCKSIZE;
 }
 
-Padding* crypto::Aes::GetPaadingFunction(PaddingScheme padding_scheme)
+PaddingPtr crypto::Aes::GetPaadingFunction(PaddingScheme padding_scheme)
 {
 	switch (padding_scheme)
 	{
 	case PaddingScheme::PKCS5Padding:
-		return new padding::PKCS5Padding(CryptoPP::AES::BLOCKSIZE);
+		return PaddingPtr(std::make_unique<padding::PKCS5Padding>(CryptoPP::AES::BLOCKSIZE));
 	case PaddingScheme::PKCS7Padding:
-		return new padding::PKCS7Padding(CryptoPP::AES::BLOCKSIZE);
+		return PaddingPtr(std::make_unique<padding::PKCS7Padding>(CryptoPP::AES::BLOCKSIZE));
 	case PaddingScheme::ISO10126Padding:
-		return new padding::ISO10126Padding(CryptoPP::AES::BLOCKSIZE);
+		return PaddingPtr(std::make_unique<padding::ISO10126Padding>(CryptoPP::AES::BLOCKSIZE));
 	default:
 		throw std::invalid_argument("[invalid_argument] <aes.cpp> crypto::Aes::GetPaadingFunction(PaddingScheme): {padding_scheme}.");
 	}
@@ -101,9 +98,8 @@ vector<byte> crypto::Aes::encrypt(const vector<byte>& ptext, const vector<byte>&
 
 	if (padding_scheme != PaddingScheme::NoPadding)
 	{
-		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Pad(padded);
-		delete padding;
+		PaddingPtr padding = GetPaadingFunction(padding_scheme);
+		padding.get()->Pad(padded);
 	}
 
 	CryptoPP::GCM<CryptoPP::AES>::Encryption gcm;
@@ -316,9 +312,8 @@ vector<byte> crypto::Aes::decrypt(const vector<byte>& ctext, const vector<byte>&
 
 	if (padding_scheme != PaddingScheme::NoPadding)
 	{
-		Padding* padding = GetPaadingFunction(padding_scheme);
-		padding->Unpad(out);
-		delete padding;
+		PaddingPtr padding = GetPaadingFunction(padding_scheme);
+		padding.get()->Unpad(out);
 	}
 	return out;
 }
