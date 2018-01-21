@@ -48,7 +48,7 @@ vector<byte> crypto::signature::EcDsa::sign(const EVP_KEY_ptr& private_key, cons
 {
 	if (hash.size() > INT_MAX)
 	{
-		throw std::invalid_argument("[invalid_argument] <dsa.cpp> crypto::signature::Dsa::sign(const EVP_KEY_ptr&, const vector<byte>&): {hash} is too long.");
+		throw std::invalid_argument("[invalid_argument] <dsa.cpp> crypto::signature::EcDsa::sign(const EVP_KEY_ptr&, const vector<byte>&): {hash} is too long.");
 	}
 
 	const unsigned key_size = EVP_PKEY_size(private_key.get());
@@ -56,7 +56,7 @@ vector<byte> crypto::signature::EcDsa::sign(const EVP_KEY_ptr& private_key, cons
 	vector<byte> stext(slen);
 	if (!ECDSA_sign(NID_undef, hash.data(), static_cast<int>(hash.size()), stext.data(), &slen, EC_KEY_ptr(EVP_PKEY_get1_EC_KEY(private_key.get()), EC_KEY_free).get()))
 	{
-		throw std::runtime_error("[runtime_error] <dsa.cpp> crypto::signature::Dsa::sign(const EVP_KEY_ptr&, const vector<byte>&):" + string(ERR_error_string(ERR_get_error(), nullptr)));
+		throw std::runtime_error("[runtime_error] <dsa.cpp> crypto::signature::EcDsa::sign(const EVP_KEY_ptr&, const vector<byte>&):" + string(ERR_error_string(ERR_get_error(), nullptr)));
 	}
 	stext.resize(slen);
 	return stext;
