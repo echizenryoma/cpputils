@@ -45,13 +45,13 @@ DSA_ptr crypto::signature::Dsa::privkey(const string& pem_key_str)
 }
 
 vector<byte> crypto::signature::Dsa::sign(const DSA_ptr& private_key, const vector<byte>& hash)
-{
-	const unsigned key_size = DSA_size(private_key.get());
+{	
 	if (hash.size() > INT_MAX)
 	{
 		throw std::invalid_argument("[invalid_argument] <dsa.cpp> crypto::signature::Dsa::sign(const DSA_ptr&, const vector<byte>&): {hash} is too long.");
 	}
 
+	const unsigned key_size = DSA_size(private_key.get());
 	unsigned slen = key_size;
 	vector<byte> stext(slen);
 	if (!DSA_sign(NID_undef, hash.data(), static_cast<int>(hash.size()), stext.data(), &slen, private_key.get()))
@@ -64,7 +64,6 @@ vector<byte> crypto::signature::Dsa::sign(const DSA_ptr& private_key, const vect
 
 bool crypto::signature::Dsa::verify(const DSA_ptr& public_key, const vector<byte>& stext, const vector<byte>& hash)
 {
-	const size_t key_size = DSA_size(public_key.get());
 	if (hash.size() > INT_MAX || stext.size() > INT_MAX)
 	{
 		return false;

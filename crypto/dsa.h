@@ -7,10 +7,6 @@
 
 #include "type.h"
 
-#include "padding.h"
-using crypto::padding::Padding;
-using crypto::padding::PaddingPtr;
-
 #include <memory>
 #include <openssl/pem.h>
 using DSA_ptr = std::unique_ptr<DSA, decltype(&DSA_free)>;

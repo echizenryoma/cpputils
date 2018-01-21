@@ -79,6 +79,9 @@
     <ClCompile Include="dsa.cpp">
       <Filter>src\signature</Filter>
     </ClCompile>
+    <ClCompile Include="ecsda.cpp">
+      <Filter>src\signature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="type.h">
@@ -143,6 +146,9 @@
       <Filter>src\crypto</Filter>
     </ClInclude>
     <ClInclude Include="dsa.h">
+      <Filter>src\signature</Filter>
+    </ClInclude>
+    <ClInclude Include="ecdsa.h">
       <Filter>src\signature</Filter>
     </ClInclude>
   </ItemGroup>

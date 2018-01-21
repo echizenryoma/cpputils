@@ -44,13 +44,13 @@ TEST(DSA, SHA512)
 
 	ptext = Hash::digest(Base64::decode("GcRqZtvZqfz0nww="), Hash::HashScheme::SHA512);
 	stext = Dsa::sign(DSA_PRIVATE_KEY, ptext);
-EXPECT_EQ(Dsa::verify(DSA_PUBLIC_KEY, stext, ptext), true);
+EXPECT_TRUE(Dsa::verify(DSA_PUBLIC_KEY, stext, ptext));
 
 	ptext = Hash::digest(Base64::decode("tQJT13nQjQeKScukjRt11lT3DjY="), Hash::HashScheme::SHA512);
 	stext = Dsa::sign(DSA_PRIVATE_KEY, ptext);
-EXPECT_EQ(Dsa::verify(DSA_PUBLIC_KEY, stext, ptext), true);
+EXPECT_TRUE(Dsa::verify(DSA_PUBLIC_KEY, stext, ptext));
 
 	ptext = Hash::digest(Base64::decode("joLPIWteFG354eZXhT7uDRzxk0FXCB0UwW6PuVp4xOI="), Hash::HashScheme::SHA512);
 	stext = Dsa::sign(DSA_PRIVATE_KEY, ptext);
-EXPECT_EQ(Dsa::verify(DSA_PUBLIC_KEY, stext, ptext), true);
+EXPECT_TRUE(Dsa::verify(DSA_PUBLIC_KEY, stext, ptext));
 }

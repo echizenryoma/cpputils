@@ -40,6 +40,9 @@
     <ClCompile Include="dsa_test.cpp">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="ecdsa_test.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
