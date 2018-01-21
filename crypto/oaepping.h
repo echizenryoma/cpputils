@@ -6,6 +6,7 @@
 #pragma once
 
 #include "padding.h"
+#include <memory>
 #include <cryptopp/oaep.h>
 
 namespace crypto
@@ -18,6 +19,7 @@ namespace crypto
 		* for additional details.
 		*/
 		class OAEPwithHashandMGF1Padding;
+		using OAEP_BasePtr = std::unique_ptr<CryptoPP::OAEP_Base>;
 	}
 }
 
@@ -48,7 +50,7 @@ private:
 	HashScheme hash_scheme_;
 	vector<byte> label_;
 
-	CryptoPP::OAEP_Base* GetOAEPFunction() const;
+	OAEP_BasePtr GetOAEPFunction() const;
 public:
 	OAEPwithHashandMGF1Padding(size_t block_size, HashScheme hash_scheme, const vector<byte>& label = {});
 

@@ -95,8 +95,7 @@ RSA_ptr crypto::Rsa::pubkey(const string& pem_key_str)
 	{
 		throw std::bad_alloc();
 	}
-	RSA_ptr rsa(EVP_PKEY_get1_RSA(key.get()), RSA_free);
-	return rsa;
+	return RSA_ptr(EVP_PKEY_get1_RSA(key.get()), RSA_free);
 }
 
 RSA_ptr crypto::Rsa::privkey(const string& pem_key_str)
@@ -116,8 +115,7 @@ RSA_ptr crypto::Rsa::privkey(const string& pem_key_str)
 	{
 		throw std::bad_alloc();
 	}
-	RSA_ptr rsa(EVP_PKEY_get1_RSA(key.get()), RSA_free);
-	return rsa;
+	return RSA_ptr(EVP_PKEY_get1_RSA(key.get()), RSA_free);
 }
 
 RSA_ptr crypto::Rsa::key(const string& pem_key_str, KeyType key_type)
@@ -140,10 +138,10 @@ vector<byte> crypto::Rsa::encrypt(const vector<byte>& ptext, const RSA_ptr& key,
 		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type}");
 	}
 
-	size_t key_size = RSA_size(key.get());
+	const size_t key_size = RSA_size(key.get());
 	if (!CheckMessageSize(padding_scheme, key_size, ptext.size()))
 	{
-		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type}: {msg} is too long.");
+		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::encrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {msg} is too long.");
 	}
 
 	vector<byte> padded = ptext;
@@ -177,7 +175,7 @@ vector<byte> crypto::Rsa::decrypt(const vector<byte>& ctext, const RSA_ptr& key,
 	{
 		throw std::invalid_argument("[invalid_argument] <rsa.cpp> crypto::Rsa::decrypt(const vector<byte>&, const RSA_ptr&, KeyType, PaddingScheme, const vector<byte>&): {key_type} is not support.");
 	}
-	size_t key_size = RSA_size(key.get());
+	const size_t key_size = RSA_size(key.get());
 
 	vector<byte> ptext(key_size);
 	int ptext_size;

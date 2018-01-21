@@ -178,6 +178,7 @@
     <ClCompile Include="base64_test.cpp" />
     <ClCompile Include="blowfish_test.cpp" />
     <ClCompile Include="des_test.cpp" />
+    <ClCompile Include="dsa_test.cpp" />
     <ClCompile Include="hash_test.cpp" />
     <ClCompile Include="hex_test.cpp" />
     <ClCompile Include="hmac_test.cpp" />

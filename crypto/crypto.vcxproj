@@ -23,6 +23,7 @@
     <ClCompile Include="base64.cpp" />
     <ClCompile Include="blowfish.cpp" />
     <ClCompile Include="des.cpp" />
+    <ClCompile Include="dsa.cpp" />
     <ClCompile Include="hash.cpp" />
     <ClCompile Include="hex.cpp" />
     <ClCompile Include="hmac.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="base64.h" />
     <ClInclude Include="blowfish.h" />
     <ClInclude Include="des.h" />
+    <ClInclude Include="dsa.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="hex.h" />
     <ClInclude Include="hmac.h" />

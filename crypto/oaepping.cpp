@@ -2,41 +2,42 @@
 * Copyright (c) 2012, 2017, Echizen Ryoma. All rights reserved.
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 */
-#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
 #include "pch.h"
-#include "oaepping.h"
 
-CryptoPP::OAEP_Base* crypto::padding::OAEPwithHashandMGF1Padding::GetOAEPFunction() const
+#include "oaepping.h"
+using crypto::padding::OAEP_BasePtr;
+
+OAEP_BasePtr crypto::padding::OAEPwithHashandMGF1Padding::GetOAEPFunction() const
 {
 	switch (hash_scheme_)
 	{
 	case MD2:
-		return new CryptoPP::OAEP<CryptoPP::Weak::MD2>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::Weak::MD2>>());
 	case MD4:
-		return new CryptoPP::OAEP<CryptoPP::Weak::MD4>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::Weak::MD4>>());
 	case MD5:
-		return new CryptoPP::OAEP<CryptoPP::Weak::MD5>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::Weak::MD5>>());
 	case SHA1:
-		return new CryptoPP::OAEP<CryptoPP::SHA1>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA1>>());
 	case SHA224:
-		return new CryptoPP::OAEP<CryptoPP::SHA224>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA224>>());
 	case SHA256:
-		return new CryptoPP::OAEP<CryptoPP::SHA256>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA256>>());
 	case SHA384:
-		return new CryptoPP::OAEP<CryptoPP::SHA384>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA384>>());
 	case SHA512:
-		return new CryptoPP::OAEP<CryptoPP::SHA512>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA512>>());
 	case SHA3_224:
-		return new CryptoPP::OAEP<CryptoPP::SHA3_224>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA3_224>>());
 	case SHA3_256:
-		return new CryptoPP::OAEP<CryptoPP::SHA3_256>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA3_256>>());
 	case SHA3_384:
-		return new CryptoPP::OAEP<CryptoPP::SHA3_384>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA3_384>>());
 	case SHA3_512:
-		return new CryptoPP::OAEP<CryptoPP::SHA3_512>();
+		return OAEP_BasePtr(std::make_unique<CryptoPP::OAEP<CryptoPP::SHA3_512>>());
 	default:
-		throw std::invalid_argument("[invalid_argument] <oaepping.cpp> crypto::padding::OAEPwithHashandMGF1Padding::GetPadLength(size_t): {hash_scheme_}.");
+		throw std::invalid_argument("[invalid_argument] <oaepping.cpp> crypto::padding::OAEPwithHashandMGF1Padding::GetOAEPFunction(): {hash_scheme_}.");
 	}
 }
 
@@ -57,17 +58,16 @@ void crypto::padding::OAEPwithHashandMGF1Padding::Pad(vector<byte>& in_out) cons
 		throw std::invalid_argument("[invalid_argument] <oaeppadding.cpp> crypto::padding::OAEPwithHashandMGF1Padding::Pad(vector<byte>& in_out): {in.size()} is too long.");
 	}
 
-	CryptoPP::OAEP_Base* oaep = GetOAEPFunction();
+	OAEP_BasePtr oaep = GetOAEPFunction();
 	CryptoPP::AutoSeededRandomPool rng;
 
 	vector<byte> padded(block_size_);
-	oaep->Pad(
+	oaep.get()->Pad(
 		rng,
 		in.data(), in.size(),
 		padded.data(), padded.size() * 8,
 		MakeParameters(CryptoPP::Name::EncodingParameters(), CryptoPP::ConstByteArrayParameter(label_.data(), label_.size(), false))
 	);
-	delete oaep;
 	out = padded;
 }
 
@@ -83,16 +83,15 @@ size_t crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out) 
 
 	in.erase(in.begin());
 
-	CryptoPP::OAEP_Base* oaep = GetOAEPFunction();
+	OAEP_BasePtr oaep = GetOAEPFunction();
 	CryptoPP::AutoSeededRandomPool rng;
 
 	vector<byte> ptext(block_size_);
-	const CryptoPP::DecodingResult result = oaep->Unpad(
+	const CryptoPP::DecodingResult result = oaep.get()->Unpad(
 		in.data(), in.size() * 8,
 		ptext.data(),
 		MakeParameters(CryptoPP::Name::EncodingParameters(), CryptoPP::ConstByteArrayParameter(label_.data(), label_.size(), false))
 	);
-	delete oaep;
 	ptext.resize(result.messageLength);
 	out = ptext;
 	return result.messageLength;
@@ -100,8 +99,7 @@ size_t crypto::padding::OAEPwithHashandMGF1Padding::Unpad(vector<byte>& in_out) 
 
 size_t crypto::padding::OAEPwithHashandMGF1Padding::GetPadLength(const size_t len) const
 {
-	CryptoPP::OAEP_Base* oaep = GetOAEPFunction();
-	const size_t padding_size = oaep->MaxUnpaddedLength(block_size_ * 8) - len;
-	delete oaep;
+	OAEP_BasePtr oaep = GetOAEPFunction();
+	const size_t padding_size = oaep.get()->MaxUnpaddedLength(block_size_ * 8) - len;
 	return padding_size;
 }
