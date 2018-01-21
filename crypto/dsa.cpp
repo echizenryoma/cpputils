@@ -8,7 +8,7 @@ DSA_ptr crypto::signature::Dsa::pubkey(const string& pem_key_str)
 {
 	if (pem_key_str.size() > INT_MAX)
 	{
-		throw std::length_error("[length_error] <rsa.cpp> crypto::signature::Dsa::pubkey(const string&): {pem_key_str} is too long.");
+		throw std::length_error("[length_error] <dsa.cpp> crypto::signature::Dsa::pubkey(const string&): {pem_key_str} is too long.");
 	}
 
 	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.data(), static_cast<int>(pem_key_str.size())), BIO_free);
@@ -28,7 +28,7 @@ DSA_ptr crypto::signature::Dsa::privkey(const string& pem_key_str)
 {
 	if (pem_key_str.size() > INT_MAX)
 	{
-		throw std::length_error("[length_error] <rsa.cpp> crypto::signature::Dsa::privkey(const string&): {pem_key_str} is too long.");
+		throw std::length_error("[length_error] <dsa.cpp> crypto::signature::Dsa::privkey(const string&): {pem_key_str} is too long.");
 	}
 
 	BIO_ptr bio(BIO_new_mem_buf(pem_key_str.data(), static_cast<int>(pem_key_str.size())), BIO_free);
