@@ -24,7 +24,7 @@
     <ClCompile Include="blowfish.cpp" />
     <ClCompile Include="des.cpp" />
     <ClCompile Include="dsa.cpp" />
-    <ClCompile Include="ecsda.cpp" />
+    <ClCompile Include="ecdsa.cpp" />
     <ClCompile Include="hash.cpp" />
     <ClCompile Include="hex.cpp" />
     <ClCompile Include="hmac.cpp" />

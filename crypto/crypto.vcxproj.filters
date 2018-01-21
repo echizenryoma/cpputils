@@ -79,7 +79,7 @@
     <ClCompile Include="dsa.cpp">
       <Filter>src\signature</Filter>
     </ClCompile>
-    <ClCompile Include="ecsda.cpp">
+    <ClCompile Include="ecdsa.cpp">
       <Filter>src\signature</Filter>
     </ClCompile>
   </ItemGroup>
