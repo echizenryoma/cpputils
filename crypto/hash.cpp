@@ -20,7 +20,7 @@ HashTransformationPtr crypto::message::digest::Hash::GetHashFunction(HashScheme 
 	case HashScheme::MD5:
 		return HashTransformationPtr(std::make_unique<CryptoPP::Weak::MD5>());
 	case HashScheme::SHA1:
-		return HashTransformationPtr(std::make_unique<CryptoPP::SHA>());
+		return HashTransformationPtr(std::make_unique<CryptoPP::SHA1>());
 	case HashScheme::SHA224:
 		return HashTransformationPtr(std::make_unique<CryptoPP::SHA224>());
 	case HashScheme::SHA256:
